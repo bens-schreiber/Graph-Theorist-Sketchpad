@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A46FE0212BD6EFC50045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0202BD6EFC50045977A /* main.c */; };
 		A46FE0232BD6EFC50045977A /* raylib.entitlements in CopyFiles */ = {isa = PBXBuildFile; fileRef = A46FE0222BD6EFC50045977A /* raylib.entitlements */; };
 		A46FE0252BD6EFC50045977A /* libraylib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A46FE0242BD6EFC50045977A /* libraylib.a */; };
+		A46FE0632BD701B90045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0622BD701B90045977A /* main.c */; };
+		A46FE07E2BD702300045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
+		A46FE0972BD708F10045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0962BD708F10045977A /* main.c */; };
+		A46FE0982BD708F10045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0962BD708F10045977A /* main.c */; };
+		A46FE0992BD709F80045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,13 +27,37 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		A46FE0662BD701F90045977A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		A46FE0812BD705BD0045977A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A46FE01D2BD6EFC50045977A /* Graph Theorist Sketchpad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Graph Theorist Sketchpad"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A46FE0202BD6EFC50045977A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		A46FE0222BD6EFC50045977A /* raylib.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = raylib.entitlements; sourceTree = "<group>"; };
 		A46FE0242BD6EFC50045977A /* libraylib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libraylib.a; path = /opt/homebrew/Cellar/raylib/5.0/lib/libraylib.a; sourceTree = "<absolute>"; };
+		A46FE02E2BD6F0440045977A /* Graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
+		A46FE02F2BD6F0440045977A /* Graph.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Graph.c; sourceTree = "<group>"; };
+		A46FE0622BD701B90045977A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		A46FE0682BD701F90045977A /* Graph */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Graph; sourceTree = BUILT_PRODUCTS_DIR; };
+		A46FE0832BD705BD0045977A /* Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tests; sourceTree = BUILT_PRODUCTS_DIR; };
+		A46FE0902BD706570045977A /* GraphTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphTests.h; sourceTree = "<group>"; };
+		A46FE0962BD708F10045977A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +69,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A46FE0652BD701F90045977A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A46FE0802BD705BD0045977A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -48,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				A46FE01F2BD6EFC50045977A /* Graph Theorist Sketchpad */,
+				A46FE0692BD701F90045977A /* Graph */,
+				A46FE0842BD705BD0045977A /* Tests */,
 				A46FE01E2BD6EFC50045977A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +100,8 @@
 			isa = PBXGroup;
 			children = (
 				A46FE01D2BD6EFC50045977A /* Graph Theorist Sketchpad */,
+				A46FE0682BD701F90045977A /* Graph */,
+				A46FE0832BD705BD0045977A /* Tests */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -63,11 +109,29 @@
 		A46FE01F2BD6EFC50045977A /* Graph Theorist Sketchpad */ = {
 			isa = PBXGroup;
 			children = (
-				A46FE0202BD6EFC50045977A /* main.c */,
 				A46FE0222BD6EFC50045977A /* raylib.entitlements */,
 				A46FE0242BD6EFC50045977A /* libraylib.a */,
+				A46FE0622BD701B90045977A /* main.c */,
 			);
 			path = "Graph Theorist Sketchpad";
+			sourceTree = "<group>";
+		};
+		A46FE0692BD701F90045977A /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				A46FE02F2BD6F0440045977A /* Graph.c */,
+				A46FE02E2BD6F0440045977A /* Graph.h */,
+			);
+			path = Graph;
+			sourceTree = "<group>";
+		};
+		A46FE0842BD705BD0045977A /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A46FE0902BD706570045977A /* GraphTests.h */,
+				A46FE0962BD708F10045977A /* main.c */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -90,6 +154,40 @@
 			productReference = A46FE01D2BD6EFC50045977A /* Graph Theorist Sketchpad */;
 			productType = "com.apple.product-type.tool";
 		};
+		A46FE0672BD701F90045977A /* Graph */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A46FE06C2BD701F90045977A /* Build configuration list for PBXNativeTarget "Graph" */;
+			buildPhases = (
+				A46FE0642BD701F90045977A /* Sources */,
+				A46FE0652BD701F90045977A /* Frameworks */,
+				A46FE0662BD701F90045977A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Graph;
+			productName = Graph;
+			productReference = A46FE0682BD701F90045977A /* Graph */;
+			productType = "com.apple.product-type.tool";
+		};
+		A46FE0822BD705BD0045977A /* Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A46FE0872BD705BD0045977A /* Build configuration list for PBXNativeTarget "Tests" */;
+			buildPhases = (
+				A46FE07F2BD705BD0045977A /* Sources */,
+				A46FE0802BD705BD0045977A /* Frameworks */,
+				A46FE0812BD705BD0045977A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tests;
+			productName = Tests;
+			productReference = A46FE0832BD705BD0045977A /* Tests */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -100,6 +198,12 @@
 				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					A46FE01C2BD6EFC50045977A = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					A46FE0672BD701F90045977A = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					A46FE0822BD705BD0045977A = {
 						CreatedOnToolsVersion = 15.3;
 					};
 				};
@@ -118,6 +222,8 @@
 			projectRoot = "";
 			targets = (
 				A46FE01C2BD6EFC50045977A /* Graph Theorist Sketchpad */,
+				A46FE0672BD701F90045977A /* Graph */,
+				A46FE0822BD705BD0045977A /* Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -127,7 +233,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A46FE0212BD6EFC50045977A /* main.c in Sources */,
+				A46FE0632BD701B90045977A /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A46FE0642BD701F90045977A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A46FE07E2BD702300045977A /* Graph.c in Sources */,
+				A46FE0972BD708F10045977A /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A46FE07F2BD705BD0045977A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A46FE0992BD709F80045977A /* Graph.c in Sources */,
+				A46FE0982BD708F10045977A /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +385,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y9MNN9CWFT;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = /opt/homebrew/Cellar/raylib/5.0/include;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -271,6 +396,59 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y9MNN9CWFT;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = /opt/homebrew/Cellar/raylib/5.0/include;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A46FE06D2BD701F90045977A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y9MNN9CWFT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "/opt/homebrew/Cellar/raylib/5.0/include/**";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A46FE06E2BD701F90045977A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y9MNN9CWFT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "/opt/homebrew/Cellar/raylib/5.0/include/**";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A46FE0882BD705BD0045977A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y9MNN9CWFT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/homebrew/Cellar/raylib/5.0/include/**",
+					"../Graph/**",
+					"\"/Users/benjaminschreiber/projects/Graph Theorist Sketchpad/Graph\"/**",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A46FE0892BD705BD0045977A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y9MNN9CWFT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = (
+					"/opt/homebrew/Cellar/raylib/5.0/include/**",
+					"../Graph/**",
+					"\"/Users/benjaminschreiber/projects/Graph Theorist Sketchpad/Graph\"/**",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -292,6 +470,24 @@
 			buildConfigurations = (
 				A46FE0292BD6EFC50045977A /* Debug */,
 				A46FE02A2BD6EFC50045977A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A46FE06C2BD701F90045977A /* Build configuration list for PBXNativeTarget "Graph" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A46FE06D2BD701F90045977A /* Debug */,
+				A46FE06E2BD701F90045977A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A46FE0872BD705BD0045977A /* Build configuration list for PBXNativeTarget "Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A46FE0882BD705BD0045977A /* Debug */,
+				A46FE0892BD705BD0045977A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
