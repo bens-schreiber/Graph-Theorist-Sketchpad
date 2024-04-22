@@ -11,7 +11,7 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
-#define GRAPH_MAX_SIZE 100
+#define GRAPH_MAX_SIZE 50
 
 typedef enum
 {
@@ -25,6 +25,8 @@ typedef struct
     AdjacencyState State;
     bool Exists;
     u_int Weight;
+    u_int Color;
+    char Label[100];
 } AdjacencyMatrixValue;
 
 typedef struct
@@ -91,13 +93,12 @@ void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2);
 void Graph_RemoveVertex(Graph *g, u_short v);
 
 /// Adds a self loop to a vertex
-/// - Parameters:
-///   - v: The vertex to be self looped
 void Graph_SetSelfLoop(Graph *g, u_short v);
 
 /// Sets two adjacent vertices weight
 void Graph_SetAdjacencyWeight(Graph *g, u_short v1, u_short v2, u_int weight);
 
-void Graph_SetSelfLoopWeight(Graph *g, u_short v, u_int weight);
+/// Computes the degree of a vertex
+u_int Graph_VertexDegree(Graph *g, u_short v);
 
 #endif /* Graph_h */

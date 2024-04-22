@@ -181,5 +181,34 @@ void Digraph_SetAdjacency_GoesOneWay(void)
     free(g);
 }
 
+void Graph_VertexDegree_ReturnsCorrectDegree(void)
+{
+    // Arrange
+    Graph *g = Graph_CreateGraph();
+    u_short v1 = Graph_AddVertex(g);
+    u_short v2 = Graph_AddVertex(g);
+    u_short v3 = Graph_AddVertex(g);
+    u_short v4 = Graph_AddVertex(g);
+    
+    Graph_SetSelfLoop(g, v1);
+    Graph_SetAdjacency(g, v1, v2);
+    Graph_SetAdjacency(g, v1, v3);
+    
+    // Act
+    u_int deg1 = Graph_VertexDegree(g, v1);
+    u_int deg2 = Graph_VertexDegree(g, v2);
+    u_int deg3 = Graph_VertexDegree(g, v3);
+    u_int deg4 = Graph_VertexDegree(g, v4);
+    
+    // Assert
+    assert(deg1 == 3);
+    assert(deg2 == 1);
+    assert(deg3 == 1);
+    assert(deg4 == 0);
+    
+    // Cleanup
+    free(g);
+}
+
 
 #endif /* GraphTests_h */

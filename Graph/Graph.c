@@ -13,7 +13,7 @@
 #define VERTEX_NOT_EXISTS(g,x) (!VERTEX_EXISTS(g,x))
 
 #define DEFAULT_ADJ_MATRIX_VALUE ((AdjacencyMatrixValue) \
-{ .State = NO_ADJACENCY, .Exists = false, .Weight = 0 })
+{ .State = NO_ADJACENCY, .Exists = false, .Weight = 0, .Color = 0, .Label = ""})
 
 static Graph *_Graph_Factory(bool directed, bool weighted)
 {
@@ -172,7 +172,18 @@ void Graph_SetAdjacencyWeight(Graph *g, u_short v1, u_short v2, u_int weight)
     g->AdjMatrix[v1][v2].Weight = weight;
 }
 
-void Graph_SetSelfLoopWeight(Graph *g, u_short v, u_int weight)
+u_int Graph_VertexDegree(Graph *g, u_short v)
 {
-    Graph_SetAdjacencyWeight(g, v, v, weight);
+    assert(g != NULL);
+    assert(VERTEX_EXISTS(g, v));
+    
+    u_int deg = 0;
+    for (int i = 0; i < GRAPH_MAX_SIZE; i++)
+    {
+        if (Graph_IsAdjacent(g, v, i))
+        {
+            deg++;
+        }
+    }
+    return deg;
 }
