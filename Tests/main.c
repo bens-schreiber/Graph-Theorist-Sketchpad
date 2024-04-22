@@ -17,6 +17,7 @@ int main(int argc, const char * argv[]) {
     Graph_RemoveEdge_SetsVerticesToExistsNoAdjacency();
     Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix();
     Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix();
+    Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix();
     
     return 0;
 }

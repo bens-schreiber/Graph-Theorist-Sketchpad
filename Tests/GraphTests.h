@@ -127,5 +127,25 @@ void Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix(void)
     assert(g->AdjMatrix[3][3] == NO_ADJACENCY);
 }
 
+void Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix(void)
+{
+    // Arrange
+    Graph *g = Graph_CreateGraph();
+    Graph_AddVertex(g);
+    u_short v2 = Graph_AddVertex(g);
+    Graph_AddVertex(g);
+    Graph_AddVertex(g);
+    Graph_SetSelfLoop(g, v2);
+    
+    // Act
+    Graph_RemoveVertex(g, v2);
+    
+    // Assert
+    assert(g->Vertices == 3);
+    assert(g->Edges == 0);
+    assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
+    assert(g->AdjMatrix[3][3] == NO_ADJACENCY);
+}
+
 
 #endif /* GraphTests_h */

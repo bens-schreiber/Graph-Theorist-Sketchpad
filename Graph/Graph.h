@@ -61,4 +61,9 @@ void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2);
 ///   - v: The vertex to be removed from the table
 void Graph_RemoveVertex(Graph *g, u_short v);
 
+/// Adds a self loop to a vertex
+/// - Parameters:
+///   - v: The vertex to be self looped
+void Graph_SetSelfLoop(Graph *g, u_short v);
+
 #endif /* Graph_h */

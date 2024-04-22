@@ -83,7 +83,14 @@ void Graph_RemoveVertex(Graph *g, u_short v)
         {
             for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
             {
-                g->Edges -= g->AdjMatrix[i][j] == ADJACENCY ? 1 : 0;
+                if (g->AdjMatrix[i][j] == ADJACENCY)
+                {
+                    g->Edges--;
+                }
+                if (g->AdjMatrix[i][j] == SELF_LOOP)
+                {
+                    g->Edges--;
+                }
             }
             skip_i = 1;
         }
@@ -107,6 +114,15 @@ void Graph_RemoveVertex(Graph *g, u_short v)
         }
     }
     g->Vertices--;
+}
+
+void Graph_SetSelfLoop(Graph *g, u_short v)
+{
+    assert(g != NULL);
+    assert(VERTEX_EXISTS(g, v));
+    
+    g->AdjMatrix[v][v] = SELF_LOOP;
+    g->Edges++;
 }
 
 
