@@ -9,6 +9,7 @@
 #define Graph_h
 
 #include <sys/types.h>
+#include <stdbool.h>
 
 #define GRAPH_MAX_SIZE 100
 
@@ -25,6 +26,7 @@ typedef struct
     u_int Edges;
     u_int Vertices;
     u_short nextVertexIndexToBeInserted;
+    bool directed;
     VertexState AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
 } Graph;
 

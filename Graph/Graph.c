@@ -18,6 +18,7 @@ Graph *Graph_CreateGraph(void)
     g->Edges = 0;
     g->Vertices = 0;
     g->nextVertexIndexToBeInserted = 0;
+    g->directed = false;
     
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
     {
@@ -75,7 +76,7 @@ void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2)
 void Graph_RemoveVertex(Graph *g, u_short v)
 {
     
-    u_short skip_i = 0;
+    bool skip_i = false;
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
     {
         // Remove the edge count
@@ -92,15 +93,15 @@ void Graph_RemoveVertex(Graph *g, u_short v)
                     g->Edges--;
                 }
             }
-            skip_i = 1;
+            skip_i = true;
         }
         
-        u_short skip_j = 0;
+        bool skip_j = false;
         for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
         {
             if (i == v)
             {
-                skip_j = 1;
+                skip_j = true;
             }
             
             VertexState newState = NO_ADJACENCY;
