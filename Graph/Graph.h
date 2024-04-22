@@ -33,13 +33,21 @@ typedef struct
     u_int Vertices;
     u_short NextVertexIndexToBeInserted;
     bool Directed;
+    bool Weighted;
     AdjacencyMatrixValue AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
 } Graph;
 
 /// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
 Graph *Graph_CreateGraph(void);
 
-Graph *Graph_CreateDigraph(void);
+/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
+Graph *Graph_CreateWeightedGraph(void);
+
+/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
+Graph *Graph_CreateWeightedDiGraph(void);
+
+/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
+Graph *Graph_CreateDiGraph(void);
 
 /// Adds a vertex to the next available spot in the AdjMatrix, with state EXISTS WITH NO ADJACENCY. O(1)
 /// - Returns: the index of the vertex created
@@ -86,5 +94,10 @@ void Graph_RemoveVertex(Graph *g, u_short v);
 /// - Parameters:
 ///   - v: The vertex to be self looped
 void Graph_SetSelfLoop(Graph *g, u_short v);
+
+/// Sets two adjacent vertices weight
+void Graph_SetAdjacencyWeight(Graph *g, u_short v1, u_short v2, u_int weight);
+
+void Graph_SetSelfLoopWeight(Graph *g, u_short v, u_int weight);
 
 #endif /* Graph_h */

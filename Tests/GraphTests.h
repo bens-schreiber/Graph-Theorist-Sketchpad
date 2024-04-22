@@ -166,7 +166,7 @@ void Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix(void)
 void Digraph_SetAdjacency_GoesOneWay(void)
 {
     // Arrange
-    Graph *g = Graph_CreateDigraph();
+    Graph *g = Graph_CreateDiGraph();
     u_short v1 = Graph_AddVertex(g);
     u_short v2 = Graph_AddVertex(g);
     
