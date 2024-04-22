@@ -12,8 +12,11 @@ int main(int argc, const char * argv[]) {
     
     // Graph Tests
     Graph_CreateNew_SetsAllValuesToZero();
-    Graph_AddMultipleVertices_SetsPopulatesMatrix();
-    Graph_SetAdjacency_SetsAdjMatrix();
+    Graph_AddMultipleVertices_PopulatesMatrixDiagonal();
+    Graph_SetAdjacency_SetsVerticesToAdjacent();
+    Graph_RemoveEdge_SetsVerticesToExistsNoAdjacency();
+    Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix();
+    Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix();
     
     return 0;
 }

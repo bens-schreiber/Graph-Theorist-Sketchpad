@@ -17,9 +17,12 @@ Graph *Graph_CreateGraph(void)
     Graph *g = malloc(sizeof(Graph));
     g->Edges = 0;
     g->Vertices = 0;
+    g->nextVertexIndexToBeInserted = 0;
     
-    for (int i = 0; i < GRAPH_MAX_SIZE; ++i) {
-        for (int j = 0; j < GRAPH_MAX_SIZE; ++j) {
+    for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
+    {
+        for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
+        {
             g->AdjMatrix[i][j] = NO_ADJACENCY;
         }
     }
@@ -29,14 +32,13 @@ Graph *Graph_CreateGraph(void)
 
 u_short Graph_AddVertex(Graph *g)
 {
-    static u_short lastInsertedVertexIndex = 0;
     assert(g != NULL);
-    assert(VERTEX_NOT_EXISTS(g, lastInsertedVertexIndex));
-    assert(lastInsertedVertexIndex < GRAPH_MAX_SIZE);
+    assert(VERTEX_NOT_EXISTS(g, g->nextVertexIndexToBeInserted));
+    assert(g->nextVertexIndexToBeInserted < GRAPH_MAX_SIZE);
     
-    g->AdjMatrix[lastInsertedVertexIndex][lastInsertedVertexIndex] = EXISTS_WITH_NO_ADJACENCY;
+    g->AdjMatrix[g->nextVertexIndexToBeInserted][g->nextVertexIndexToBeInserted] = EXISTS_WITH_NO_ADJACENCY;
     g->Vertices++;
-    return lastInsertedVertexIndex++;
+    return g->nextVertexIndexToBeInserted++;
 }
 
 void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2)
@@ -57,6 +59,54 @@ u_short Graph_IsAdjacent(Graph *g, u_short v1, u_short v2)
     assert(VERTEX_EXISTS(g, v2));
     
     return g->AdjMatrix[v1][v2] == ADJACENCY;
+}
+
+void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2)
+{
+    assert(g != NULL);
+    assert(VERTEX_EXISTS(g, v1));
+    assert(VERTEX_EXISTS(g, v2));
+    
+    g->AdjMatrix[v1][v2] = NO_ADJACENCY;
+    g->AdjMatrix[v2][v1] = NO_ADJACENCY;
+    g->Edges--;
+}
+
+void Graph_RemoveVertex(Graph *g, u_short v)
+{
+    
+    u_short skip_i = 0;
+    for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
+    {
+        // Remove the edge count
+        if (i == v)
+        {
+            for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
+            {
+                g->Edges -= g->AdjMatrix[i][j] == ADJACENCY ? 1 : 0;
+            }
+            skip_i = 1;
+        }
+        
+        u_short skip_j = 0;
+        for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
+        {
+            if (i == v)
+            {
+                skip_j = 1;
+            }
+            
+            VertexState newState = NO_ADJACENCY;
+            if (i + skip_i < GRAPH_MAX_SIZE && j + skip_j < GRAPH_MAX_SIZE)
+            {
+                newState = g->AdjMatrix[i + skip_i][j + skip_j];
+            }
+            
+            g->AdjMatrix[i][j] = newState;
+            
+        }
+    }
+    g->Vertices--;
 }
 
 
