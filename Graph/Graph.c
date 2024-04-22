@@ -12,13 +12,13 @@
 #define VERTEX_EXISTS(g, x) ((g)->AdjMatrix[(x)][(x)] == EXISTS_WITH_NO_ADJACENCY)
 #define VERTEX_NOT_EXISTS(g,x) (!VERTEX_EXISTS(g,x))
 
-Graph *Graph_CreateGraph(void)
+static Graph *_Graph_Factory(bool directed)
 {
     Graph *g = malloc(sizeof(Graph));
     g->Edges = 0;
     g->Vertices = 0;
     g->nextVertexIndexToBeInserted = 0;
-    g->directed = false;
+    g->directed = directed;
     
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
     {
@@ -29,6 +29,15 @@ Graph *Graph_CreateGraph(void)
     }
     
     return g;
+}
+Graph *Graph_CreateGraph(void)
+{
+    return _Graph_Factory(false);
+}
+
+Graph *Graph_CreateDigraph(void)
+{
+    return _Graph_Factory(true);
 }
 
 u_short Graph_AddVertex(Graph *g)
@@ -49,17 +58,24 @@ void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2)
     assert(VERTEX_EXISTS(g, v2));
     
     g->AdjMatrix[v1][v2] = ADJACENCY;
-    g->AdjMatrix[v2][v1] = ADJACENCY;
+    
+    if (!g->directed)
+    {
+        g->AdjMatrix[v2][v1] = ADJACENCY;
+    }
+    
     g->Edges++;
 }
 
-u_short Graph_IsAdjacent(Graph *g, u_short v1, u_short v2)
+bool Graph_IsAdjacent(Graph *g, u_short v1, u_short v2)
 {
     assert(g != NULL);
-    assert(VERTEX_EXISTS(g, v1));
-    assert(VERTEX_EXISTS(g, v2));
-    
-    return g->AdjMatrix[v1][v2] == ADJACENCY;
+    return g->AdjMatrix[v1][v2] == ADJACENCY || g->AdjMatrix[v1][v2] == SELF_LOOP;
+}
+
+bool Graph_IsNotAdjacent(Graph *g, u_short v1, u_short v2)
+{
+    return !Graph_IsAdjacent(g, v1, v2);
 }
 
 void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2)

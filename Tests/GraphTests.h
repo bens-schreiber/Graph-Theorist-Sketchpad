@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <sys/types.h>
+#include <stdbool.h>
 #include "Graph.h"
 
 void Graph_CreateNew_SetsAllValuesToZero(void)
@@ -70,6 +71,9 @@ void Graph_SetAdjacency_SetsVerticesToAdjacent(void)
     assert(g->Edges == 1);
     assert(Graph_IsAdjacent(g, v1, v2));
     assert(Graph_IsAdjacent(g, v2, v1));
+    
+    // Cleanup
+    free(g);
 }
 
 void Graph_RemoveEdge_SetsVerticesToExistsNoAdjacency(void)
@@ -87,6 +91,9 @@ void Graph_RemoveEdge_SetsVerticesToExistsNoAdjacency(void)
     assert(g->Edges == 0);
     assert(!Graph_IsAdjacent(g, v1, v2));
     assert(!Graph_IsAdjacent(g, v2, v1));
+    
+    // Cleanup
+    free(g);
 }
 
 void Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix(void)
@@ -105,7 +112,10 @@ void Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix(void)
     // Assert
     assert(g->Vertices == 3);
     assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
-    assert(g->AdjMatrix[3][3] == NO_ADJACENCY);
+    assert(Graph_IsNotAdjacent(g, 3, 3));
+    
+    // Cleanup
+    free(g);
 }
 
 void Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix(void)
@@ -124,7 +134,10 @@ void Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix(void)
     // Assert
     assert(g->Vertices == 3);
     assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
-    assert(g->AdjMatrix[3][3] == NO_ADJACENCY);
+    assert(Graph_IsNotAdjacent(g, 3, 3));
+    
+    // Cleanup
+    free(g);
 }
 
 void Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix(void)
@@ -144,7 +157,28 @@ void Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix(void)
     assert(g->Vertices == 3);
     assert(g->Edges == 0);
     assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
-    assert(g->AdjMatrix[3][3] == NO_ADJACENCY);
+    assert(Graph_IsNotAdjacent(g, 3, 3));
+    
+    // Cleanup
+    free(g);
+}
+
+void Digraph_SetAdjacency_GoesOneWay(void)
+{
+    // Arrange
+    Graph *g = Graph_CreateDigraph();
+    u_short v1 = Graph_AddVertex(g);
+    u_short v2 = Graph_AddVertex(g);
+    
+    // Act
+    Graph_SetAdjacency(g, v1, v2);
+    
+    // Assert
+    assert(Graph_IsAdjacent(g, v1, v2));
+    assert(Graph_IsNotAdjacent(g, v2, v1));
+    
+    // Cleanup
+    free(g);
 }
 
 

@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix();
     Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix();
     Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix();
+    Digraph_SetAdjacency_GoesOneWay();
     
     return 0;
 }

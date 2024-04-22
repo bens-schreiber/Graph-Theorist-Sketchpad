@@ -33,11 +33,14 @@ typedef struct
 /// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
 Graph *Graph_CreateGraph(void);
 
+Graph *Graph_CreateDigraph(void);
+
 /// Adds a vertex to the next available spot in the AdjMatrix, with state EXISTS WITH NO ADJACENCY. O(1)
 /// - Returns: the index of the vertex created
 u_short Graph_AddVertex(Graph *g);
 
 /// Sets two vertices to be adjacent, ie connected by an edge
+/// On a digraph, v1 will be adj to v2 but not vice versa
 /// - Parameters:
 ///   - g: The graph
 ///   - v1: The vertex to be adjacent to v2
@@ -45,12 +48,22 @@ u_short Graph_AddVertex(Graph *g);
 void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2);
 
 /// Returns if two vertex are adjacent
+/// On a digraph, v1 can be adj to v2 but not neccesarily vice versa
 /// - Parameters:
 ///   - g: The graph
 ///   - v1: The vertex to be adjacent to v2
 ///   - v2: The vertex to be adjacent to v1
 /// - Returns: 1 if adjacent, 0 otherwise
-u_short Graph_IsAdjacent(Graph *g, u_short v1, u_short v2);
+bool Graph_IsAdjacent(Graph *g, u_short v1, u_short v2);
+
+/// Returns if two vertex are not adjacent
+/// On a digraph, v1 can not be adj to v2 but not neccesarily vice versa
+/// - Parameters:
+///   - g: The graph
+///   - v1: The vertex to not be adjacent to v2
+///   - v2: The vertex to not be adjacent to v1
+/// - Returns: 1 if adjacent, 0 otherwise
+bool Graph_IsNotAdjacent(Graph *g, u_short v1, u_short v2);
 
 /// Removes adjacency between two vertices. O(1)
 /// - Parameters:
