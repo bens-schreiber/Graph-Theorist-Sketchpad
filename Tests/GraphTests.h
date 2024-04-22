@@ -24,11 +24,11 @@ void Graph_CreateNew_SetsAllValuesToZero(void)
     assert(g != NULL);
     assert(g->Edges == 0);
     assert(g->Vertices == 0);
-    assert(g->nextVertexIndexToBeInserted == 0);
+    assert(g->NextVertexIndexToBeInserted == 0);
     
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i) {
         for (int j = 0; j < GRAPH_MAX_SIZE; ++j) {
-            assert(g->AdjMatrix[i][j] == 0);
+            assert(g->AdjMatrix[i][j].State == NO_ADJACENCY);
         }
     }
     
@@ -48,10 +48,10 @@ void Graph_AddMultipleVertices_PopulatesMatrixDiagonal(void)
     
     // Assert
     assert(g->Vertices == 3);
-    assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
-    assert(g->AdjMatrix[1][1] == EXISTS_WITH_NO_ADJACENCY);
-    assert(g->AdjMatrix[2][2] == EXISTS_WITH_NO_ADJACENCY);
-    assert(g->nextVertexIndexToBeInserted == 3);
+    assert(g->AdjMatrix[0][0].Exists);
+    assert(g->AdjMatrix[1][1].Exists);
+    assert(g->AdjMatrix[2][2].Exists);
+    assert(g->NextVertexIndexToBeInserted == 3);
     
     // Cleanup
     free(g);
@@ -111,7 +111,7 @@ void Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix(void)
     
     // Assert
     assert(g->Vertices == 3);
-    assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
+    assert(g->AdjMatrix[0][0].Exists);
     assert(Graph_IsNotAdjacent(g, 3, 3));
     
     // Cleanup
@@ -133,7 +133,7 @@ void Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix(void)
     
     // Assert
     assert(g->Vertices == 3);
-    assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
+    assert(g->AdjMatrix[0][0].Exists);
     assert(Graph_IsNotAdjacent(g, 3, 3));
     
     // Cleanup
@@ -156,7 +156,7 @@ void Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix(void)
     // Assert
     assert(g->Vertices == 3);
     assert(g->Edges == 0);
-    assert(g->AdjMatrix[0][0] == EXISTS_WITH_NO_ADJACENCY);
+    assert(g->AdjMatrix[0][0].Exists);
     assert(Graph_IsNotAdjacent(g, 3, 3));
     
     // Cleanup

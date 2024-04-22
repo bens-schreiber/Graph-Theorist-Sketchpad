@@ -16,18 +16,24 @@
 typedef enum
 {
     NO_ADJACENCY,
-    EXISTS_WITH_NO_ADJACENCY,
     ADJACENCY,
     SELF_LOOP
-} VertexState;
+} AdjacencyState;
+
+typedef struct
+{
+    AdjacencyState State;
+    bool Exists;
+    u_int Weight;
+} AdjacencyMatrixValue;
 
 typedef struct
 {
     u_int Edges;
     u_int Vertices;
-    u_short nextVertexIndexToBeInserted;
-    bool directed;
-    VertexState AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
+    u_short NextVertexIndexToBeInserted;
+    bool Directed;
+    AdjacencyMatrixValue AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
 } Graph;
 
 /// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix

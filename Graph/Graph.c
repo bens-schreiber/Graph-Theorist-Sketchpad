@@ -9,22 +9,25 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define VERTEX_EXISTS(g, x) ((g)->AdjMatrix[(x)][(x)] == EXISTS_WITH_NO_ADJACENCY)
+#define VERTEX_EXISTS(g, x) ((g)->AdjMatrix[(x)][(x)].Exists)
 #define VERTEX_NOT_EXISTS(g,x) (!VERTEX_EXISTS(g,x))
+
+#define DEFAULT_ADJ_MATRIX_VALUE ((AdjacencyMatrixValue) \
+{ .State = NO_ADJACENCY, .Exists = false, .Weight = 0 })
 
 static Graph *_Graph_Factory(bool directed)
 {
     Graph *g = malloc(sizeof(Graph));
     g->Edges = 0;
     g->Vertices = 0;
-    g->nextVertexIndexToBeInserted = 0;
-    g->directed = directed;
+    g->NextVertexIndexToBeInserted = 0;
+    g->Directed = directed;
     
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
     {
         for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
         {
-            g->AdjMatrix[i][j] = NO_ADJACENCY;
+            g->AdjMatrix[i][j] = DEFAULT_ADJ_MATRIX_VALUE;
         }
     }
     
@@ -43,12 +46,16 @@ Graph *Graph_CreateDigraph(void)
 u_short Graph_AddVertex(Graph *g)
 {
     assert(g != NULL);
-    assert(VERTEX_NOT_EXISTS(g, g->nextVertexIndexToBeInserted));
-    assert(g->nextVertexIndexToBeInserted < GRAPH_MAX_SIZE);
+    assert(VERTEX_NOT_EXISTS(g, g->NextVertexIndexToBeInserted));
+    assert(g->NextVertexIndexToBeInserted < GRAPH_MAX_SIZE);
     
-    g->AdjMatrix[g->nextVertexIndexToBeInserted][g->nextVertexIndexToBeInserted] = EXISTS_WITH_NO_ADJACENCY;
+    g->AdjMatrix[g->NextVertexIndexToBeInserted][g->NextVertexIndexToBeInserted]
+        = DEFAULT_ADJ_MATRIX_VALUE;
+    g->AdjMatrix[g->NextVertexIndexToBeInserted][g->NextVertexIndexToBeInserted]
+        .Exists = true;
+    
     g->Vertices++;
-    return g->nextVertexIndexToBeInserted++;
+    return g->NextVertexIndexToBeInserted++;
 }
 
 void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2)
@@ -57,11 +64,11 @@ void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2)
     assert(VERTEX_EXISTS(g, v1));
     assert(VERTEX_EXISTS(g, v2));
     
-    g->AdjMatrix[v1][v2] = ADJACENCY;
+    g->AdjMatrix[v1][v2].State = ADJACENCY;
     
-    if (!g->directed)
+    if (!g->Directed)
     {
-        g->AdjMatrix[v2][v1] = ADJACENCY;
+        g->AdjMatrix[v2][v1].State = ADJACENCY;
     }
     
     g->Edges++;
@@ -70,7 +77,7 @@ void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2)
 bool Graph_IsAdjacent(Graph *g, u_short v1, u_short v2)
 {
     assert(g != NULL);
-    return g->AdjMatrix[v1][v2] == ADJACENCY || g->AdjMatrix[v1][v2] == SELF_LOOP;
+    return g->AdjMatrix[v1][v2].State == ADJACENCY || g->AdjMatrix[v1][v2].State == SELF_LOOP;
 }
 
 bool Graph_IsNotAdjacent(Graph *g, u_short v1, u_short v2)
@@ -84,8 +91,8 @@ void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2)
     assert(VERTEX_EXISTS(g, v1));
     assert(VERTEX_EXISTS(g, v2));
     
-    g->AdjMatrix[v1][v2] = NO_ADJACENCY;
-    g->AdjMatrix[v2][v1] = NO_ADJACENCY;
+    g->AdjMatrix[v1][v2].State = NO_ADJACENCY;
+    g->AdjMatrix[v2][v1].State = NO_ADJACENCY;
     g->Edges--;
 }
 
@@ -100,11 +107,11 @@ void Graph_RemoveVertex(Graph *g, u_short v)
         {
             for (int j = 0; j < GRAPH_MAX_SIZE; ++j)
             {
-                if (g->AdjMatrix[i][j] == ADJACENCY)
+                if (g->AdjMatrix[i][j].State == ADJACENCY)
                 {
                     g->Edges--;
                 }
-                if (g->AdjMatrix[i][j] == SELF_LOOP)
+                if (g->AdjMatrix[i][j].State == SELF_LOOP)
                 {
                     g->Edges--;
                 }
@@ -120,13 +127,13 @@ void Graph_RemoveVertex(Graph *g, u_short v)
                 skip_j = true;
             }
             
-            VertexState newState = NO_ADJACENCY;
+            AdjacencyMatrixValue newValue = DEFAULT_ADJ_MATRIX_VALUE;
             if (i + skip_i < GRAPH_MAX_SIZE && j + skip_j < GRAPH_MAX_SIZE)
             {
-                newState = g->AdjMatrix[i + skip_i][j + skip_j];
+                newValue = g->AdjMatrix[i + skip_i][j + skip_j];
             }
             
-            g->AdjMatrix[i][j] = newState;
+            g->AdjMatrix[i][j] = newValue;
             
         }
     }
@@ -138,7 +145,7 @@ void Graph_SetSelfLoop(Graph *g, u_short v)
     assert(g != NULL);
     assert(VERTEX_EXISTS(g, v));
     
-    g->AdjMatrix[v][v] = SELF_LOOP;
+    g->AdjMatrix[v][v].State = SELF_LOOP;
     g->Edges++;
 }
 
