@@ -226,6 +226,9 @@ void Graph_WeightedGraph_ReturnsCorrectWeight(void)
     assert(g->AdjMatrix[v1][v1] == weight);
     assert(g->AdjMatrix[v2][v2] == WE_DNE);
     assert(g->AdjMatrix[v3][v3] == WE_MIN);
+    
+    // Cleanup
+    free(g);
 }
 
 
