@@ -20,6 +20,7 @@ int main(int argc, const char * argv[]) {
     Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix();
     Digraph_SetAdjacency_GoesOneWay();
     Graph_VertexDegree_ReturnsCorrectDegree();
+    Graph_WeightedGraph_ReturnsCorrectWeight();
     
     return 0;
 }

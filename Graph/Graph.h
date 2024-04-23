@@ -11,32 +11,21 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
-#define GRAPH_MAX_SIZE 50
+#define GRAPH_MAX_SIZE 127
 
-typedef enum
-{
-    NO_ADJACENCY,
-    ADJACENCY,
-    SELF_LOOP
-} AdjacencyState;
+#define WE_DNE          0
+#define WE_MIN          1
 
-typedef struct
-{
-    AdjacencyState State;
-    bool Exists;
-    u_int Weight;
-    u_int Color;
-    char Label[100];
-} AdjacencyMatrixValue;
+/// A value greater than 0 implies the edge exists with weight of the value, a value 0 indicates there is no edge.
+typedef u_short WeightedEdge;
 
 typedef struct
 {
     u_int Edges;
     u_int Vertices;
-    u_short NextVertexIndexToBeInserted;
-    bool Directed;
-    bool Weighted;
-    AdjacencyMatrixValue AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
+    bool IsDirected;
+    bool IsWeighted;
+    WeightedEdge AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
 } Graph;
 
 /// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
@@ -51,7 +40,7 @@ Graph *Graph_CreateWeightedDiGraph(void);
 /// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
 Graph *Graph_CreateDiGraph(void);
 
-/// Adds a vertex to the next available spot in the AdjMatrix, with state EXISTS WITH NO ADJACENCY. O(1)
+/// Adds a vertex to the adjacency table at index VertexRange O(1)
 /// - Returns: the index of the vertex created
 u_short Graph_AddVertex(Graph *g);
 
@@ -61,7 +50,7 @@ u_short Graph_AddVertex(Graph *g);
 ///   - g: The graph
 ///   - v1: The vertex to be adjacent to v2
 ///   - v2: The vertex to be adjacent to v1
-void Graph_SetAdjacency(Graph *g, u_short v1, u_short v2);
+void Graph_SetAdjacent(Graph *g, u_short v1, u_short v2);
 
 /// Returns if two vertex are adjacent
 /// On a digraph, v1 can be adj to v2 but not neccesarily vice versa
@@ -95,8 +84,8 @@ void Graph_RemoveVertex(Graph *g, u_short v);
 /// Adds a self loop to a vertex
 void Graph_SetSelfLoop(Graph *g, u_short v);
 
-/// Sets two adjacent vertices weight
-void Graph_SetAdjacencyWeight(Graph *g, u_short v1, u_short v2, u_int weight);
+/// Sets two adjacent vertices weight;
+void Graph_SetAdjacencyWeighted(Graph *g, u_short v1, u_short v2, u_short weight);
 
 /// Computes the degree of a vertex
 u_int Graph_VertexDegree(Graph *g, u_short v);
