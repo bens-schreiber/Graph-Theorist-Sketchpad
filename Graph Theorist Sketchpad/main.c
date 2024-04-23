@@ -6,12 +6,15 @@
 //
 
 #include "raylib.h"
+#include "Bvh/Primitive.h"
 
 int main(void)
 {
     
     const int screenWidth = 800;
     const int screenHeight = 450;
+    Primitive p;
+    int isPSet = 0;
     
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     
@@ -22,11 +25,20 @@ int main(void)
     {
         // TODO: Update your variables here
         
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            isPSet = 1;
+            p = Primitive_CreatePrimitive(GetMousePosition());
+        }
+        
         BeginDrawing();
         
         ClearBackground(RAYWHITE);
         
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        if (isPSet)
+        {
+            Primitive_Draw(&p);
+        }
         
         EndDrawing();
     }

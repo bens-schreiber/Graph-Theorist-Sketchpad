@@ -60,6 +60,7 @@
 		A46FE0832BD705BD0045977A /* Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		A46FE0902BD706570045977A /* GraphTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphTests.h; sourceTree = "<group>"; };
 		A46FE0962BD708F10045977A /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		A46FE0BB2BD868380045977A /* Primitive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Primitive.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +112,7 @@
 		A46FE01F2BD6EFC50045977A /* Graph Theorist Sketchpad */ = {
 			isa = PBXGroup;
 			children = (
+				A46FE0BA2BD868200045977A /* Bvh */,
 				A46FE0222BD6EFC50045977A /* raylib.entitlements */,
 				A46FE0242BD6EFC50045977A /* libraylib.a */,
 				A46FE0622BD701B90045977A /* main.c */,
@@ -134,6 +136,14 @@
 				A46FE0962BD708F10045977A /* main.c */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		A46FE0BA2BD868200045977A /* Bvh */ = {
+			isa = PBXGroup;
+			children = (
+				A46FE0BB2BD868380045977A /* Primitive.h */,
+			);
+			path = Bvh;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
