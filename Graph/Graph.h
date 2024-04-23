@@ -101,4 +101,6 @@ void Graph_SetAdjacencyWeight(Graph *g, u_short v1, u_short v2, u_int weight);
 /// Computes the degree of a vertex
 u_int Graph_VertexDegree(Graph *g, u_short v);
 
+void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, char buffer[100]);
+
 #endif /* Graph_h */

@@ -14,6 +14,8 @@
 		A46FE0972BD708F10045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0962BD708F10045977A /* main.c */; };
 		A46FE0982BD708F10045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0962BD708F10045977A /* main.c */; };
 		A46FE0992BD709F80045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
+		A46FE09B2BD7336B0045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0622BD701B90045977A /* main.c */; };
+		A46FE09C2BD733780045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -233,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A46FE09C2BD733780045977A /* Graph.c in Sources */,
 				A46FE0632BD701B90045977A /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,6 +246,7 @@
 			files = (
 				A46FE07E2BD702300045977A /* Graph.c in Sources */,
 				A46FE0972BD708F10045977A /* main.c in Sources */,
+				A46FE09B2BD7336B0045977A /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

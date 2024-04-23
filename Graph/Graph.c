@@ -187,3 +187,8 @@ u_int Graph_VertexDegree(Graph *g, u_short v)
     }
     return deg;
 }
+
+void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, char buffer[100])
+{
+    
+}
