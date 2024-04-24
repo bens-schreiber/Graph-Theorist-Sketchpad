@@ -16,6 +16,8 @@
 #define WE_DNE          0
 #define WE_MIN          1
 
+typedef char StringBuffer[0xFFF];
+
 /// A value greater than 0 implies the edge exists with weight of the value, a value 0 indicates there is no edge.
 typedef u_short WeightedEdge;
 
@@ -90,6 +92,8 @@ void Graph_SetAdjacencyWeighted(Graph *g, u_short v1, u_short v2, u_short weight
 /// Computes the degree of a vertex
 u_int Graph_VertexDegree(Graph *g, u_short v);
 
-void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, char buffer[100]);
+void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, StringBuffer buffer);
+
+void Graph_DumpString(Graph *g, StringBuffer buffer);
 
 #endif /* Graph_h */

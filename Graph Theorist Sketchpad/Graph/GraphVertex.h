@@ -14,12 +14,12 @@
 
 #define GRAPH_VERTEX_RADIUS 15
 
-typedef char StringBuffer[100];
+typedef char Label[100];
 
 typedef struct
 {
     u_short Index;
-    StringBuffer Label;
+    Label Label;
     Color Color;
 } GraphVertex;
 

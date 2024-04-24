@@ -23,6 +23,10 @@ int main(void)
     BvhTree *bvht = NULL;
     Graph *g = Graph_CreateGraph();
     
+    char buffer[0xFFF] = "";
+    
+    u_int graphHash = g->Vertices;
+    
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     
     SetTargetFPS(60);
@@ -52,6 +56,14 @@ int main(void)
             }
         }
         
+        if (graphHash != g->Vertices)
+        {
+            Graph_DumpString(g, buffer);
+            graphHash = g->Vertices;
+        }
+        
+        DrawText(buffer, 10, 10, 20, BLACK);
+        
         BeginDrawing();
         
         ClearBackground(RAYWHITE);
@@ -64,8 +76,6 @@ int main(void)
         }
         
         EndDrawing();
-        
-        continue;
     }
     CloseWindow();
     

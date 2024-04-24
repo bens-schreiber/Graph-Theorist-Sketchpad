@@ -8,6 +8,8 @@
 #include "Graph.h"
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
+#include <stdio.h>
 
 #define VERTEX_EXISTS(g, x) (x <= g->Vertices)
 #define VERTEX_NOT_EXISTS(g,x) (!VERTEX_EXISTS(g,x))
@@ -173,7 +175,26 @@ u_int Graph_VertexDegree(Graph *g, u_short v)
     return deg;
 }
 
-void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, char buffer[100])
+void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, StringBuffer buffer)
 {
     
+}
+
+void Graph_DumpString(Graph *g, StringBuffer buffer)
+{
+    memset(buffer, '\0', sizeof(StringBuffer));
+    char numStr[3];
+    for (int i = 0; i < g->Vertices; i++)
+    {
+        for (int j = 0; j < g->Vertices; j++)
+        {
+            sprintf(numStr, "%d", g->AdjMatrix[i][j]);
+            strcat(buffer, numStr);
+            if (j + 1 < g->Vertices)
+            {
+                strcat(buffer, " ");
+            }
+        }
+        strcat(buffer, "\n");
+    }
 }
