@@ -17,9 +17,14 @@
 		A46FE09C2BD733780045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
 		A46FE0C22BD86C0F0045977A /* BvhTreeDraw.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C12BD86C0F0045977A /* BvhTreeDraw.c */; };
 		A46FE0C52BD8711D0045977A /* LongestAxis.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C42BD8711D0045977A /* LongestAxis.c */; };
-		A46FE0CA2BD892930045977A /* GraphVertex.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C92BD892930045977A /* GraphVertex.c */; };
 		A46FE0CC2BD89D4B0045977A /* BvhTreeCreateFree.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0CB2BD89D4B0045977A /* BvhTreeCreateFree.c */; };
 		A46FE0CE2BD89ED10045977A /* BvhCheckCollision.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0CD2BD89ED00045977A /* BvhCheckCollision.c */; };
+		A46FE0D62BD9901E0045977A /* GraphSketchCreateFree.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0D52BD9901E0045977A /* GraphSketchCreateFree.c */; };
+		A46FE0D72BD9901E0045977A /* GraphSketchCreateFree.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0D52BD9901E0045977A /* GraphSketchCreateFree.c */; };
+		A46FE0D92BD99ADB0045977A /* GraphSketchDraw.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0D82BD99ADB0045977A /* GraphSketchDraw.c */; };
+		A46FE0DA2BD99ADB0045977A /* GraphSketchDraw.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0D82BD99ADB0045977A /* GraphSketchDraw.c */; };
+		A46FE0DC2BD99B780045977A /* GraphSketchUpdate.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0DB2BD99B780045977A /* GraphSketchUpdate.c */; };
+		A46FE0DD2BD99B780045977A /* GraphSketchUpdate.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0DB2BD99B780045977A /* GraphSketchUpdate.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,10 +74,12 @@
 		A46FE0C12BD86C0F0045977A /* BvhTreeDraw.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BvhTreeDraw.c; sourceTree = "<group>"; };
 		A46FE0C32BD8711D0045977A /* LongestAxis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LongestAxis.h; sourceTree = "<group>"; };
 		A46FE0C42BD8711D0045977A /* LongestAxis.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = LongestAxis.c; sourceTree = "<group>"; };
-		A46FE0C82BD892930045977A /* GraphVertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphVertex.h; sourceTree = "<group>"; };
-		A46FE0C92BD892930045977A /* GraphVertex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = GraphVertex.c; sourceTree = "<group>"; };
 		A46FE0CB2BD89D4B0045977A /* BvhTreeCreateFree.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BvhTreeCreateFree.c; sourceTree = "<group>"; };
 		A46FE0CD2BD89ED00045977A /* BvhCheckCollision.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BvhCheckCollision.c; sourceTree = "<group>"; };
+		A46FE0D52BD9901E0045977A /* GraphSketchCreateFree.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = GraphSketchCreateFree.c; sourceTree = "<group>"; };
+		A46FE0D82BD99ADB0045977A /* GraphSketchDraw.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = GraphSketchDraw.c; sourceTree = "<group>"; };
+		A46FE0DB2BD99B780045977A /* GraphSketchUpdate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = GraphSketchUpdate.c; sourceTree = "<group>"; };
+		A46FE0DE2BD99D890045977A /* GraphSketch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphSketch.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +131,7 @@
 		A46FE01F2BD6EFC50045977A /* Graph Theorist Sketchpad */ = {
 			isa = PBXGroup;
 			children = (
-				A46FE0C72BD892820045977A /* Graph */,
+				A46FE0C72BD892820045977A /* GraphSketch */,
 				A46FE0BA2BD868200045977A /* Bvh */,
 				A46FE0222BD6EFC50045977A /* raylib.entitlements */,
 				A46FE0242BD6EFC50045977A /* libraylib.a */,
@@ -181,13 +188,15 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
-		A46FE0C72BD892820045977A /* Graph */ = {
+		A46FE0C72BD892820045977A /* GraphSketch */ = {
 			isa = PBXGroup;
 			children = (
-				A46FE0C82BD892930045977A /* GraphVertex.h */,
-				A46FE0C92BD892930045977A /* GraphVertex.c */,
+				A46FE0DE2BD99D890045977A /* GraphSketch.h */,
+				A46FE0D52BD9901E0045977A /* GraphSketchCreateFree.c */,
+				A46FE0DB2BD99B780045977A /* GraphSketchUpdate.c */,
+				A46FE0D82BD99ADB0045977A /* GraphSketchDraw.c */,
 			);
-			path = Graph;
+			path = GraphSketch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,11 +300,13 @@
 			files = (
 				A46FE0CC2BD89D4B0045977A /* BvhTreeCreateFree.c in Sources */,
 				A46FE0C22BD86C0F0045977A /* BvhTreeDraw.c in Sources */,
-				A46FE0CA2BD892930045977A /* GraphVertex.c in Sources */,
 				A46FE09C2BD733780045977A /* Graph.c in Sources */,
 				A46FE0632BD701B90045977A /* main.c in Sources */,
 				A46FE0CE2BD89ED10045977A /* BvhCheckCollision.c in Sources */,
+				A46FE0DC2BD99B780045977A /* GraphSketchUpdate.c in Sources */,
+				A46FE0D92BD99ADB0045977A /* GraphSketchDraw.c in Sources */,
 				A46FE0C52BD8711D0045977A /* LongestAxis.c in Sources */,
+				A46FE0D62BD9901E0045977A /* GraphSketchCreateFree.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,8 +314,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A46FE0D72BD9901E0045977A /* GraphSketchCreateFree.c in Sources */,
+				A46FE0DA2BD99ADB0045977A /* GraphSketchDraw.c in Sources */,
 				A46FE07E2BD702300045977A /* Graph.c in Sources */,
 				A46FE0972BD708F10045977A /* main.c in Sources */,
+				A46FE0DD2BD99B780045977A /* GraphSketchUpdate.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

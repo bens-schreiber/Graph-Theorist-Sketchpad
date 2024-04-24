@@ -52,10 +52,15 @@ Graph *Graph_CreateWeightedDiGraph(void)
     return _Graph_Factory(true, true);
 }
 
-u_short Graph_AddVertex(Graph *g)
+void Graph_FreeGraph(Graph *g)
+{
+    free(g);
+}
+
+VertexIndex Graph_AddVertex(Graph *g)
 {
     assert(g != NULL);
-    int nextVertexIndex = g->Vertices + 1;
+    VertexIndex nextVertexIndex = g->Vertices + 1;
     assert(VERTEX_NOT_EXISTS(g, nextVertexIndex));
     assert(nextVertexIndex < GRAPH_MAX_SIZE);
     
@@ -65,7 +70,7 @@ u_short Graph_AddVertex(Graph *g)
     return g->Vertices++;
 }
 
-void Graph_SetAdjacencyWeighted(Graph *g, u_short v1, u_short v2, u_short weight)
+void Graph_SetAdjacencyWeighted(Graph *g, VertexIndex v1, VertexIndex v2, VertexIndex weight)
 {
     assert(g != NULL);
     assert(VERTEX_EXISTS(g, v1));
@@ -81,23 +86,23 @@ void Graph_SetAdjacencyWeighted(Graph *g, u_short v1, u_short v2, u_short weight
     g->Edges++;
 }
 
-void Graph_SetAdjacent(Graph *g, u_short v1, u_short v2)
+void Graph_SetAdjacent(Graph *g, VertexIndex v1, VertexIndex v2)
 {
     Graph_SetAdjacencyWeighted(g, v1, v2, WE_MIN);
 }
 
-bool Graph_IsAdjacent(Graph *g, u_short v1, u_short v2)
+bool Graph_IsAdjacent(Graph *g, VertexIndex v1, VertexIndex v2)
 {
     assert(g != NULL);
     return g->AdjMatrix[v1][v2] > 0;
 }
 
-bool Graph_IsNotAdjacent(Graph *g, u_short v1, u_short v2)
+bool Graph_IsNotAdjacent(Graph *g, VertexIndex v1, VertexIndex v2)
 {
     return !Graph_IsAdjacent(g, v1, v2);
 }
 
-void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2)
+void Graph_RemoveEdge(Graph *g, VertexIndex v1, VertexIndex v2)
 {
     assert(g != NULL);
     assert(VERTEX_EXISTS(g, v1));
@@ -108,7 +113,7 @@ void Graph_RemoveEdge(Graph *g, u_short v1, u_short v2)
     g->Edges--;
 }
 
-void Graph_RemoveVertex(Graph *g, u_short v)
+void Graph_RemoveVertex(Graph *g, VertexIndex v)
 {
     assert(g != NULL);
     assert(VERTEX_EXISTS(g, v));
@@ -150,7 +155,7 @@ void Graph_RemoveVertex(Graph *g, u_short v)
     g->Vertices--;
 }
 
-void Graph_SetSelfLoop(Graph *g, u_short v)
+void Graph_SetSelfLoop(Graph *g, VertexIndex v)
 {
     assert(g != NULL);
     assert(VERTEX_EXISTS(g, v));
@@ -159,12 +164,12 @@ void Graph_SetSelfLoop(Graph *g, u_short v)
     g->Edges++;
 }
 
-u_int Graph_VertexDegree(Graph *g, u_short v)
+unsigned int Graph_VertexDegree(Graph *g, VertexIndex v)
 {
     assert(g != NULL);
     assert(VERTEX_EXISTS(g, v));
     
-    u_int deg = 0;
+    unsigned int deg = 0;
     for (int i = 0; i < GRAPH_MAX_SIZE; i++)
     {
         if (Graph_IsAdjacent(g, v, i))
@@ -175,7 +180,7 @@ u_int Graph_VertexDegree(Graph *g, u_short v)
     return deg;
 }
 
-void Graph_Dijkstra(Graph *g, u_short v1, u_short v2, StringBuffer buffer)
+void Graph_Dijkstra(Graph *g, VertexIndex v1, VertexIndex v2, StringBuffer buffer)
 {
     
 }
