@@ -14,19 +14,30 @@
 
 typedef struct BvhNode
 {
+    /// The box that contains the Bounding Volume
     Rectangle BoundingBox;
+    
+    /// The collideables in the tree. Only populated in a leaf node.
     Primitive Primitives[2];
+    
+    /// The amount of collideables in the node.
     size_t Size;
+    
     struct BvhNode *Left;
     struct BvhNode *Right;
 } BvhNode;
 
+/// A bounding volume hierarchy tree
 typedef struct
 {
     BvhNode *root;
 } BvhTree;
 
 /// Creates a Bvh Tree from the given primitives confined to the scene bounding box
+/// - Parameters:
+///  - primitives: The collideable primitives to be put into the tree
+///  - size: The size of the primitives array
+///  - sceneBoundingBox: The largest most bounding box of the entire scene.
 BvhTree *BvhTree_CreateBvhTree(Primitive *primitives, size_t size, Rectangle sceneBoundingBox);
 
 /// Recurisvely frees all memory of the Bvh Tree
