@@ -14,15 +14,10 @@ int main(void)
     
     const int screenWidth = 800;
     const int screenHeight = 450;
-    const int size = 5;
-    Primitive p[size] = {};
-    p[0] = Primitive_CreatePrimitive((Vector2) {30,100});
-    p[1] = Primitive_CreatePrimitive((Vector2) {80,200});
-    p[2] = Primitive_CreatePrimitive((Vector2) {150, 100});
-    p[3] = Primitive_CreatePrimitive((Vector2) {280, 280});
-    p[4] = Primitive_CreatePrimitive((Vector2) {400, 400});
+    int size = 0;
+    Primitive p[100] = {};
     
-    BvhTree *bvht = BvhTree_CreateBvhTree(p, size, (Rectangle) {10,10,400,400});
+    BvhTree *bvht = NULL;
     
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     
@@ -32,6 +27,16 @@ int main(void)
     while (!WindowShouldClose())
     {
         // TODO: Update your variables here
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            p[size++] = Primitive_CreatePrimitive(GetMousePosition());
+            if (bvht != NULL)
+            {
+                BvhTree_FreeBvhTree(bvht);
+            }
+            
+            bvht = BvhTree_CreateBvhTree(p, size, (Rectangle) {0, 0, screenWidth, screenHeight});
+        }
         
         BeginDrawing();
         

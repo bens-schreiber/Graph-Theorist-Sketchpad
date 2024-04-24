@@ -173,5 +173,6 @@ void _Draw(const BvhNode *bvhn)
 
 void BvhTree_Draw(const BvhTree *bvht)
 {
+    if (bvht == NULL) return;
     _Draw(bvht->root);
 }
