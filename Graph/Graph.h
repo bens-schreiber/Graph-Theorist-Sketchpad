@@ -33,15 +33,6 @@ typedef struct
 /// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
 Graph *Graph_CreateGraph(void);
 
-/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
-Graph *Graph_CreateWeightedGraph(void);
-
-/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
-Graph *Graph_CreateWeightedDiGraph(void);
-
-/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
-Graph *Graph_CreateDiGraph(void);
-
 /// Frees the memory of the graph
 void Graph_FreeGraph(Graph *g);
 

@@ -19,7 +19,7 @@ int main(int argc, const char * argv[]) {
     Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix();
     Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix();
     Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix();
-    Digraph_SetAdjacency_GoesOneWay();
+    Graph_DigraphSetAdjacency_GoesOneWay();
     Graph_VertexDegree_ReturnsCorrectDegree();
     Graph_WeightedGraph_ReturnsCorrectWeight();
     
@@ -28,7 +28,6 @@ int main(int argc, const char * argv[]) {
     GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawable();
     GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox();
     GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox();
-    
     
     return 0;
 }

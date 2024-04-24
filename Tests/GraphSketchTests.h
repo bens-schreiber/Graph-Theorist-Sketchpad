@@ -13,8 +13,8 @@
 
 #define SCENE_BOUNDING_BOX ((Rectangle) {.x = 0, .y = 0, .width = 800, .height = 450})
 
-// --- Mocks ---
-void DrawRectangleRec(Rectangle _, Color __) {}
+#define TEST static inline void
+#define GRAPH_SKETCH_TEST_CASE(name) TEST name(void) { _Setup_GraphSketch_Tests(_##name); }
 
 static unsigned int _checkCollisionRecsCallCount = 0;
 bool CheckCollisionRecs(Rectangle a, Rectangle b)
@@ -25,27 +25,31 @@ bool CheckCollisionRecs(Rectangle a, Rectangle b)
     a.y < b.y + b.height &&
     a.y + a.height > b.y;
 }
-// --- Mocks ---
 
+void DrawRectangleRec(Rectangle _, Color __) {}
 
-void GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree(void)
+static void _Setup_GraphSketch_Tests(void (*test)(GraphSketch*))
 {
-    // Act
     GraphSketch *gs = GraphSketch_CreateGraphSketch();
-    
+    assert(gs != NULL);
+    test(gs);
+    GraphSketch_FreeGraphSketch(gs);
+    _checkCollisionRecsCallCount = 0;
+}
+
+TEST _GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree(GraphSketch *gs)
+{
     // Assert
     assert(gs->BvhTree == NULL);
     assert(gs->Graph != NULL);
     assert(gs->Graph->Vertices == 0);
-    
-    // Cleanup
-    GraphSketch_FreeGraphSketch(gs);
 }
+GRAPH_SKETCH_TEST_CASE(GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree)
 
-void GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawable(void)
+
+TEST _GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawable(GraphSketch *gs)
 {
     // Arrange
-    GraphSketch *gs = GraphSketch_CreateGraphSketch();
     const Vector2 pos = {0,0};
     
     // Act
@@ -57,16 +61,13 @@ void GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawabl
     assert(gs->BvhTree != NULL);
     assert(centroid.x == pos.x && centroid.y == pos.y);
     assert(gs->IndexToDrawableVertexMap[vi].VertexIndex == vi);
-    
-    // Cleanup
-    GraphSketch_FreeGraphSketch(gs);
 }
+GRAPH_SKETCH_TEST_CASE(GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawable)
 
-void GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox(void)
+
+TEST _GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox(GraphSketch *gs)
 {
     // Arrange
-    _checkCollisionRecsCallCount = 0;
-    GraphSketch *gs = GraphSketch_CreateGraphSketch();
     const Vector2 pos = {100,100};
     VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
     
@@ -76,16 +77,13 @@ void GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox(void)
     // Assert
     assert(collision);
     assert(_checkCollisionRecsCallCount == 2);
-    
-    // Cleanup
-    GraphSketch_FreeGraphSketch(gs);
-    _checkCollisionRecsCallCount = 0;
 }
+GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox)
 
-void GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox(void)
+
+TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox(GraphSketch *gs)
 {
     // Arrange
-    GraphSketch *gs = GraphSketch_CreateGraphSketch();
     const Vector2 pos = {100,100};
     VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
     
@@ -97,16 +95,13 @@ void GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox(void)
     // Assert
     assert(!collision);
     assert(_checkCollisionRecsCallCount == 2);
-    
-    // Cleanup
-    GraphSketch_FreeGraphSketch(gs);
-    _checkCollisionRecsCallCount = 0;
 }
+GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox)
 
-void GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene(void)
+
+TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene(GraphSketch *gs)
 {
     // Arrange
-    GraphSketch *gs = GraphSketch_CreateGraphSketch();
     const Vector2 pos = {100,100};
     GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
     
@@ -117,10 +112,7 @@ void GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene(void)
     // Assert
     assert(!collision);
     assert(_checkCollisionRecsCallCount == 1);
-    
-    // Cleanup
-    GraphSketch_FreeGraphSketch(gs);
-    _checkCollisionRecsCallCount = 0;
 }
+GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene)
 
 #endif /* GraphSketchTests_h */

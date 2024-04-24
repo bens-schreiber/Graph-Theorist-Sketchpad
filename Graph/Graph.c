@@ -14,13 +14,13 @@
 #define VERTEX_EXISTS(g, x) (x <= g->Vertices)
 #define VERTEX_NOT_EXISTS(g,x) (!VERTEX_EXISTS(g,x))
 
-static Graph *_Graph_Factory(bool directed, bool weighted)
+Graph *Graph_CreateGraph(void)
 {
     Graph *g = malloc(sizeof(Graph));
     g->Edges = 0;
     g->Vertices = 0;
-    g->IsDirected = directed;
-    g->IsWeighted = weighted;
+    g->IsDirected = false;
+    g->IsWeighted = false;
     
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i)
     {
@@ -31,25 +31,6 @@ static Graph *_Graph_Factory(bool directed, bool weighted)
     }
     
     return g;
-}
-Graph *Graph_CreateGraph(void)
-{
-    return _Graph_Factory(false, false);
-}
-
-Graph *Graph_CreateWeightedGraph(void)
-{
-    return _Graph_Factory(false, true);
-}
-
-Graph *Graph_CreateDiGraph(void)
-{
-    return _Graph_Factory(true, false);
-}
-
-Graph *Graph_CreateWeightedDiGraph(void)
-{
-    return _Graph_Factory(true, true);
 }
 
 void Graph_FreeGraph(Graph *g)
