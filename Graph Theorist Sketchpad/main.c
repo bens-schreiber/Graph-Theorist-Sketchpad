@@ -6,6 +6,7 @@
 //
 
 #include "raylib.h"
+#include <stdio.h>
 #include "Bvh/BvhTree.h"
 #include "Bvh/Primitive/Primitive.h"
 #include "../Graph/Graph.h"
@@ -29,8 +30,7 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())
     {
-        // TODO: Update your variables here
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
         {
             u_short size = Graph_AddVertex(g);
             p[size] = Primitive_CreatePrimitive(GetMousePosition());
@@ -43,10 +43,20 @@ int main(void)
             bvht = BvhTree_CreateBvhTree(p, size + 1, (Rectangle) {0, 0, screenWidth, screenHeight});
         }
         
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            Primitive p = Primitive_CreatePrimitiveWithSize(GetMousePosition(), 3);
+            if (BvhTree_CheckCollision(bvht, p.BoundingBox))
+            {
+                printf("COLLISION!!!");
+            }
+        }
+        
         BeginDrawing();
         
         ClearBackground(RAYWHITE);
         
+        // TODO: option to show Bvh tree
         BvhTree_Draw(bvht);
         for (int i = 0; i < g->Vertices; i++)
         {

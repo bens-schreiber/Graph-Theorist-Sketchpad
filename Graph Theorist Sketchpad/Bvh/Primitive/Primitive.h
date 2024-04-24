@@ -19,10 +19,9 @@ typedef struct
     Vector2 Centroid;
 } Primitive;
 
-/// Creates a new primitive at a given position with a bounding box enclosing it
-static inline Primitive Primitive_CreatePrimitive(Vector2 position)
+static inline Primitive Primitive_CreatePrimitiveWithSize(Vector2 position, float boundingBoxSize)
 {
-    Vector2 corner = Vector2SubtractValue(position, BOUNDING_BOX_SIZE / 2);
+    Vector2 corner = Vector2SubtractValue(position, boundingBoxSize / 2);
     Rectangle boundingBox =
     {
         .x = corner.x,
@@ -32,6 +31,12 @@ static inline Primitive Primitive_CreatePrimitive(Vector2 position)
     };
     
     return (Primitive) {boundingBox, position};
+}
+
+/// Creates a new primitive at a given position with a bounding box enclosing it
+static inline Primitive Primitive_CreatePrimitive(Vector2 position)
+{
+    return Primitive_CreatePrimitiveWithSize(position, BOUNDING_BOX_SIZE);
 }
 
 
