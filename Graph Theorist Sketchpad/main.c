@@ -13,7 +13,9 @@ int main(void)
 {
     const Rectangle screenBoundingBox = {.x = 0, .y = 0, .width = 800, .height = 450};
     
-//    GraphSketch *gs = GraphSketch_CreateGraphSketch()
+    GraphSketch *gs = GraphSketch_CreateGraphSketch();
+    StringBuffer buffer;
+    bool redrawGraph = true;
     
     InitWindow(screenBoundingBox.width, screenBoundingBox.height, "raylib [core] example - basic window");
     
@@ -24,22 +26,29 @@ int main(void)
     {
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
         {
-            
+            GraphSketch_AddVertex(gs, GetMousePosition(), screenBoundingBox);
+            redrawGraph = true;
         }
         
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            
+            printf("clicked");
         }
         
         BeginDrawing();
         
+        GraphSketch_DrawVertices(gs);
+        GraphSketch_DrawAdjMatrix(gs, buffer, redrawGraph);
+        
         ClearBackground(RAYWHITE);
         
         EndDrawing();
+        redrawGraph = false;
     }
     
     CloseWindow();
+    
+    GraphSketch_FreeGraphSketch(gs);
     
     return 0;
 }
