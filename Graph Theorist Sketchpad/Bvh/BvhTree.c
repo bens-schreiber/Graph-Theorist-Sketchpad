@@ -46,12 +46,12 @@ static Rectangle _ExpandBoundingBox(Rectangle a, Rectangle b)
 static BvhNode *_CreateBvhTreeImpl(Primitive *primitives, size_t size, Rectangle boundingBox)
 {
     
+    BvhNode *bvhn = _BvhNode_CreateBvhNode(primitives, size, boundingBox);
+    
     if (size < 2)
     {
-        return NULL;
+        return bvhn;
     }
-    
-    BvhNode *bvhn = _BvhNode_CreateBvhNode(primitives, size, boundingBox);
     
     if (size == 2)
     {
@@ -154,6 +154,7 @@ bool _CheckCollisionImpl(const BvhNode *bvhn, Rectangle boundingBox)
 
 bool BvhTree_CheckCollision(const BvhTree *bvht, Rectangle boundingBox)
 {
+    if (bvht == NULL) return false;
     return _CheckCollisionImpl(bvht->root, boundingBox);
 }
 

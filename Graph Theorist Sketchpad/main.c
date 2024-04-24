@@ -32,15 +32,15 @@ int main(void)
     {
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
         {
-            u_short size = Graph_AddVertex(g);
-            p[size] = Primitive_CreatePrimitive(GetMousePosition());
-            gv[size] = GraphVertex_CreateGraphVertex(size, "Default Label", RED);
+            u_short index = Graph_AddVertex(g);
+            p[index] = Primitive_CreatePrimitive(GetMousePosition());
+            gv[index] = GraphVertex_CreateGraphVertex(index, "Default Label", RED);
             if (bvht != NULL)
             {
                 BvhTree_FreeBvhTree(bvht);
             }
             
-            bvht = BvhTree_CreateBvhTree(p, size + 1, (Rectangle) {0, 0, screenWidth, screenHeight});
+            bvht = BvhTree_CreateBvhTree(p, index + 1, (Rectangle) {0, 0, screenWidth, screenHeight});
         }
         
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
