@@ -6,15 +6,16 @@
 //
 
 #include "raylib.h"
+#include "GraphSketch/GraphSketch.h"
 #include <stdio.h>
 
 int main(void)
 {
+    const Rectangle screenBoundingBox = {.x = 0, .y = 0, .width = 800, .height = 450};
     
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+//    GraphSketch *gs = GraphSketch_CreateGraphSketch()
     
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenBoundingBox.width, screenBoundingBox.height, "raylib [core] example - basic window");
     
     SetTargetFPS(60);
     

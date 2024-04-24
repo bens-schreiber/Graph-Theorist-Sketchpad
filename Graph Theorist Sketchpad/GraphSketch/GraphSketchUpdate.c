@@ -22,8 +22,8 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     if (gs->BvhTree != NULL)
     {
         BvhTree_FreeBvhTree(gs->BvhTree);
-        gs->BvhTree = BvhTree_CreateBvhTree(gs->IndexToPrimitiveMap, vi, sceneBoundingBox);
     }
+    gs->BvhTree = BvhTree_CreateBvhTree(gs->IndexToPrimitiveMap, gs->Graph->Vertices, sceneBoundingBox);
     
     // Add a vertex to the display
     gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex("", RED, vi);

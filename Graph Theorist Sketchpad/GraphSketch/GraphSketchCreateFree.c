@@ -30,7 +30,11 @@ GraphSketch *GraphSketch_CreateGraphSketch(void)
 void GraphSketch_FreeGraphSketch(GraphSketch *gs)
 {
     assert(gs != NULL);
-    BvhTree_FreeBvhTree(gs->BvhTree);
+    
+    if (gs->BvhTree != NULL)
+    {
+        BvhTree_FreeBvhTree(gs->BvhTree);
+    }
     Graph_FreeGraph(gs->Graph);
     free(gs);
 }
