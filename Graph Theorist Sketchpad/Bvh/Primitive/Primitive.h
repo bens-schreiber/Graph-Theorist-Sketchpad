@@ -11,7 +11,7 @@
 #include "raylib.h"
 #include "raymath.h"
 
-#define BOUNDING_BOX_SIZE 20.0
+#define BOUNDING_BOX_SIZE 25.0
 
 typedef struct
 {

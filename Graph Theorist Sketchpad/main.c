@@ -8,16 +8,19 @@
 #include "raylib.h"
 #include "Bvh/BvhTree.h"
 #include "Bvh/Primitive/Primitive.h"
+#include "../Graph/Graph.h"
+#include "Graph/GraphVertex.h"
 
 int main(void)
 {
     
     const int screenWidth = 800;
     const int screenHeight = 450;
-    int size = 0;
-    Primitive p[100] = {};
     
+    Primitive p[100] = {};
+    GraphVertex gv[100] = {};
     BvhTree *bvht = NULL;
+    Graph *g = Graph_CreateGraph();
     
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     
@@ -29,13 +32,15 @@ int main(void)
         // TODO: Update your variables here
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            p[size++] = Primitive_CreatePrimitive(GetMousePosition());
+            u_short size = Graph_AddVertex(g);
+            p[size] = Primitive_CreatePrimitive(GetMousePosition());
+            gv[size] = GraphVertex_CreateGraphVertex(size, "Default Label", RED);
             if (bvht != NULL)
             {
                 BvhTree_FreeBvhTree(bvht);
             }
             
-            bvht = BvhTree_CreateBvhTree(p, size, (Rectangle) {0, 0, screenWidth, screenHeight});
+            bvht = BvhTree_CreateBvhTree(p, size + 1, (Rectangle) {0, 0, screenWidth, screenHeight});
         }
         
         BeginDrawing();
@@ -43,9 +48,9 @@ int main(void)
         ClearBackground(RAYWHITE);
         
         BvhTree_Draw(bvht);
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < g->Vertices; i++)
         {
-            Primitive_Draw(p + i);
+            GraphVertex_Draw(gv + i, p + gv[i].Index);
         }
         
         EndDrawing();

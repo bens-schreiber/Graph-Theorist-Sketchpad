@@ -14,10 +14,10 @@
 		A46FE0972BD708F10045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0962BD708F10045977A /* main.c */; };
 		A46FE0982BD708F10045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0962BD708F10045977A /* main.c */; };
 		A46FE0992BD709F80045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
-		A46FE09B2BD7336B0045977A /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0622BD701B90045977A /* main.c */; };
 		A46FE09C2BD733780045977A /* Graph.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE02F2BD6F0440045977A /* Graph.c */; };
 		A46FE0C22BD86C0F0045977A /* BvhTree.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C12BD86C0F0045977A /* BvhTree.c */; };
 		A46FE0C52BD8711D0045977A /* LongestAxis.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C42BD8711D0045977A /* LongestAxis.c */; };
+		A46FE0CA2BD892930045977A /* GraphVertex.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C92BD892930045977A /* GraphVertex.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +67,8 @@
 		A46FE0C12BD86C0F0045977A /* BvhTree.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = BvhTree.c; sourceTree = "<group>"; };
 		A46FE0C32BD8711D0045977A /* LongestAxis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LongestAxis.h; sourceTree = "<group>"; };
 		A46FE0C42BD8711D0045977A /* LongestAxis.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = LongestAxis.c; sourceTree = "<group>"; };
+		A46FE0C82BD892930045977A /* GraphVertex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphVertex.h; sourceTree = "<group>"; };
+		A46FE0C92BD892930045977A /* GraphVertex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = GraphVertex.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 		A46FE01F2BD6EFC50045977A /* Graph Theorist Sketchpad */ = {
 			isa = PBXGroup;
 			children = (
+				A46FE0C72BD892820045977A /* Graph */,
 				A46FE0BA2BD868200045977A /* Bvh */,
 				A46FE0222BD6EFC50045977A /* raylib.entitlements */,
 				A46FE0242BD6EFC50045977A /* libraylib.a */,
@@ -170,6 +173,15 @@
 				A46FE0C42BD8711D0045977A /* LongestAxis.c */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		A46FE0C72BD892820045977A /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				A46FE0C82BD892930045977A /* GraphVertex.h */,
+				A46FE0C92BD892930045977A /* GraphVertex.c */,
+			);
+			path = Graph;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A46FE0C22BD86C0F0045977A /* BvhTree.c in Sources */,
+				A46FE0CA2BD892930045977A /* GraphVertex.c in Sources */,
 				A46FE09C2BD733780045977A /* Graph.c in Sources */,
 				A46FE0632BD701B90045977A /* main.c in Sources */,
 				A46FE0C52BD8711D0045977A /* LongestAxis.c in Sources */,
@@ -284,7 +297,6 @@
 			files = (
 				A46FE07E2BD702300045977A /* Graph.c in Sources */,
 				A46FE0972BD708F10045977A /* main.c in Sources */,
-				A46FE09B2BD7336B0045977A /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
