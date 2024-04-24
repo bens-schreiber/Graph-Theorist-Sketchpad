@@ -6,15 +6,23 @@
 //
 
 #include "raylib.h"
-#include "Bvh/Primitive.h"
+#include "Bvh/BvhTree.h"
+#include "Bvh/Primitive/Primitive.h"
 
 int main(void)
 {
     
     const int screenWidth = 800;
     const int screenHeight = 450;
-    Primitive p;
-    int isPSet = 0;
+    const int size = 3;
+    Primitive p[size] = {};
+    p[0] = Primitive_CreatePrimitive((Vector2) {30,100});
+    p[1] = Primitive_CreatePrimitive((Vector2) {100,100});
+    p[2] = Primitive_CreatePrimitive((Vector2) {150, 150});
+//    p[3] = Primitive_CreatePrimitive((Vector2) {280, 280});
+//    p[4] = Primitive_CreatePrimitive((Vector2) {400, 400});
+    
+    BvhTree *bvht = BvhTree_CreateBvhTree(p, size, (Rectangle) {10,10,200,200});
     
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     
@@ -25,22 +33,19 @@ int main(void)
     {
         // TODO: Update your variables here
         
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-        {
-            isPSet = 1;
-            p = Primitive_CreatePrimitive(GetMousePosition());
-        }
-        
         BeginDrawing();
         
         ClearBackground(RAYWHITE);
         
-        if (isPSet)
+        BvhTree_Draw(bvht);
+        for (int i = 0; i < size; i++)
         {
-            Primitive_Draw(&p);
+            Primitive_Draw(p + i);
         }
         
         EndDrawing();
+        
+        continue;
     }
     CloseWindow();
     

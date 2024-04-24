@@ -34,9 +34,10 @@ static inline Primitive Primitive_CreatePrimitive(Vector2 position)
     return (Primitive) {boundingBox, position};
 }
 
+
 static inline void Primitive_Draw(const Primitive *p)
 {
-    DrawRectangleLines(p->BoundingBox.x, p->BoundingBox.y, p->BoundingBox.width, p->BoundingBox.height, RED);
+    DrawRectangleRec(p->BoundingBox, RED);
 }
 
 
