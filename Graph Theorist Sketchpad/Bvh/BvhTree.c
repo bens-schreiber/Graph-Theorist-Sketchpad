@@ -13,24 +13,12 @@
 static BvhNode *_BvhNode_CreateBvhNode(const Primitive *primitives, size_t size, Rectangle boundingBox)
 {
     BvhNode *bvhn = malloc(sizeof(BvhNode));
-    bvhn->BoundingBox = boundingBox;
-    bvhn->Left        = NULL;
-    bvhn->Right       = NULL;
-    bvhn->Size        = size;
-    
-    if (size == 1)
-    {
-        bvhn->Primitives[0] = primitives[0];
-        bvhn->Primitives[1] = primitives[0];
-        return bvhn;
-    }
-    
-    if (size == 2)
-    {
-        bvhn->Primitives[0] = primitives[0];
-        bvhn->Primitives[1] = primitives[1];
-        return bvhn;
-    }
+    bvhn->BoundingBox   = boundingBox;
+    bvhn->Left          = NULL;
+    bvhn->Right         = NULL;
+    bvhn->Size          = size;
+    bvhn->Primitives[0] = primitives[0];
+    bvhn->Primitives[1] = primitives[1];
     
     return bvhn;
 }
@@ -38,24 +26,40 @@ static BvhNode *_BvhNode_CreateBvhNode(const Primitive *primitives, size_t size,
 /// Expands the a bounding box to enclose both a and b
 static Rectangle _ExpandBoundingBox(Rectangle a, Rectangle b)
 {
-    Vector2 aMin = {a.x, a.y};
-    //    Vector2 aMax = {a.x + a.width, a.y + a.height };
+    // Calculate the minimum and maximum x and y coordinates
+    int minX = (a.x < b.x) ? a.x : b.x;
+    int minY = (a.y < b.y) ? a.y : b.y;
+    int maxX = (a.x + a.width > b.x + b.width) ? a.x + a.width : b.x + b.width;
+    int maxY = (a.y + a.height > b.y + b.height) ? a.y + a.height : b.y + b.height;
     
-    //    Vector2 bMin = {b.x, b.y};
-    Vector2 bMax = {b.x + b.width, b.y + b.height };
+    Rectangle result;
+
+    // Calculate the width and height of the smallest enclosing rectangle
+    result.x = minX;
+    result.y = minY;
+    result.width = maxX - minX;
+    result.height = maxY - minY;
     
-    return (Rectangle) {.x = aMin.x, .y = aMin.y, .width = bMax.x - aMin.x, .height = bMax.y - aMin.y};
+    return result;
 }
 
 static BvhNode *_CreateBvhTreeImpl(Primitive *primitives, size_t size, Rectangle boundingBox)
 {
-    // If there are less than 2 primitives, the BVH node should be a leaf node.
+    
     if (size < 2)
     {
         return NULL;
     }
     
     BvhNode *bvhn = _BvhNode_CreateBvhNode(primitives, size, boundingBox);
+    
+    if (size == 2)
+    {
+        Rectangle a = bvhn->Primitives[0].BoundingBox;
+        Rectangle b = bvhn->Primitives[1].BoundingBox;
+        bvhn->BoundingBox = _ExpandBoundingBox(a,b);
+        return bvhn;
+    }
     
     // Sort the primitivess by the longest axis.
     qsort(primitives, size, sizeof(Primitive), LongestAxis_CompareByLongestAxis(boundingBox));
@@ -81,7 +85,7 @@ static BvhNode *_CreateBvhTreeImpl(Primitive *primitives, size_t size, Rectangle
     }
     
     // Recurse on the left and right AABBs.
-    bvhn->Left = _CreateBvhTreeImpl(primitives, median, left);
+    bvhn->Left = _CreateBvhTreeImpl(primitives, median + 1, left);
     bvhn->Right = _CreateBvhTreeImpl(primitives + median, size - median, right);
     
     return bvhn;
