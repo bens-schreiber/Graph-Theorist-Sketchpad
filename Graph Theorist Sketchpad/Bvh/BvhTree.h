@@ -44,7 +44,8 @@ BvhTree *BvhTree_CreateBvhTree(Primitive *primitives, size_t size, Rectangle sce
 void BvhTree_FreeBvhTree(BvhTree *bvht);
 
 /// Checks if a boundingBox collides with any other boundingBox in the Bvh Tree
-bool BvhTree_CheckCollision(const BvhTree *bvht, Rectangle boundingBox);
+/// - Returns: the primitive it collides with (nullable)
+Primitive *BvhTree_CheckCollision(BvhTree *bvht, Rectangle boundingBox);
 
 /// Recursively draws the bounding boxes of all BvhNodes
 void BvhTree_Draw(const BvhTree *bvht);

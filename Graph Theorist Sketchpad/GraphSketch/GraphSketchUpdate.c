@@ -7,6 +7,7 @@
 
 #include "GraphSketch.h"
 #include <assert.h>
+#include <stdio.h>
 
 VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle sceneBoundingBox)
 {
@@ -16,7 +17,7 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     VertexIndex vi = Graph_AddVertex(gs->Graph);
     
     // Add a collideable at the given position
-    gs->IndexToPrimitiveMap[vi] = Primitive_CreatePrimitive(position);
+    gs->IndexToPrimitiveMap[vi] = Primitive_CreatePrimitive(position, vi);
     
     // Re-create the Bvh Tree on every graph change
     if (gs->BvhTree != NULL)
@@ -26,7 +27,10 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     gs->BvhTree = BvhTree_CreateBvhTree(gs->IndexToPrimitiveMap, gs->Graph->Vertices, sceneBoundingBox);
     
     // Add a vertex to the display
-    gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex("", RED, vi);
+    char numStr[4];
+    sprintf(numStr, "%u", vi);
+    numStr[3] = '\0';
+    gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex(numStr, RED, vi);
     
     return vi;
 }

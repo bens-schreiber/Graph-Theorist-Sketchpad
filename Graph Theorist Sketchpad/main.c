@@ -30,9 +30,14 @@ int main(void)
             redrawGraph = true;
         }
         
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && gs->BvhTree != NULL)
         {
-            printf("clicked");
+            Rectangle mouseBoundingBox = Primitive_CreatePrimitiveWithSize(GetMousePosition(), 0, 3).BoundingBox;
+            Primitive *p = BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox);
+            if (p != NULL)
+            {
+                printf("%s\n", gs->IndexToDrawableVertexMap[p->VertexIndex].Label);
+            }
         }
         
         BeginDrawing();

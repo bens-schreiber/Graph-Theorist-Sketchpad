@@ -174,7 +174,7 @@ void Graph_DumpString(Graph *g, StringBuffer buffer)
     {
         for (int j = 0; j < g->Vertices; j++)
         {
-            sprintf(numStr, "%d", g->AdjMatrix[i][j]);
+            sprintf(numStr, "%u", g->AdjMatrix[i][j]);
             strcat(buffer, numStr);
             if (j + 1 < g->Vertices)
             {

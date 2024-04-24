@@ -72,10 +72,10 @@ TEST _GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox(GraphSketch 
     VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
     
     // Act
-    bool collision = BvhTree_CheckCollision(gs->BvhTree, gs->IndexToPrimitiveMap[vi].BoundingBox);
+    Primitive *collision = BvhTree_CheckCollision(gs->BvhTree, gs->IndexToPrimitiveMap[vi].BoundingBox);
     
     // Assert
-    assert(collision);
+    assert(collision != NULL);
     assert(_checkCollisionRecsCallCount == 2);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox)
@@ -90,10 +90,10 @@ TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox(GraphS
     // Act
     Rectangle boundingBox = gs->IndexToPrimitiveMap[vi].BoundingBox;
     Rectangle noCollisionBox = { .x = boundingBox.x - 2, .y = boundingBox.y - 2, .width = 1, .height = 1 };
-    bool collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
+    Primitive *collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
     
     // Assert
-    assert(!collision);
+    assert(collision == NULL);
     assert(_checkCollisionRecsCallCount == 2);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox)
@@ -107,10 +107,10 @@ TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene(GraphSketch *gs)
     
     // Act
     Rectangle noCollisionBox = (Rectangle) {.x = SCENE_BOUNDING_BOX.x - 2, .y = SCENE_BOUNDING_BOX.y - 2, .width = 1, .height = 1};
-    bool collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
+    Primitive *collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
     
     // Assert
-    assert(!collision);
+    assert(collision == NULL);
     assert(_checkCollisionRecsCallCount == 1);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene)
