@@ -53,7 +53,7 @@ void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
         unsigned int edgesShared = Graph_EdgesShared(gs->Graph, v1, v2);
         if (edgesShared % 2)
         {
-            curvature = edgesShared * 20;
+            curvature = edgesShared * 40;
         }
         else
         {

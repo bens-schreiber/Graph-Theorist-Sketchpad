@@ -36,6 +36,7 @@ typedef struct
     bool ShowIncidenceMatrix;
     bool ShowVertices;
     bool ShowEdges;
+    bool ShowDirection;
     
     // Color options
     Color VertexColor;

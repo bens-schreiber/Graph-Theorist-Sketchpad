@@ -32,6 +32,7 @@ SceneController *SceneController_CreateSceneController(void)
     sc->ShowIncidenceMatrix = false;
     sc->ShowVertices = true;
     sc->ShowEdges = true;
+    sc->ShowDirection = true;
     
     sc->VertexColor = RAYWHITE;
     

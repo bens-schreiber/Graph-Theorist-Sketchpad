@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "math.h"
 #include "raygui.h"
+#include "raymath.h"
 
 void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
@@ -42,20 +43,22 @@ static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
     DrawSplineBezierQuadratic(points, 3, 2, RAYWHITE);
 }
 
-void CalculateCurvature(Vector2 v0, Vector2 v1, Vector2 v2, double* curvatureX, double* curvatureY)
-{
-    
-    // First derivatives
-    Vector2 dpdt1 = {2 * (v1.x - v0.x), 2 * (v1.y - v0.y)};
-    Vector2 dpdt2 = {2 * (v2.x - v1.x), 2 * (v2.y - v1.y)};
-    
-    // Second derivatives
-    Vector2 d2pdt21 = {2 * (v0.x - 2 * v1.x + v2.x), 2 * (v0.y - 2 * v1.y + v2.y)};
-    
-    // Curvature calculation
-    *curvatureX = (dpdt1.x * d2pdt21.y - dpdt1.y * d2pdt21.x) / pow(dpdt1.x * dpdt1.x + dpdt1.y * dpdt1.y, 1.5);
-    *curvatureY = (dpdt2.x * d2pdt21.y - dpdt2.y * d2pdt21.x) / pow(dpdt2.x * dpdt2.x + dpdt2.y * dpdt2.y, 1.5);
+void _DrawTriangleFromMidpointPointingAtPos(Vector2 midpoint, Vector2 point, float size) {
+    Vector2 pos1, pos2, pos3;
+
+    float angle = atan2f(point.y - midpoint.y, point.x - midpoint.x);
+
+    float angleOffset = M_PI / 6;
+
+    pos1.x = midpoint.x + size * cos(angle + angleOffset);
+    pos1.y = midpoint.y + size * sin(angle + angleOffset);
+    pos2.x = midpoint.x + size * cos(angle - angleOffset);
+    pos2.y = midpoint.y + size * sin(angle - angleOffset);
+    pos3 = midpoint;
+
+    DrawTriangle(pos1, pos2, pos3, RED);
 }
+
 
 void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
 {
@@ -73,29 +76,20 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     // The spline control will be the point in between c1 and c2 that indicates the bezier curve.
     Vector2 splineControl = mid;
     
-    // Calculate curvature
-    double curvatureX, curvatureY;
-    CalculateCurvature(c1, splineControl, c2, &curvatureX, &curvatureY);
-    
     // Move control point in the direction of maximum curvature
-    splineControl.x += de.Curvature * (curvatureX > 0 ? 1 : -1);
-    splineControl.y += de.Curvature * (curvatureY > 0 ? 1 : -1);
-//    if (fabs(curvatureX) > fabs(curvatureY))
-//    {
-//        splineControl.x += de.Curvature * (curvatureX > 0 ? 1 : -1);
-//    }
-//    else
-//    {
-//        splineControl.y += de.Curvature * (curvatureY > 0 ? 1 : -1);
-//    }
+    Vector2 direction = {-(c2.y - c1.y), c2.x - c1.x};
+    direction = Vector2Normalize(direction);
+
+    // Move the control point along this direction
+    splineControl.x += de.Curvature * direction.x;
+    splineControl.y += de.Curvature * direction.y;
     
     Vector2 points[3] = { c1, splineControl, c2 };
     Vector2 bezierMid = _QuadraticBezierMidpoint(points[0], points[1], points[2]);
     
     DrawText(de.Label, bezierMid.x, bezierMid.y + 10, 15, RAYWHITE);
     DrawSplineBezierQuadratic(points, 3, 2, RAYWHITE);
-    
-    DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, RAYWHITE);
+    _DrawTriangleFromMidpointPointingAtPos(bezierMid, c1, 15);
 }
 
 void GraphSketch_DrawVertices(const GraphSketch *gs)
