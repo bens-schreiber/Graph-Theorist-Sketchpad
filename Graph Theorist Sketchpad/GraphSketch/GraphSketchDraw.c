@@ -8,6 +8,7 @@
 #include "GraphSketch.h"
 #include <assert.h>
 #include <stdio.h>
+#include "math.h"
 
 void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
@@ -35,6 +36,20 @@ static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
     DrawCircleLinesV(v.Centroid, GRAPH_VERTEX_RADIUS + 10, BLACK);
 }
 
+void CalculateCurvature(Vector2 v0, Vector2 v1, Vector2 v2, double* curvatureX, double* curvatureY) {
+    double t = 0.5; // Parameter value at midpoint
+    
+    // First derivatives
+    Vector2 dpdt1 = {2 * (v1.x - v0.x), 2 * (v1.y - v0.y)};
+    Vector2 dpdt2 = {2 * (v2.x - v1.x), 2 * (v2.y - v1.y)};
+    
+    // Second derivatives
+    Vector2 d2pdt21 = {2 * (v0.x - 2 * v1.x + v2.x), 2 * (v0.y - 2 * v1.y + v2.y)};
+    
+    // Curvature calculation
+    *curvatureX = (dpdt1.x * d2pdt21.y - dpdt1.y * d2pdt21.x) / pow(dpdt1.x * dpdt1.x + dpdt1.y * dpdt1.y, 1.5);
+    *curvatureY = (dpdt2.x * d2pdt21.y - dpdt2.y * d2pdt21.x) / pow(dpdt2.x * dpdt2.x + dpdt2.y * dpdt2.y, 1.5);
+}
 
 void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
 {
@@ -44,18 +59,26 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
         return;
     }
     
+    // Find the linear midpoint between centroid1 and centroid2
     Vector2 c1 = gs->IndexToPrimitiveMap[de.V1].Centroid;
     Vector2 c2 = gs->IndexToPrimitiveMap[de.V2].Centroid;
     Vector2 mid = { (c1.x + c2.x) / 2, (c1.y + c2.y) / 2};
     
+    // The spline control will be the point in between c1 and c2 that indicates the bezier curve.
     Vector2 splineControl = mid;
-    if (c1.x > c2.y)
+    
+    // Calculate curvature
+    double curvatureX, curvatureY;
+    CalculateCurvature(c1, splineControl, c2, &curvatureX, &curvatureY);
+    
+    // Move control point in the direction of maximum curvature
+    if (fabs(curvatureX) > fabs(curvatureY)) 
     {
-        splineControl.x += de.Curvature;
+        splineControl.x += de.Curvature * (curvatureX > 0 ? 1 : -1);
     }
-    else
+    else 
     {
-        splineControl.y += de.Curvature;
+        splineControl.y += de.Curvature * (curvatureY > 0 ? 1 : -1);
     }
     
     Vector2 points[3] = { c1, splineControl, c2 };
@@ -66,6 +89,7 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     
     DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, BLACK);
 }
+
 void GraphSketch_DrawVertices(const GraphSketch *gs)
 {
     assert(gs != NULL);
@@ -76,7 +100,7 @@ void GraphSketch_DrawVertices(const GraphSketch *gs)
     }
 }
 
-static void _DrawMatrix(StringBuffer buffer, Vector2 position)
+static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizontal)
 {
     int xOffset = position.x;
     int yOffset = position.y;
@@ -93,7 +117,7 @@ static void _DrawMatrix(StringBuffer buffer, Vector2 position)
         }
         text[0] = *iter;
         DrawText(text, xOffset, yOffset, 15, BLACK);
-        xOffset += 8;
+        xOffset += *iter == '-' ? 6 : spacingHorizontal;
         iter++;
     }
 }
@@ -107,7 +131,7 @@ void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool 
         Graph_DumpAdjMatrix(gs->Graph, buffer);
     }
     
-    _DrawMatrix(buffer, (Vector2){10,10});
+    _DrawMatrix(buffer, (Vector2){10,10}, 8);
 }
 
 void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
@@ -119,7 +143,7 @@ void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer,
         Graph_DumpIncidenceMatrix(gs->Graph, buffer);
     }
     
-    _DrawMatrix(buffer, (Vector2){10,300});
+    _DrawMatrix(buffer, (Vector2){10,300}, 12);
 }
 
 void GraphSketch_DrawEdges(const GraphSketch *gs)

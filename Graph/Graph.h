@@ -98,6 +98,9 @@ bool Graph_IsAdjacent(Graph *g, VertexIndex, VertexIndex v2);
 /// - Returns: 1 if adjacent, 0 otherwise
 bool Graph_IsNotAdjacent(Graph *g, VertexIndex v1, VertexIndex v2);
 
+/// - Returns: the amount of edges shared between v1 and v2
+unsigned int Graph_EdgesShared(Graph *g, VertexIndex v1, VertexIndex v2);
+
 /// - Returns: The degree of vertex v
 unsigned int Graph_VertexDegree(Graph *g, VertexIndex v);
 

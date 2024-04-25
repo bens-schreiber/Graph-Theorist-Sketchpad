@@ -42,17 +42,17 @@ void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
 {
     assert(gs != NULL);
     
-    int degree = Graph_VertexDegree(gs->Graph, v2);
     int curvature = 0;
     if (Graph_IsAdjacent(gs->Graph, v1, v2) || Graph_IsAdjacent(gs->Graph, v2, v1))
     {
-        if (degree % 2)
+        unsigned int edgesShared = Graph_EdgesShared(gs->Graph, v1, v2);
+        if (edgesShared % 2)
         {
-            curvature = degree * 40;
+            curvature = edgesShared * 40;
         }
         else
         {
-            curvature = (degree - 1) * (-40);
+            curvature = (edgesShared - 1) * (-40);
         }
     }
     

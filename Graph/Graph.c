@@ -92,6 +92,19 @@ bool Graph_IsNotAdjacent(Graph *g, VertexIndex v1, VertexIndex v2)
     return !Graph_IsAdjacent(g, v1, v2);
 }
 
+unsigned int Graph_EdgesShared(Graph *g, VertexIndex v1, VertexIndex v2)
+{
+    unsigned int edges = 0;
+    for (int e = 0; e < g->Edges; e++)
+    {
+        if (Graph_IsIncident(g, v1, e) && Graph_IsIncident(g, v2, e))
+        {
+            edges++;
+        }
+    }
+    return edges;
+}
+
 unsigned int Graph_VertexDegree(Graph *g, VertexIndex v)
 {
     assert(g != NULL);
