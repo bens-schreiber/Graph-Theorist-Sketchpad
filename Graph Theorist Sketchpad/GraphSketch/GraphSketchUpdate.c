@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 
-VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle sceneBoundingBox)
+VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color, Rectangle sceneBoundingBox)
 {
     assert(gs != NULL);
     
@@ -34,7 +34,7 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     char numStr[4];
     sprintf(numStr, "v%u", vi);
     numStr[3] = '\0';
-    gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex(numStr, RED, vi);
+    gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex(numStr, color, vi);
     return vi;
 }
 
@@ -52,7 +52,7 @@ void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
         }
         else
         {
-            curvature = (edgesShared - 1) * (-20);
+            curvature = (edgesShared - 1) * (-40);
         }
     }
     

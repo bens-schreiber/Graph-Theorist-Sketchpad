@@ -16,8 +16,8 @@ Primitive Primitive_CreatePrimitiveWithSize(Vector2 position, VertexIndex vi, fl
     {
         .x = corner.x,
         .y = corner.y,
-        .width = BOUNDING_BOX_SIZE,
-        .height = BOUNDING_BOX_SIZE
+        .width = boundingBoxSize,
+        .height = boundingBoxSize
     };
     
     return (Primitive) {.BoundingBox = boundingBox, .Centroid = position, .VertexIndex = vi};

@@ -78,7 +78,7 @@ void GraphSketch_FreeGraphSketch(GraphSketch *gs);
 
 /// Creates a collideable vertex centered around the given position within the scene
 /// - Returns: The index of the added vertex
-VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle sceneBoundingBox);
+VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color, Rectangle sceneBoundingBox);
 
 /// Adds an edge between two vertices
 void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2);

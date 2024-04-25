@@ -32,6 +32,8 @@ int main(void)
     bool showVertices = true;
     bool showEdges = true;
     
+    Color color = RAYWHITE;
+    
     InitWindow(screenBoundingBox.width, screenBoundingBox.height, "raylib [core] example - basic window");
     
     SetTargetFPS(60);
@@ -44,7 +46,7 @@ int main(void)
         {
             if (edgeMode && gs->BvhTree != NULL)
             {
-                Rectangle mouseBoundingBox = Primitive_CreatePrimitiveWithSize(GetMousePosition(), 0, 3).BoundingBox;
+                Rectangle mouseBoundingBox = Primitive_CreatePrimitiveWithSize(GetMousePosition(), 0, 10).BoundingBox;
                 int vi = BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox);
                 if (vi >= 0)
                 {
@@ -67,26 +69,46 @@ int main(void)
             
             else if (vertexMode)
             {
-                Vector2 mousePosition = GetMousePosition();
-                if (mousePosition.x < (graphSketchBoundingBox.width - GRAPH_VERTEX_RADIUS))
+                Rectangle mouseBoundingBox = Primitive_CreatePrimitiveWithSize(GetMousePosition(), 0, GRAPH_VERTEX_RADIUS*3).BoundingBox;
+                bool collision = gs->BvhTree == NULL ? false : BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox) >= 0;
+                
+                if (!collision)
                 {
-                    GraphSketch_AddVertex(gs, GetMousePosition(), graphSketchBoundingBox);
-                    Graph_DumpAdjMatrix(gs->Graph, adjBuffer);
+                    Vector2 mousePosition = GetMousePosition();
+                    if (mousePosition.x < (graphSketchBoundingBox.width - GRAPH_VERTEX_RADIUS))
+                    {
+                        GraphSketch_AddVertex(gs, GetMousePosition(), color, graphSketchBoundingBox);
+                        Graph_DumpAdjMatrix(gs->Graph, adjBuffer);
+                        Graph_DumpIncidenceMatrix(gs->Graph, incidenceBuffer);
+                    }
                 }
             }
         }
         
         BeginDrawing();
         
+        if (showEdges) GraphSketch_DrawEdges(gs);
+        
         if (showVertices) GraphSketch_DrawVertices(gs);
+        
+        if (showBvhTree) 
+        {
+            BvhTree_Draw(gs->BvhTree);
+            
+            Vector2 mousePosition = GetMousePosition();
+            if (mousePosition.x < guiBoundingBox.x)
+            {
+                Rectangle mouseBoundingBox = Primitive_CreatePrimitiveWithSize(mousePosition, 0, vertexMode ? GRAPH_VERTEX_RADIUS*3 : 10).BoundingBox;
+                
+                bool collision = gs->BvhTree == NULL ? false : BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox) >= 0;
+                
+                DrawRectangleRec(mouseBoundingBox, collision ? GREEN : RAYWHITE);
+            }
+        }
         
         if (showAdjMatrix) GraphSketch_DrawAdjMatrix(gs, adjBuffer);
         
         if (showIncidenceMatrix) GraphSketch_DrawIncidenceMatrix(gs, incidenceBuffer);
-        
-        if (showBvhTree) BvhTree_Draw(gs->BvhTree);
-        
-        if (showEdges) GraphSketch_DrawEdges(gs);
         
         DrawRectangleRec(guiBoundingBox, Fade(LIGHTGRAY, 0.3f));
         GuiCheckBox((Rectangle){ 530, 30, 20, 20 }, "Show BVH Tree", &showBvhTree);
@@ -94,14 +116,16 @@ int main(void)
         GuiCheckBox((Rectangle){ 530, 90, 20, 20 }, "Show Vertices", &showVertices);
         GuiCheckBox((Rectangle){ 530, 120, 20, 20 }, "Show Incidence Matrix", &showIncidenceMatrix);
         GuiCheckBox((Rectangle){ 530, 150, 20, 20 }, "Show Edges", &showEdges);
+
+        GuiColorPicker((Rectangle){ 530, 210, 90, 90 }, "", &color);
         
-        if (GuiButton((Rectangle){ 530, 210, 140, 20 }, "Vertex Mode"))
+        if (GuiButton((Rectangle){ 530, 310, 140, 20 }, "Vertex Mode"))
         {
             vertexMode = true;
             edgeMode = false;
         }
         
-        if (GuiButton((Rectangle){ 530, 240, 140, 20 }, "Edge Mode"))
+        if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Edge Mode"))
         {
             vertexMode = false;
             edgeMode = true;
@@ -128,10 +152,10 @@ int main(void)
         
         if (edgeCreationMode)
         {
-            DrawLineV(edgeCreationModeOriginPrim.Centroid, GetMousePosition(), BLACK);
+            DrawLineEx(edgeCreationModeOriginPrim.Centroid, GetMousePosition(), 2, RAYWHITE);
         }
         
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
         
         EndDrawing();
     }

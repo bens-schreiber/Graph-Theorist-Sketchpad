@@ -17,7 +17,7 @@ void _Draw(const BvhNode *bvhn)
                        bvhn->BoundingBox.y,
                        bvhn->BoundingBox.width,
                        bvhn->BoundingBox.height,
-                       BLACK);
+                       RED);
     
     for (int i = 0; i < bvhn->Size; i++)
     {

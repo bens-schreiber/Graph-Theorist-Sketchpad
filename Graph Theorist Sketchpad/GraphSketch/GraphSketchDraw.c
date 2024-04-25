@@ -15,18 +15,15 @@ void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
     assert(dv != NULL);
     assert(p != NULL);
-    DrawCircleV(p->Centroid, GRAPH_VERTEX_RADIUS, SKYBLUE);
+    DrawCircleLinesV(p->Centroid, GRAPH_VERTEX_RADIUS, dv->Color);
     int fontMeasure = MeasureText(dv->Label, 20);
-    DrawText(dv->Label, p->Centroid.x - fontMeasure / 2, p->Centroid.y - fontMeasure / 2, 20, BLACK);
+    DrawText(dv->Label, p->Centroid.x - fontMeasure / 2, p->Centroid.y - fontMeasure / 2, 20, RAYWHITE);
 }
 
 static Vector2 _QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
     Vector2 midpoint;
-
-    // Calculate the midpoint using the parametric equation
     midpoint.x = (p0.x + 2 * p1.x + p2.x) / 4.0;
     midpoint.y = (p0.y + 2 * p1.y + p2.y) / 4.0;
-
     return midpoint;
 }
 
@@ -36,13 +33,13 @@ static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
     const int xOffset = 20;
     const int yOffset = 80;
     
-    DrawText(de.Label, v.Centroid.x, v.Centroid.y - yOffset / 1.5, 15, BLACK);
+    DrawText(de.Label, v.Centroid.x, v.Centroid.y - yOffset / 1.5, 15, RAYWHITE);
     
     Vector2 p1 = (Vector2) { v.Centroid.x - xOffset, v.Centroid.y};
     Vector2 splineControl = (Vector2) {v.Centroid.x, v.Centroid.y - yOffset};
     Vector2 p2 = (Vector2) {v.Centroid.x + xOffset, v.Centroid.y};
     Vector2 points[3] = { p1, splineControl, p2 };
-    DrawSplineBezierQuadratic(points, 3, 2, BLACK);
+    DrawSplineBezierQuadratic(points, 3, 2, RAYWHITE);
 }
 
 void CalculateCurvature(Vector2 v0, Vector2 v1, Vector2 v2, double* curvatureX, double* curvatureY)
@@ -95,10 +92,10 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     Vector2 points[3] = { c1, splineControl, c2 };
     Vector2 bezierMid = _QuadraticBezierMidpoint(points[0], points[1], points[2]);
     
-    DrawText(de.Label, bezierMid.x, bezierMid.y + 10, 15, BLACK);
-    DrawSplineBezierQuadratic(points, 3, 2, BLACK);
+    DrawText(de.Label, bezierMid.x, bezierMid.y + 10, 15, RAYWHITE);
+    DrawSplineBezierQuadratic(points, 3, 2, RAYWHITE);
     
-    DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, BLACK);
+    DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, RAYWHITE);
 }
 
 void GraphSketch_DrawVertices(const GraphSketch *gs)
@@ -111,8 +108,9 @@ void GraphSketch_DrawVertices(const GraphSketch *gs)
     }
 }
 
-static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizontal)
+static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizontal, const char *title)
 {
+    int xMaxOffset = 0;
     int xOffset = position.x;
     int yOffset = position.y;
     char *iter = buffer;
@@ -122,6 +120,7 @@ static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizo
         if (*iter == '\n')
         {
             yOffset += 15;
+            xMaxOffset = xOffset;
             xOffset = position.x;
             iter++;
             continue;
@@ -130,27 +129,29 @@ static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizo
         
         if (*iter == '-')
         {
-            DrawText(text, xOffset - spacingHorizontal*1.75, yOffset, 15, BLACK);
+            DrawText(text, xOffset - spacingHorizontal*1.75, yOffset, 15, RAYWHITE);
             iter++;
             continue;
         }
         
-        DrawText(text, xOffset - spacingHorizontal, yOffset, 15, BLACK);
+        DrawText(text, xOffset - spacingHorizontal, yOffset, 15, RAYWHITE);
         xOffset += spacingHorizontal;
         iter++;
     }
+    
+    GuiGroupBox((Rectangle) {.x = position.x - 20, .y = position.y - 5, .width = xMaxOffset + 5, .height = yOffset - position.y + 10}, title);
 }
 
 void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer)
 {
     assert(gs != NULL);
-    _DrawMatrix(buffer, (Vector2){20,10}, 8);
+    _DrawMatrix(buffer, (Vector2){20,10}, 8, "Adjacency Matrix");
 }
 
 void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer)
 {
     assert(gs != NULL);
-    _DrawMatrix(buffer, (Vector2){20,300}, 10);
+    _DrawMatrix(buffer, (Vector2){20,10}, 10, "Incidence Matrix");
 }
 
 void GraphSketch_DrawEdges(const GraphSketch *gs)
