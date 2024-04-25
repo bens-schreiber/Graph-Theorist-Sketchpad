@@ -12,41 +12,73 @@
 
 #define GRAPH_MAX_SIZE 127
 
-#define WE_DNE          0
-#define WE_MIN          1
+#define INCIDENCE_MATRIX_NEGATIVE_DIRECTION    (-1)
+#define INCIDENCE_MATRIX_NO_VALUE               0
+#define INCIDENCE_MATRIX_POSITIVE_DIRECTION     1
 
 typedef char StringBuffer[0xFFF];
 typedef unsigned int VertexIndex;
-
-/// A value greater than 0 implies the edge exists with weight of the value, a value 0 indicates there is no edge.
-typedef unsigned int WeightedEdge;
+typedef unsigned int EdgeIndex;
 
 typedef struct
 {
     unsigned int Edges;
     unsigned int Vertices;
-    bool IsDirected;
-    bool IsWeighted;
-    WeightedEdge AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
+    
+    /// Maps Vertex to Vertex returning true if they are adjacent, false if they are not
+    bool AdjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
+    
+    /// Maps Vertex to Edge returning a weight:
+    /// 0 if they do not connect,
+    /// greater than 0 if they connect and it is directed outwards,
+    /// less than 0 if they connect and is directed inwards
+    ///
+    /// NOTE: A self loop is denoted by a single entry in a column
+    signed int IncidenceMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
 } Graph;
 
-/// Returns a new graph with 0 edges, 0 vertices and the 0 matrix adj matrix
+/// Returns a new graph with 0 edges, 0 vertices, false values in the adj matrix, and all 0's in the incidence matrix
 Graph *Graph_CreateGraph(void);
 
 /// Frees the memory of the graph
 void Graph_FreeGraph(Graph *g);
 
-/// Adds a vertex to the adjacency table at index VertexRange O(1)
+/// Adds a vertex to the adjacency matrix and incidence matrix O(1)
 /// - Returns: the index of the vertex created
 VertexIndex Graph_AddVertex(Graph *g);
 
-/// Sets two vertices to be adjacent, ie connected by an edge
-/// On a digraph, v1 will be adj to v2 but not vice versa
+/// Sets v1 to share an edge with v2, ie AdjMatrix[v1][v2] == true
 /// - Parameters:
 ///   - g: The graph
-///   - v1: The vertex to be adjacent to v2
-///   - v2: The vertex to be adjacent to v1
-void Graph_SetAdjacent(Graph *g, VertexIndex v1, VertexIndex v2);
+///   - v1: The vertex to be directed towards v2
+///   - v2: The vertex to share an edge with v1
+/// - Returns: the new edge index
+EdgeIndex Graph_AddEdge(Graph *g, VertexIndex v1, VertexIndex v2);
+
+/// Sets v1 to share an edge with v2, ie AdjMatrix[v1][v2] == true
+/// - Parameters:
+///   - g: The graph
+///   - v1: The vertex to be directed towards v2
+///   - v2: The vertex to share an edge with v1
+///   - weight: the weight of the egde
+/// - Returns: the new edge index
+EdgeIndex Graph_AddEdgeWeighted(Graph *g, VertexIndex v1, VertexIndex v2, VertexIndex weight);
+
+/// Queries the incidence matrix
+/// - Parameters:
+///   - g: The graph
+///   - v: the vertex
+///   - e: the edge
+/// - Returns: if an edge is incident to a vertex
+bool Graph_IsIncident(Graph *g, VertexIndex v, EdgeIndex e);
+
+/// Queries the incidence matrix
+/// - Parameters:
+///   - g: The graph
+///   - v: the vertex
+///   - e: the edge
+/// - Returns: if an edge is not incident to a vertex
+bool Graph_IsNotIncident(Graph *g, VertexIndex v, EdgeIndex e);
 
 /// Returns if two vertex are adjacent
 /// On a digraph, v1 can be adj to v2 but not neccesarily vice versa
@@ -66,27 +98,8 @@ bool Graph_IsAdjacent(Graph *g, VertexIndex, VertexIndex v2);
 /// - Returns: 1 if adjacent, 0 otherwise
 bool Graph_IsNotAdjacent(Graph *g, VertexIndex v1, VertexIndex v2);
 
-/// Removes adjacency between two vertices. O(1)
-/// - Parameters:
-///   - v1: The vertex to have no adjacency to v2
-///   - v2: The vertex to have no adjacency to v1
-void Graph_RemoveEdge(Graph *g, VertexIndex v1, VertexIndex v2);
-
-/// Removes a vertex from the adjacency table. O(V) time
-/// - Parameters:
-///   - v: The vertex to be removed from the table
-void Graph_RemoveVertex(Graph *g, VertexIndex v);
-
-/// Adds a self loop to a vertex
-void Graph_SetSelfLoop(Graph *g, VertexIndex v);
-
-/// Sets two adjacent vertices weight;
-void Graph_SetAdjacencyWeighted(Graph *g, VertexIndex v1, VertexIndex v2, VertexIndex weight);
-
 /// - Returns: The degree of vertex v
 unsigned int Graph_VertexDegree(Graph *g, VertexIndex v);
-
-void Graph_Dijkstra(Graph *g, VertexIndex v1, VertexIndex v2, StringBuffer buffer);
 
 void Graph_DumpString(Graph *g, StringBuffer buffer);
 

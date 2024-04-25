@@ -34,187 +34,87 @@ TEST _Graph_CreateNew_SetsAllValuesToZero(Graph *g)
     
     for (int i = 0; i < GRAPH_MAX_SIZE; ++i) {
         for (int j = 0; j < GRAPH_MAX_SIZE; ++j) {
-            assert(g->AdjMatrix[i][j] == WE_DNE);
+            assert(g->AdjMatrix[i][j] == false);
+            assert(g->IncidenceMatrix[i][j] == INCIDENCE_MATRIX_NO_VALUE);
         }
     }
 }
 GRAPH_TEST_CASE(Graph_CreateNew_SetsAllValuesToZero)
 
 
-TEST _Graph_AddMultipleVertices_PopulatesMatrixDiagonal(Graph *g)
+TEST _Graph_AddVerticesWithSelfLoops_PopulatesIncidenceMatrixAndAdjacencyMatrix(Graph *g)
 {
+    // Arrange
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
+    VertexIndex v3 = Graph_AddVertex(g);
+    
     // Act
-    Graph_AddVertex(g);
-    Graph_AddVertex(g);
-    Graph_AddVertex(g);
+    EdgeIndex e1 = Graph_AddEdge(g, v1, v1);
+    EdgeIndex e2 = Graph_AddEdge(g, v2, v2);
+    EdgeIndex e3 = Graph_AddEdge(g, v3, v3);
     
     // Assert
     assert(g->Vertices == 3);
-    assert(g->AdjMatrix[0][0] == WE_DNE);
-    assert(g->AdjMatrix[1][1] == WE_DNE);
-    assert(g->AdjMatrix[2][2] == WE_DNE);
+    assert(g->Edges == 3);
+    assert(g->AdjMatrix[v1][v1]);
+    assert(g->AdjMatrix[v2][v2]);
+    assert(g->AdjMatrix[v3][v3]);
+    assert(g->IncidenceMatrix[v1][e1]);
+    assert(g->IncidenceMatrix[v2][e2]);
+    assert(g->IncidenceMatrix[v3][e3]);
 }
-GRAPH_TEST_CASE(Graph_AddMultipleVertices_PopulatesMatrixDiagonal)
+GRAPH_TEST_CASE(Graph_AddVerticesWithSelfLoops_PopulatesIncidenceMatrixAndAdjacencyMatrix)
 
 
-TEST _Graph_SetAdjacency_SetsVerticesToAdjacent(Graph *g)
+TEST _Graph_AddVertexAdjacency_VerticesAreAdjacentAndIncident(Graph *g)
 {
     // Arrange
-    u_short v1 = Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
     
     // Act
-    Graph_SetAdjacent(g, v1, v2);
+    EdgeIndex e1 = Graph_AddEdge(g, v1, v2);
     
     // Assert
     assert(g->Edges == 1);
-    assert(Graph_IsAdjacent(g, v1, v2));
-    assert(Graph_IsAdjacent(g, v2, v1));
-}
-GRAPH_TEST_CASE(Graph_SetAdjacency_SetsVerticesToAdjacent)
-
-
-TEST _Graph_RemoveEdge_SetsVerticesToExistsNoAdjacency(Graph *g)
-{
-    // Arrange
-    u_short v1 = Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
-    Graph_SetAdjacent(g, v1, v2);
-    
-    // Act
-    Graph_RemoveEdge(g, v1, v2);
-    
-    // Assert
-    assert(g->Edges == 0);
-    assert(!Graph_IsAdjacent(g, v1, v2));
-    assert(!Graph_IsAdjacent(g, v2, v1));
-}
-GRAPH_TEST_CASE(Graph_RemoveEdge_SetsVerticesToExistsNoAdjacency)
-
-
-TEST _Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix(Graph *g)
-{
-    // Arrange
-    u_short v1 = Graph_AddVertex(g);
-    Graph_SetSelfLoop(g, v1);
-    Graph_AddVertex(g);
-    Graph_AddVertex(g);
-    Graph_AddVertex(g);
-    
-    // Act
-    Graph_RemoveVertex(g, v1);
-    
-    // Assert
-    assert(g->Vertices == 3);
-    assert(g->AdjMatrix[0][0] == WE_DNE);
-    assert(Graph_IsNotAdjacent(g, 3, 3));
-}
-GRAPH_TEST_CASE(Graph_RemoveVertex1_RemovesRowAndColumnFromAdjMatrix)
-
-
-TEST _Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix(Graph *g)
-{
-    // Arrange
-    Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
-    Graph_SetSelfLoop(g, v2);
-    Graph_AddVertex(g);
-    Graph_AddVertex(g);
-    
-    // Act
-    Graph_RemoveVertex(g, v2);
-    
-    // Assert
-    assert(g->Vertices == 3);
-    assert(g->AdjMatrix[0][0] == WE_DNE);
-    assert(g->AdjMatrix[1][1] == WE_DNE);
-    assert(Graph_IsNotAdjacent(g, 3, 3));
-}
-GRAPH_TEST_CASE(Graph_RemoveVertexOffset_RemovesRowAndColumnFromAdjMatrix)
-
-
-TEST _Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix(Graph *g)
-{
-    // Arrange
-    Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
-    Graph_AddVertex(g);
-    Graph_AddVertex(g);
-    Graph_SetSelfLoop(g, v2);
-    
-    // Act
-    Graph_RemoveVertex(g, v2);
-    
-    // Assert
-    assert(g->Vertices == 3);
-    assert(g->Edges == 0);
-    assert(g->AdjMatrix[0][0] == WE_DNE);
-    assert(Graph_IsNotAdjacent(g, 3, 3));
-}
-GRAPH_TEST_CASE(Graph_RemoveVertexWithSelfLoop_RemovesRowAndColumnFromAdjMatrix)
-
-
-TEST _Graph_DigraphSetAdjacency_GoesOneWay(Graph *g)
-{
-    // Arrange
-    g->IsDirected = true;
-    u_short v1 = Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
-    
-    // Act
-    Graph_SetAdjacent(g, v1, v2);
-    
-    // Assert
+    assert(Graph_IsIncident(g, v1, e1));
+    assert(Graph_IsIncident(g, v2, e1));
     assert(Graph_IsAdjacent(g, v1, v2));
     assert(Graph_IsNotAdjacent(g, v2, v1));
 }
-GRAPH_TEST_CASE(Graph_DigraphSetAdjacency_GoesOneWay)
-
+GRAPH_TEST_CASE(Graph_AddVertexAdjacency_VerticesAreAdjacentAndIncident)
 
 TEST _Graph_VertexDegree_ReturnsCorrectDegree(Graph *g)
 {
     // Arrange
-    u_short v1 = Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
-    u_short v3 = Graph_AddVertex(g);
-    u_short v4 = Graph_AddVertex(g);
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
+    VertexIndex v3 = Graph_AddVertex(g);
+    VertexIndex v4 = Graph_AddVertex(g);
     
-    Graph_SetSelfLoop(g, v1);
-    Graph_SetAdjacent(g, v1, v2);
-    Graph_SetAdjacent(g, v1, v3);
+    Graph_AddEdge(g, v1, v2);
+    Graph_AddEdge(g, v1, v2);
+    Graph_AddEdge(g, v1, v2);
+    Graph_AddEdge(g, v1, v1);
+    
+    Graph_AddEdge(g, v2, v3);
+    Graph_AddEdge(g, v2, v4);
     
     // Act
-    u_short deg1 = Graph_VertexDegree(g, v1);
-    u_short deg2 = Graph_VertexDegree(g, v2);
-    u_short deg3 = Graph_VertexDegree(g, v3);
-    u_short deg4 = Graph_VertexDegree(g, v4);
+    unsigned int degV1 = Graph_VertexDegree(g, v1);
+    unsigned int degV2 = Graph_VertexDegree(g, v2);
+    unsigned int degV3 = Graph_VertexDegree(g, v3);
+    unsigned int degV4 = Graph_VertexDegree(g, v4);
     
     // Assert
-    assert(deg1 == 3);
-    assert(deg2 == 1);
-    assert(deg3 == 1);
-    assert(deg4 == 0);
+    assert(g->Edges == 6);
+    assert(degV1 == 4);
+    assert(degV2 == 5);
+    assert(degV3 == 1);
+    assert(degV4 == 1);
 }
 GRAPH_TEST_CASE(Graph_VertexDegree_ReturnsCorrectDegree)
 
-
-TEST _Graph_WeightedGraph_ReturnsCorrectWeight(Graph *g)
-{
-    // Arrange
-    u_short v1 = Graph_AddVertex(g);
-    u_short v2 = Graph_AddVertex(g);
-    u_short v3 = Graph_AddVertex(g);
-    
-    // Act
-    int weight = 100;
-    Graph_SetAdjacencyWeighted(g, v1, v1, weight);
-    Graph_SetSelfLoop(g, v3);
-    
-    // Assert
-    assert(g->AdjMatrix[v1][v1] == weight);
-    assert(g->AdjMatrix[v2][v2] == WE_DNE);
-    assert(g->AdjMatrix[v3][v3] == WE_MIN);
-}
-GRAPH_TEST_CASE(Graph_WeightedGraph_ReturnsCorrectWeight)
 
 #endif /* GraphTests_h */
