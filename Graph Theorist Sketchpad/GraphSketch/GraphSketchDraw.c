@@ -16,6 +16,7 @@ void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
     assert(dv != NULL);
     assert(p != NULL);
+    DrawCircleV(p->Centroid, GRAPH_VERTEX_RADIUS, BLACK);
     DrawCircleLinesV(p->Centroid, GRAPH_VERTEX_RADIUS, dv->Color);
     int fontMeasure = MeasureText(dv->Label, 20);
     DrawText(dv->Label, p->Centroid.x - fontMeasure / 2, p->Centroid.y - fontMeasure / 2, 20, RAYWHITE);
@@ -31,16 +32,8 @@ static Vector2 _QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
 static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
 {
     Primitive v = gs->IndexToPrimitiveMap[de.V1];
-    const int xOffset = 20;
-    const int yOffset = 80;
-    
-    DrawText(de.Label, v.Centroid.x, v.Centroid.y - yOffset / 1.5, 15, RAYWHITE);
-    
-    Vector2 p1 = (Vector2) { v.Centroid.x - xOffset, v.Centroid.y};
-    Vector2 splineControl = (Vector2) {v.Centroid.x, v.Centroid.y - yOffset};
-    Vector2 p2 = (Vector2) {v.Centroid.x + xOffset, v.Centroid.y};
-    Vector2 points[3] = { p1, splineControl, p2 };
-    DrawSplineBezierQuadratic(points, 3, 2, RAYWHITE);
+    DrawText(de.Label, v.Centroid.x - GRAPH_VERTEX_RADIUS*1.5, v.Centroid.y - GRAPH_VERTEX_RADIUS*3 / 1.5, 15, RAYWHITE);
+    DrawCircleLinesV(Vector2AddValue(v.Centroid, -20), GRAPH_VERTEX_RADIUS / 2, RAYWHITE);
 }
 
 void _DrawTriangleFromMidpointPointingAtPos(Vector2 midpoint, Vector2 point, float size) {
