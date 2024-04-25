@@ -10,7 +10,7 @@
 
 #include "raylib.h"
 
-#define BOUNDING_BOX_SIZE 25.0
+#define BOUNDING_BOX_SIZE 27.0
 
 typedef unsigned int VertexIndex;
 

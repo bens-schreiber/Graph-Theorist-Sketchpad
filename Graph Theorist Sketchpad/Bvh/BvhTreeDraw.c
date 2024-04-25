@@ -19,6 +19,11 @@ void _Draw(const BvhNode *bvhn)
                        bvhn->BoundingBox.height,
                        BLACK);
     
+    for (int i = 0; i < bvhn->Size; i++)
+    {
+        Primitive_Draw(&bvhn->Primitives[i]);
+    }
+    
     // Recurse
     _Draw(bvhn->Left);
     _Draw(bvhn->Right);

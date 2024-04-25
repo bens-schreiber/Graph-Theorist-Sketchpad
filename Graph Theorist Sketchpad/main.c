@@ -5,21 +5,29 @@
 //  Created by Benjamin Schreiber on 4/22/24.
 //
 
-#include "raylib.h"
+#include <raylib.h>
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 #include "GraphSketch/GraphSketch.h"
 #include <stdio.h>
 
 int main(void)
 {
     const Rectangle screenBoundingBox = {.x = 0, .y = 0, .width = 800, .height = 450};
+    const Rectangle graphSketchBoundingBox = {.x = 0, .y = 0, .width = 500, .height = screenBoundingBox.height };
+    const Rectangle guiBoundingBox = {.x = 500, .y = 0, .width = screenBoundingBox.width - 500, .height = screenBoundingBox.height};
     
     GraphSketch *gs = GraphSketch_CreateGraphSketch();
-    StringBuffer adjBuffer;
-    StringBuffer incidenceBuffer;
-    bool remakeMatrices = true;
+    StringBuffer adjBuffer = "";
+    StringBuffer incidenceBuffer = "";
     
     bool edgeCreationMode = false;
     Primitive edgeCreationModeOriginPrim;
+    
+    bool showBvhTree = false;
+    bool showAdjMatrix = false;
+    bool showIncidenceMatrix = false;
+    bool showVertices = true;
     
     InitWindow(screenBoundingBox.width, screenBoundingBox.height, "raylib [core] example - basic window");
     
@@ -30,8 +38,12 @@ int main(void)
     {
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
         {
-            GraphSketch_AddVertex(gs, GetMousePosition(), screenBoundingBox);
-            remakeMatrices = true;
+            Vector2 mousePosition = GetMousePosition();
+            if (mousePosition.x < (graphSketchBoundingBox.width - GRAPH_VERTEX_RADIUS))
+            {
+                GraphSketch_AddVertex(gs, GetMousePosition(), graphSketchBoundingBox);
+                Graph_DumpAdjMatrix(gs->Graph, adjBuffer);
+            }
         }
         
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && gs->BvhTree != NULL)
@@ -46,7 +58,8 @@ int main(void)
                     VertexIndex v2 = vi;
                     GraphSketch_AddEdge(gs, v1, v2);
                     
-                    remakeMatrices = true;
+                    Graph_DumpAdjMatrix(gs->Graph, adjBuffer);
+                    Graph_DumpIncidenceMatrix(gs->Graph, incidenceBuffer);
                     edgeCreationMode = false;
                 } else
                 {
@@ -58,10 +71,19 @@ int main(void)
         
         BeginDrawing();
         
-        GraphSketch_DrawVertices(gs);
-        GraphSketch_DrawAdjMatrix(gs, adjBuffer, remakeMatrices);
-        GraphSketch_DrawIncidenceMatrix(gs, incidenceBuffer, remakeMatrices);
-        BvhTree_Draw(gs->BvhTree);
+        if (showVertices) GraphSketch_DrawVertices(gs);
+        
+        if (showAdjMatrix) GraphSketch_DrawAdjMatrix(gs, adjBuffer);
+        
+        if (showIncidenceMatrix) GraphSketch_DrawIncidenceMatrix(gs, incidenceBuffer);
+        
+        if (showBvhTree) BvhTree_Draw(gs->BvhTree);
+        
+        DrawRectangleRec(guiBoundingBox, Fade(LIGHTGRAY, 0.3f));
+        GuiCheckBox((Rectangle){ 600, 320, 20, 20 }, "Show BVH Tree", &showBvhTree);
+        GuiCheckBox((Rectangle){ 600, 350, 20, 20 }, "Show Adjacency Matrix", &showAdjMatrix);
+        GuiCheckBox((Rectangle){ 600, 410, 20, 20 }, "Show Incidence Matrix", &showIncidenceMatrix);
+        GuiCheckBox((Rectangle){ 600, 380, 20, 20 }, "Show Vertices", &showVertices);
         
         if (edgeCreationMode)
         {
@@ -73,7 +95,6 @@ int main(void)
         ClearBackground(RAYWHITE);
         
         EndDrawing();
-        remakeMatrices = false;
     }
     
     CloseWindow();

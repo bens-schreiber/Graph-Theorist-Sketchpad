@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "math.h"
+#include "raygui.h"
 
 void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
@@ -121,39 +122,35 @@ static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizo
         if (*iter == '\n')
         {
             yOffset += 15;
-            xOffset = 10;
+            xOffset = position.x;
             iter++;
             continue;
         }
         text[0] = *iter;
-        DrawText(text, xOffset, yOffset, 15, BLACK);
-        xOffset += *iter == '-' ? 6 : spacingHorizontal;
+        
+        if (*iter == '-')
+        {
+            DrawText(text, xOffset - spacingHorizontal*1.75, yOffset, 15, BLACK);
+            iter++;
+            continue;
+        }
+        
+        DrawText(text, xOffset - spacingHorizontal, yOffset, 15, BLACK);
+        xOffset += spacingHorizontal;
         iter++;
     }
 }
 
-void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
+void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer)
 {
     assert(gs != NULL);
-    
-    if (update)
-    {
-        Graph_DumpAdjMatrix(gs->Graph, buffer);
-    }
-    
-    _DrawMatrix(buffer, (Vector2){10,10}, 8);
+    _DrawMatrix(buffer, (Vector2){20,10}, 8);
 }
 
-void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
+void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer)
 {
     assert(gs != NULL);
-    
-    if (update)
-    {
-        Graph_DumpIncidenceMatrix(gs->Graph, buffer);
-    }
-    
-    _DrawMatrix(buffer, (Vector2){10,300}, 12);
+    _DrawMatrix(buffer, (Vector2){20,300}, 10);
 }
 
 void GraphSketch_DrawEdges(const GraphSketch *gs)

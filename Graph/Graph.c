@@ -48,18 +48,12 @@ EdgeIndex Graph_AddEdgeWeighted(Graph *g, VertexIndex v1, VertexIndex v2, Vertex
     int e = g->Edges;
     
     // Self loop
-    if (v1 == v2)
+    if (v1 != v2)
     {
-        g->IncidenceMatrix[v1][e] = weight;
-        g->AdjMatrix[v1][v1] = true;
-    } 
-    else 
-    {
-        g->IncidenceMatrix[v1][e] = weight;
         g->IncidenceMatrix[v2][e] = INCIDENCE_MATRIX_NEGATIVE_DIRECTION;
-        g->AdjMatrix[v1][v2] = true;
-        g->AdjMatrix[v2][v1] = false;
     }
+    g->IncidenceMatrix[v1][e] = weight;
+    g->AdjMatrix[v1][v2] = true;
     
     g->Edges++;
     return e;
