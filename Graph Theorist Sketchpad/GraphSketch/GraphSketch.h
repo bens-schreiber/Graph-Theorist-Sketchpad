@@ -81,7 +81,7 @@ void GraphSketch_FreeGraphSketch(GraphSketch *gs);
 VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color, Rectangle sceneBoundingBox);
 
 /// Adds an edge between two vertices
-void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2);
+void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2, short weight);
 
 void GraphSketch_RefreshBvhTree(GraphSketch *gs, Rectangle sceneBoundingBox);
 

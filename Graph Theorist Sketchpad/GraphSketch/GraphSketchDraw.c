@@ -38,17 +38,17 @@ static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
 
 void _DrawTriangleFromMidpointPointingAtPos(Vector2 midpoint, Vector2 point, float size) {
     Vector2 pos1, pos2, pos3;
-
+    
     float angle = atan2f(point.y - midpoint.y, point.x - midpoint.x);
-
+    
     float angleOffset = M_PI / 6;
-
+    
     pos1.x = midpoint.x + size * cos(angle + angleOffset);
     pos1.y = midpoint.y + size * sin(angle + angleOffset);
     pos2.x = midpoint.x + size * cos(angle - angleOffset);
     pos2.y = midpoint.y + size * sin(angle - angleOffset);
     pos3 = midpoint;
-
+    
     DrawTriangle(pos1, pos2, pos3, RED);
 }
 
@@ -72,7 +72,7 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     // Move control point in the direction of maximum curvature
     Vector2 direction = {-(c2.y - c1.y), c2.x - c1.x};
     direction = Vector2Normalize(direction);
-
+    
     // Move the control point along this direction
     splineControl.x += de.Curvature * direction.x;
     splineControl.y += de.Curvature * direction.y;
@@ -95,50 +95,57 @@ void GraphSketch_DrawVertices(const GraphSketch *gs)
     }
 }
 
-static void _DrawMatrix(StringBuffer buffer, Vector2 position, int spacingHorizontal, const char *title)
+static void _DrawMatrix(StringBuffer buffer, Vector2 position)
 {
-    int xMaxOffset = 0;
-    int xOffset = position.x;
-    int yOffset = position.y;
+    int column = 0;
+    int row = 0;
+    
+    char previousChar = ' ';
+    int spacing = 0;
+    
     char *iter = buffer;
-    char text[2] = {*iter, '\0'};
+    char text[2] = { *iter, '\0'};
+    
     while (*iter != '\0')
     {
         if (*iter == '\n')
         {
-            yOffset += 15;
-            xMaxOffset = xOffset;
-            xOffset = position.x;
+            column = 0;
+            row++;
             iter++;
+            previousChar = ' ';
+            continue;
+        }
+        if (*iter == ' ')
+        {
+            column++;
+            iter++;
+            previousChar = ' ';
             continue;
         }
         text[0] = *iter;
+        spacing = previousChar != ' ' ? 6 : 0;
         
-        if (*iter == '-')
-        {
-            DrawText(text, xOffset - spacingHorizontal*1.75, yOffset, 15, RAYWHITE);
-            iter++;
-            continue;
-        }
-        
-        DrawText(text, xOffset - spacingHorizontal, yOffset, 15, RAYWHITE);
-        xOffset += spacingHorizontal;
+        DrawText(text, position.x + column*25 + spacing, position.y + row*15, 15, RAYWHITE);
+        previousChar = *iter;
         iter++;
     }
-    
-    GuiGroupBox((Rectangle) {.x = position.x - 20, .y = position.y - 5, .width = xMaxOffset + 5, .height = yOffset - position.y + 10}, title);
 }
 
 void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer)
 {
     assert(gs != NULL);
-    _DrawMatrix(buffer, (Vector2){20,10}, 8, "Adjacency Matrix");
+    _DrawMatrix(buffer, (Vector2){20,10});
+    GuiGroupBox((Rectangle) {10, 5, gs->Graph->Vertices * 25 + 10, gs->Graph->Vertices * 15 + 10},
+                "Adjacency Matrix");
 }
 
 void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer)
 {
     assert(gs != NULL);
-    _DrawMatrix(buffer, (Vector2){20,10}, 10, "Incidence Matrix");
+    _DrawMatrix(buffer, (Vector2){20,10});
+    GuiGroupBox((Rectangle) {10, 5, gs->Graph->Edges * 25 + 10, gs->Graph->Vertices * 15 + 10},
+                "Incidence Matrix");
 }
 
 void GraphSketch_DrawEdges(const GraphSketch *gs)

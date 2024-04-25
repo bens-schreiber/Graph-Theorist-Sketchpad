@@ -43,7 +43,7 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color
     return vi;
 }
 
-void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
+void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2, short weight)
 {
     assert(gs != NULL);
     
@@ -61,7 +61,7 @@ void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
         }
     }
     
-    EdgeIndex ei = Graph_AddEdge(gs->Graph, v1, v2);
+    EdgeIndex ei = Graph_AddEdgeWeighted(gs->Graph, v1, v2, weight);
     
     char numStr[4];
     sprintf(numStr, "e%u", ei);

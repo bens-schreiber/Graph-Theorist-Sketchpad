@@ -29,6 +29,7 @@ typedef struct
     bool IsInVertexCreationMode;
     bool IsInEdgeCreationMode;
     bool IsInVertexMoveMode;
+    bool IsInEditWeightMode;
     
     // Options
     bool ShowBvhTree;
@@ -44,6 +45,7 @@ typedef struct
     // Output dumps
     StringBuffer AdjMatrixDumpBuffer;
     StringBuffer IncidenceMatrixDumpBuffer;
+    char VertexWeightInputBuffer[3];
     
 } SceneController;
 

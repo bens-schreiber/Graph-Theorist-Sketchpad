@@ -28,6 +28,12 @@ int main(void)
         
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
+            if (GetMousePosition().x < GUI_BOUNDING_BOX.x && sc->IsInEditWeightMode)
+            {
+                sc->IsInEditWeightMode = false;
+                continue;
+            }
+            
             if (sc->IsInEdgeCreationMode)
             {
                 SceneController_CreateEdge(sc, gs);

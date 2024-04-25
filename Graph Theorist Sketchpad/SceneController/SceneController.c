@@ -19,6 +19,8 @@ SceneController *SceneController_CreateSceneController(void)
     
     sc->AdjMatrixDumpBuffer[0] = '\0';
     sc->IncidenceMatrixDumpBuffer[0] = '\0';
+    sc->VertexWeightInputBuffer[0] = '1';
+    sc->VertexWeightInputBuffer[1] = '\0';
     
     sc->IsInEdgeCreationState = false;
     sc->IsInVertexMoveState = false;
@@ -26,6 +28,7 @@ SceneController *SceneController_CreateSceneController(void)
     sc->IsInVertexCreationMode = true;
     sc->IsInEdgeCreationMode = false;
     sc->IsInVertexMoveMode = false;
+    sc->IsInEditWeightMode = false;
     
     sc->ShowBvhTree = false;
     sc->ShowAdjMatrix = false;
@@ -89,7 +92,8 @@ void SceneController_CreateEdge(SceneController *sc, GraphSketch *gs)
     // A second edge has been seleected at vi
     VertexIndex v1 = sc->EdgeCreationStateOriginVertexIndex;
     VertexIndex v2 = vi;
-    GraphSketch_AddEdge(gs, v1, v2);
+    int weight = TextToInteger(sc->VertexWeightInputBuffer);
+    GraphSketch_AddEdge(gs, v1, v2, weight == 0 ? 1 : weight);
     
     Graph_DumpAdjMatrix(gs->Graph, sc->AdjMatrixDumpBuffer);
     Graph_DumpIncidenceMatrix(gs->Graph, sc->IncidenceMatrixDumpBuffer);
@@ -184,23 +188,30 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     GuiCheckBox((Rectangle){ 530, 120, 20, 20 }, "Show Incidence Matrix", &sc->ShowIncidenceMatrix);
     GuiCheckBox((Rectangle){ 530, 150, 20, 20 }, "Show Edges", &sc->ShowEdges);
     
-    GuiColorPicker((Rectangle){ 530, 210, 90, 90 }, "", &sc->VertexColor);
+    GuiColorPicker((Rectangle){ 530, 180, 90, 90 }, "", &sc->VertexColor);
     
-    if (GuiButton((Rectangle){ 530, 310, 140, 20 }, "Vertex Mode"))
+    
+    GuiGroupBox((Rectangle){ 530, 285, 140, 30 }, "Weight");
+    if (GuiTextBox((Rectangle){ 535, 290, 130, 20 }, sc->VertexWeightInputBuffer, 3, sc->IsInEditWeightMode))
+    {
+        sc->IsInEditWeightMode = true;
+    }
+    
+    if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Vertex Mode"))
     {
         sc->IsInVertexCreationMode = true;
         sc->IsInEdgeCreationMode = false;
         sc->IsInVertexMoveMode = false;
     }
     
-    if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Edge Mode"))
+    if (GuiButton((Rectangle){ 530, 370, 140, 20 }, "Edge Mode"))
     {
         sc->IsInEdgeCreationMode = true;
         sc->IsInVertexMoveMode = false;
         sc->IsInVertexCreationMode = false;
     }
     
-    if (GuiButton((Rectangle){ 530, 370, 140, 20 }, "Move Mode"))
+    if (GuiButton((Rectangle){ 530, 400, 140, 20 }, "Move Mode"))
     {
         sc->IsInEdgeCreationMode = false;
         sc->IsInVertexCreationMode = false;
