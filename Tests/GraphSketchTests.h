@@ -55,7 +55,7 @@ TEST _GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawab
     const Vector2 pos = {0,0};
     
     // Act
-    VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
+    VertexIndex vi = GraphSketch_AddVertex(gs, pos, RED, SCENE_BOUNDING_BOX);
     Vector2 centroid = gs->IndexToPrimitiveMap[vi].Centroid;
     
     // Assert
@@ -71,7 +71,7 @@ TEST _GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox(GraphSketch 
 {
     // Arrange
     const Vector2 pos = {100,100};
-    VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
+    VertexIndex vi = GraphSketch_AddVertex(gs, pos, RED, SCENE_BOUNDING_BOX);
     
     // Act
     int collision = BvhTree_CheckCollision(gs->BvhTree, gs->IndexToPrimitiveMap[vi].BoundingBox);
@@ -87,7 +87,7 @@ TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox(GraphS
 {
     // Arrange
     const Vector2 pos = {100,100};
-    VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
+    VertexIndex vi = GraphSketch_AddVertex(gs, pos, RED, SCENE_BOUNDING_BOX);
     
     // Act
     Rectangle boundingBox = gs->IndexToPrimitiveMap[vi].BoundingBox;
@@ -105,7 +105,7 @@ TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene(GraphSketch *gs)
 {
     // Arrange
     const Vector2 pos = {100,100};
-    GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
+    GraphSketch_AddVertex(gs, pos, RED, SCENE_BOUNDING_BOX);
     
     // Act
     Rectangle noCollisionBox = (Rectangle) {.x = SCENE_BOUNDING_BOX.x - 2, .y = SCENE_BOUNDING_BOX.y - 2, .width = 1, .height = 1};
