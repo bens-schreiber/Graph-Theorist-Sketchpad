@@ -37,6 +37,11 @@ int main(void)
             {
                 SceneController_CreateVertex(sc, gs);
             }
+            
+            else if (sc->IsInVertexMoveMode)
+            {
+                SceneController_MoveVertex(sc, gs);
+            }
         }
         
         BeginDrawing();

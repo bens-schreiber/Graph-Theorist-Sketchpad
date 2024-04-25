@@ -21,9 +21,11 @@ SceneController *SceneController_CreateSceneController(void)
     sc->IncidenceMatrixDumpBuffer[0] = '\0';
     
     sc->IsInEdgeCreationState = false;
+    sc->IsInVertexMoveState = false;
     
     sc->IsInVertexCreationMode = true;
     sc->IsInEdgeCreationMode = false;
+    sc->IsInVertexMoveMode = false;
     
     sc->ShowBvhTree = false;
     sc->ShowAdjMatrix = false;
@@ -41,17 +43,19 @@ void SceneController_FreeSceneController(SceneController *sc)
     free(sc);
 }
 
-static Rectangle _MouseBoundingBox(Vector2 mousePosition, bool isInEdgeCreationMode, bool isInVertexCreationMode)
+static Rectangle _MouseBoundingBox(SceneController *sc, Vector2 mousePosition)
 {
     Rectangle mouseBoundingBox = {};
-    if (isInEdgeCreationMode) mouseBoundingBox = EDGE_CREATION_BOUNDING_BOX(mousePosition);
-    if (isInVertexCreationMode) mouseBoundingBox = VERTEX_CREATION_BOUNDING_BOX(mousePosition);
+    if (sc->IsInEdgeCreationMode) mouseBoundingBox = EDGE_CREATION_BOUNDING_BOX(mousePosition);
+    if (sc->IsInVertexCreationMode) mouseBoundingBox = VERTEX_CREATION_BOUNDING_BOX(mousePosition);
+    if (sc->IsInVertexMoveMode) mouseBoundingBox = EDGE_CREATION_BOUNDING_BOX(mousePosition);
     return mouseBoundingBox;
 }
 
-static int _CheckMouseCollision(GraphSketch *gs, bool isInEdgeCreationMode, bool isInVertexCreationMode)
+static int _CheckMouseCollision(SceneController *sc, GraphSketch *gs)
 {
-    Rectangle mouseBoundingBox = _MouseBoundingBox(GetMousePosition(), isInEdgeCreationMode, isInVertexCreationMode);
+    if (gs->BvhTree == NULL) return -1;
+    Rectangle mouseBoundingBox = _MouseBoundingBox(sc, GetMousePosition());
     int vi = BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox);
     return vi;
 }
@@ -62,9 +66,15 @@ void SceneController_CreateEdge(SceneController *sc, GraphSketch *gs)
     assert(gs != NULL);
     assert(sc->IsInEdgeCreationMode);
     if (gs->BvhTree == NULL) return;
+    if (GetMousePosition().x >= GUI_BOUNDING_BOX.x) return;
     
-    int vi = _CheckMouseCollision(gs, sc->IsInEdgeCreationMode, sc->IsInVertexCreationMode);
-    if (!HAS_COLLISION(vi)) return;
+    int vi = _CheckMouseCollision(sc, gs);
+    if (!HAS_COLLISION(vi))
+    {
+        sc->IsInEdgeCreationState = false;
+        GuiUnlock();
+        return;
+    }
     
     // Enter the edge creation state, where we are waiting for a second edge to be selected
     if (!sc->IsInEdgeCreationState)
@@ -92,7 +102,7 @@ void SceneController_CreateVertex(SceneController *sc, GraphSketch *gs)
     assert(gs != NULL);
     assert(sc->IsInVertexCreationMode);
     
-    int vi = _CheckMouseCollision(gs, sc->IsInEdgeCreationMode, sc->IsInVertexCreationMode);
+    int vi = _CheckMouseCollision(sc, gs);
     
     // No vertices on top of each other
     if (HAS_COLLISION(vi)) return;
@@ -104,6 +114,41 @@ void SceneController_CreateVertex(SceneController *sc, GraphSketch *gs)
         Graph_DumpAdjMatrix(gs->Graph, sc->AdjMatrixDumpBuffer);
         Graph_DumpIncidenceMatrix(gs->Graph, sc->IncidenceMatrixDumpBuffer);
     }
+}
+
+void SceneController_MoveVertex(SceneController *sc, GraphSketch *gs)
+{
+    assert(sc != NULL);
+    assert(gs != NULL);
+    assert(sc->IsInVertexMoveMode);
+    
+    if (GetMousePosition().x + GRAPH_VERTEX_RADIUS >= GUI_BOUNDING_BOX.x)
+    {
+        return;
+    }
+    
+    if (sc->IsInVertexMoveState)
+    {
+        
+        // Reset bounding box position
+        Primitive p = gs->IndexToPrimitiveMap[sc->VertexMoveStateIndex];
+        gs->IndexToPrimitiveMap[sc->VertexMoveStateIndex] = Primitive_CreatePrimitive(p.Centroid, p.VertexIndex);
+        
+        // Reset BVH tree with new pos
+        GraphSketch_RefreshBvhTree(gs, SCENE_BOUNDING_BOX);
+        
+        // Unlock GUI
+        sc->IsInVertexMoveState = false;
+        GuiUnlock();
+        return;
+    }
+    
+    int vi = _CheckMouseCollision(sc, gs);
+    if (!HAS_COLLISION(vi)) return;
+    
+    sc->VertexMoveStateIndex = vi;
+    sc->IsInVertexMoveState = true;
+    GuiLock();
 }
 
 void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
@@ -120,7 +165,7 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
         
         if (mousePosition.x < GUI_BOUNDING_BOX.x)
         {
-            Rectangle mouseBoundingBox = _MouseBoundingBox(mousePosition, sc->IsInEdgeCreationMode, sc->IsInVertexCreationMode);
+            Rectangle mouseBoundingBox = _MouseBoundingBox(sc, mousePosition);
             
             int vi = BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox);
             DrawRectangleRec(mouseBoundingBox, HAS_COLLISION(vi) ? GREEN : RAYWHITE);
@@ -144,20 +189,22 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     {
         sc->IsInVertexCreationMode = true;
         sc->IsInEdgeCreationMode = false;
+        sc->IsInVertexMoveMode = false;
     }
     
     if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Edge Mode"))
     {
         sc->IsInEdgeCreationMode = true;
-//        sc->IsInVertexDrag
+        sc->IsInVertexMoveMode = false;
         sc->IsInVertexCreationMode = false;
     }
     
-//    if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Drag Mode"))
-//    {
-//        sc->IsInEdgeCreationMode = true;
-//        sc->IsInVertexCreationMode = false;
-//    }
+    if (GuiButton((Rectangle){ 530, 370, 140, 20 }, "Move Mode"))
+    {
+        sc->IsInEdgeCreationMode = false;
+        sc->IsInVertexCreationMode = false;
+        sc->IsInVertexMoveMode = true;
+    }
     
     if (sc->IsInVertexCreationMode)
     {
@@ -175,9 +222,28 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
         }
     }
     
+    if (sc->IsInVertexMoveMode)
+    {
+        if (mousePosition.x < GUI_BOUNDING_BOX.x)
+        {
+            DrawText("M", mousePosition.x, mousePosition.y - 20, 20, BLUE);
+        }
+    }
+    
     
     if (sc->IsInEdgeCreationState)
     {
-        DrawLineEx(gs->IndexToPrimitiveMap[sc->EdgeCreationStateOriginVertexIndex].Centroid, mousePosition, 2, RAYWHITE);
+        if (mousePosition.x < GUI_BOUNDING_BOX.x)
+        {
+            DrawLineEx(gs->IndexToPrimitiveMap[sc->EdgeCreationStateOriginVertexIndex].Centroid, mousePosition, 2, RAYWHITE);
+        }
+    }
+    
+    if (sc->IsInVertexMoveState)
+    {
+        if (mousePosition.x + GRAPH_VERTEX_RADIUS < GUI_BOUNDING_BOX.x)
+        {
+            gs->IndexToPrimitiveMap[sc->VertexMoveStateIndex].Centroid = GetMousePosition();
+        }
     }
 }

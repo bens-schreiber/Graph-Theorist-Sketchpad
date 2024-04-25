@@ -22,12 +22,13 @@ typedef struct
     bool IsInEdgeCreationState;
     VertexIndex EdgeCreationStateOriginVertexIndex;
     
-    bool IsInVertexDragState;
-    VertexIndex VertexDragStateIndex;
+    bool IsInVertexMoveState;
+    VertexIndex VertexMoveStateIndex;
     
     // GraphSketch editing modes
     bool IsInVertexCreationMode;
     bool IsInEdgeCreationMode;
+    bool IsInVertexMoveMode;
     
     // Options
     bool ShowBvhTree;
@@ -57,6 +58,8 @@ void SceneController_CreateEdge(SceneController *sc, GraphSketch *gs);
 
 /// Creates a vertex at mouse positiion if not on top of another vertex
 void SceneController_CreateVertex(SceneController *sc, GraphSketch *gs);
+
+void SceneController_MoveVertex(SceneController *sc, GraphSketch *gs);
 
 /// Draws the GUI and GraphSketch
 void SceneController_DrawScene(SceneController *sc, GraphSketch *gs);

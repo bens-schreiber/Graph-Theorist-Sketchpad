@@ -10,6 +10,18 @@
 #include <stdio.h>
 #include <string.h>
 
+void GraphSketch_RefreshBvhTree(GraphSketch *gs, Rectangle sceneBoundingBox)
+{
+    if (gs->BvhTree != NULL)
+    {
+        BvhTree_FreeBvhTree(gs->BvhTree);
+    }
+    
+    Primitive primitives[gs->Graph->Vertices];
+    memcpy(primitives, gs->IndexToPrimitiveMap, sizeof(primitives));
+    gs->BvhTree = BvhTree_CreateBvhTree(primitives, gs->Graph->Vertices, sceneBoundingBox);
+}
+
 VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color, Rectangle sceneBoundingBox)
 {
     assert(gs != NULL);
@@ -21,14 +33,7 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color
     gs->IndexToPrimitiveMap[vi] = Primitive_CreatePrimitive(position, vi);
     
     // Re-create the Bvh Tree on every graph change
-    if (gs->BvhTree != NULL)
-    {
-        BvhTree_FreeBvhTree(gs->BvhTree);
-    }
-    
-    Primitive primitives[gs->Graph->Vertices];
-    memcpy(primitives, gs->IndexToPrimitiveMap, sizeof(primitives));
-    gs->BvhTree = BvhTree_CreateBvhTree(primitives, gs->Graph->Vertices, sceneBoundingBox);
+    GraphSketch_RefreshBvhTree(gs, sceneBoundingBox);
     
     // Add a vertex to the display
     char numStr[4];

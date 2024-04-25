@@ -83,6 +83,8 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color
 /// Adds an edge between two vertices
 void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2);
 
+void GraphSketch_RefreshBvhTree(GraphSketch *gs, Rectangle sceneBoundingBox);
+
 /// Draws the drawable vertices
 void GraphSketch_DrawVertices(const GraphSketch *gs);
 
