@@ -53,6 +53,9 @@ typedef struct
     /// A map of vertex indices to drawing information for a vertex
     DrawableVertex IndexToDrawableVertexMap[GRAPH_MAX_SIZE];
     
+    /// A map of vertex indices to their degree
+    unsigned int VertexIndexToDegreeMap[GRAPH_MAX_SIZE];
+    
     /// A list of all edges
     DrawableEdge DrawableEdgeList[GRAPH_MAX_PRIMITIVES];
     
@@ -102,6 +105,9 @@ void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer)
 
 /// Draws all of the edges in the edge list
 void GraphSketch_DrawEdges(const GraphSketch *gs);
+
+/// Draws the degree of each vertex
+void GraphSketch_DrawDegrees(GraphSketch *gs);
 
 #endif /* GraphSketch_h */
 

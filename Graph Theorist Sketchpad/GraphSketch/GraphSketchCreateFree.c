@@ -33,6 +33,7 @@ DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, Vertex
 GraphSketch *GraphSketch_CreateGraphSketch(void)
 {
     GraphSketch *gs = malloc(sizeof(GraphSketch));
+    memset(gs->VertexIndexToDegreeMap, 0, GRAPH_MAX_SIZE);
     gs->BvhTree = NULL;
     gs->Graph = Graph_CreateGraph();
     gs->ShowDirection = true;

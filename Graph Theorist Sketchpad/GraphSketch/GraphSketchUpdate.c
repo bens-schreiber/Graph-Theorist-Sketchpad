@@ -67,4 +67,6 @@ void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2, short 
     sprintf(numStr, "e%u", ei);
     numStr[3] = '\0';
     gs->DrawableEdgeList[ei] = DrawableEdge_CreateDrawableEdge(numStr, v1, v2, ei, curvature);
+    gs->VertexIndexToDegreeMap[v1]++;
+    gs->VertexIndexToDegreeMap[v2]++;
 }

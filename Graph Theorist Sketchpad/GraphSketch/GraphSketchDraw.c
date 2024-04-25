@@ -157,3 +157,15 @@ void GraphSketch_DrawEdges(const GraphSketch *gs)
         DrawableEdge_Draw(gs, gs->DrawableEdgeList[i]);
     }
 }
+
+void GraphSketch_DrawDegrees(GraphSketch *gs)
+{
+    char text[25];
+    for (VertexIndex vi = 0; vi < gs->Graph->Vertices; vi++)
+    {
+
+        Vector2 c = gs->IndexToPrimitiveMap[vi].Centroid;
+        sprintf(text, "deg( v%u ) = %u", vi, gs->VertexIndexToDegreeMap[vi]);
+        DrawText(text, c.x - GRAPH_VERTEX_RADIUS, c.y + GRAPH_VERTEX_RADIUS + 5, 10, RAYWHITE);
+    }
+}

@@ -11,8 +11,8 @@
 #include "../GraphSketch/GraphSketch.h"
 
 #define SCENE_BOUNDING_BOX ((Rectangle){.x = 0, .y = 0, .width = 800, .height = 450})
-#define GRAPH_SKETCH_BOUNDING_BOX ((Rectangle) {.x = 0, .y = 0, .width = 500, .height = SCENE_BOUNDING_BOX.height })
-#define GUI_BOUNDING_BOX ((Rectangle) {.x = 500, .y = 0, .width = SCENE_BOUNDING_BOX.width - 500, .height = SCENE_BOUNDING_BOX.height})
+#define GRAPH_SKETCH_BOUNDING_BOX ((Rectangle) {.x = 0, .y = 0, .width = 600, .height = SCENE_BOUNDING_BOX.height })
+#define GUI_BOUNDING_BOX ((Rectangle) {.x = 600, .y = 0, .width = SCENE_BOUNDING_BOX.width - 600, .height = SCENE_BOUNDING_BOX.height})
 #define EDGE_CREATION_BOUNDING_BOX(pos) Primitive_CreatePrimitiveWithSize(pos, 0, 10).BoundingBox;
 #define VERTEX_CREATION_BOUNDING_BOX(pos) Primitive_CreatePrimitiveWithSize(pos, 0, GRAPH_VERTEX_RADIUS*3).BoundingBox;
 
@@ -38,6 +38,7 @@ typedef struct
     bool ShowVertices;
     bool ShowEdges;
     bool ShowDirection;
+    bool ShowDegrees;
     
     // Color options
     Color VertexColor;

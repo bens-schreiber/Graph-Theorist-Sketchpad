@@ -36,6 +36,7 @@ SceneController *SceneController_CreateSceneController(void)
     sc->ShowVertices = true;
     sc->ShowEdges = true;
     sc->ShowDirection = true;
+    sc->ShowDegrees = false;
     
     sc->VertexColor = RAYWHITE;
     
@@ -89,7 +90,7 @@ void SceneController_CreateEdge(SceneController *sc, GraphSketch *gs)
         return;
     }
     
-    // A second edge has been seleected at vi
+    // A second edge has been selected at vi
     VertexIndex v1 = sc->EdgeCreationStateOriginVertexIndex;
     VertexIndex v2 = vi;
     int weight = TextToInteger(sc->VertexWeightInputBuffer);
@@ -181,37 +182,40 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     
     if (sc->ShowIncidenceMatrix) GraphSketch_DrawIncidenceMatrix(gs, sc->IncidenceMatrixDumpBuffer);
     
+    if (sc->ShowDegrees) GraphSketch_DrawDegrees(gs);
+    
     DrawRectangleRec(GUI_BOUNDING_BOX, Fade(LIGHTGRAY, 0.3f));
-    GuiCheckBox((Rectangle){ 530, 30, 20, 20 }, "Show BVH Tree", &sc->ShowBvhTree);
-    GuiCheckBox((Rectangle){ 530, 60, 20, 20 }, "Show Adjacency Matrix", &sc->ShowAdjMatrix);
-    GuiCheckBox((Rectangle){ 530, 90, 20, 20 }, "Show Vertices", &sc->ShowVertices);
-    GuiCheckBox((Rectangle){ 530, 120, 20, 20 }, "Show Incidence Matrix", &sc->ShowIncidenceMatrix);
-    GuiCheckBox((Rectangle){ 530, 150, 20, 20 }, "Show Edges", &sc->ShowEdges);
+    GuiCheckBox((Rectangle){ 630, 30, 20, 20 }, "Show BVH Tree", &sc->ShowBvhTree);
+    GuiCheckBox((Rectangle){ 630, 60, 20, 20 }, "Show Adjacency Matrix", &sc->ShowAdjMatrix);
+    GuiCheckBox((Rectangle){ 630, 90, 20, 20 }, "Show Vertices", &sc->ShowVertices);
+    GuiCheckBox((Rectangle){ 630, 120, 20, 20 }, "Show Incidence Matrix", &sc->ShowIncidenceMatrix);
+    GuiCheckBox((Rectangle){ 630, 150, 20, 20 }, "Show Edges", &sc->ShowEdges);
+    GuiCheckBox((Rectangle){ 630, 180, 20, 20 }, "Show Degrees", &sc->ShowDegrees);
     
-    GuiColorPicker((Rectangle){ 530, 180, 90, 90 }, "", &sc->VertexColor);
+    GuiColorPicker((Rectangle){ 630, 210, 90, 90 }, "", &sc->VertexColor);
     
     
-    GuiGroupBox((Rectangle){ 530, 285, 140, 30 }, "Weight");
-    if (GuiTextBox((Rectangle){ 535, 290, 130, 20 }, sc->VertexWeightInputBuffer, 3, sc->IsInEditWeightMode))
+    GuiGroupBox((Rectangle){ 630, 315, 140, 30 }, "Weight");
+    if (GuiTextBox((Rectangle){ 635, 320, 130, 20 }, sc->VertexWeightInputBuffer, 3, sc->IsInEditWeightMode))
     {
         sc->IsInEditWeightMode = true;
     }
     
-    if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Vertex Mode"))
+    if (GuiButton((Rectangle){ 630, 350, 140, 20 }, "Vertex Mode"))
     {
         sc->IsInVertexCreationMode = true;
         sc->IsInEdgeCreationMode = false;
         sc->IsInVertexMoveMode = false;
     }
     
-    if (GuiButton((Rectangle){ 530, 370, 140, 20 }, "Edge Mode"))
+    if (GuiButton((Rectangle){ 630, 380, 140, 20 }, "Edge Mode"))
     {
         sc->IsInEdgeCreationMode = true;
         sc->IsInVertexMoveMode = false;
         sc->IsInVertexCreationMode = false;
     }
     
-    if (GuiButton((Rectangle){ 530, 400, 140, 20 }, "Move Mode"))
+    if (GuiButton((Rectangle){ 630, 410, 140, 20 }, "Move Mode"))
     {
         sc->IsInEdgeCreationMode = false;
         sc->IsInVertexCreationMode = false;
