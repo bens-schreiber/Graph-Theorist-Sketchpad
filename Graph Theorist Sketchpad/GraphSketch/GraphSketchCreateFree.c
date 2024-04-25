@@ -19,13 +19,14 @@ DrawableVertex DrawableVertex_CreateDrawableVertex(const char* label, Color colo
     return dv;
 }
 
-DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, VertexIndex v2, EdgeIndex e)
+DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, VertexIndex v2, EdgeIndex e, int curvature)
 {
     DrawableEdge de = {};
     strcpy(de.Label, label);
     de.V1 = v1;
     de.V2 = v2;
     de.E = 1;
+    de.Curvature = curvature;
     return de;
 }
 

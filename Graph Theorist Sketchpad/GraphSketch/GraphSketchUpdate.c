@@ -41,9 +41,25 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
 void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
 {
     assert(gs != NULL);
+    
+    int degree = Graph_VertexDegree(gs->Graph, v2);
+    int curvature = 0;
+    if (Graph_IsAdjacent(gs->Graph, v1, v2) || Graph_IsAdjacent(gs->Graph, v2, v1))
+    {
+        if (degree % 2)
+        {
+            curvature = degree * 40;
+        }
+        else
+        {
+            curvature = (degree - 1) * (-40);
+        }
+    }
+    
     EdgeIndex ei = Graph_AddEdge(gs->Graph, v1, v2);
+    
     char numStr[4];
     sprintf(numStr, "e%u", ei);
     numStr[3] = '\0';
-    gs->DrawableEdgeList[ei] = DrawableEdge_CreateDrawableEdge(numStr, v1, v2, ei);
+    gs->DrawableEdgeList[ei] = DrawableEdge_CreateDrawableEdge(numStr, v1, v2, ei, curvature);
 }

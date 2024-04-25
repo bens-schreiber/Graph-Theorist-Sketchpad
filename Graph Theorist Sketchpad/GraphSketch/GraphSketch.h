@@ -38,10 +38,11 @@ typedef struct
     VertexIndex V1;
     VertexIndex V2;
     EdgeIndex E;
+    int Curvature;
 } DrawableEdge;
 
 /// Creates a new drawable edge
-DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, VertexIndex v2, EdgeIndex e);
+DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, VertexIndex v2, EdgeIndex e, int curvature);
 
 /// The displaying graph on the screen
 typedef struct

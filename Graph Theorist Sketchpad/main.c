@@ -44,14 +44,10 @@ int main(void)
                 {
                     VertexIndex v1 = edgeCreationModeOriginPrim.VertexIndex;
                     VertexIndex v2 = vi;
+                    GraphSketch_AddEdge(gs, v1, v2);
                     
-                    if (!gs->Graph->AdjMatrix[v1][v2])
-                    {
-                        GraphSketch_AddEdge(gs, v1, v2);
-                        remakeMatrices = true;
-                    }
+                    remakeMatrices = true;
                     edgeCreationMode = false;
-                    
                 } else
                 {
                     edgeCreationMode = true;
