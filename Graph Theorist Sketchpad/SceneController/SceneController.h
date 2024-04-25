@@ -20,7 +20,10 @@ typedef struct
 {
     // Scene states
     bool IsInEdgeCreationState;
-    Primitive EdgeCreationOriginPrim;
+    VertexIndex EdgeCreationStateOriginVertexIndex;
+    
+    bool IsInVertexDragState;
+    VertexIndex VertexDragStateIndex;
     
     // GraphSketch editing modes
     bool IsInVertexCreationMode;

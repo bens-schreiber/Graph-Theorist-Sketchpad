@@ -70,18 +70,20 @@ void SceneController_CreateEdge(SceneController *sc, GraphSketch *gs)
     if (!sc->IsInEdgeCreationState)
     {
         sc->IsInEdgeCreationState = true;
-        sc->EdgeCreationOriginPrim = gs->IndexToPrimitiveMap[vi];
+        GuiLock();
+        sc->EdgeCreationStateOriginVertexIndex = vi;
         return;
     }
     
     // A second edge has been seleected at vi
-    VertexIndex v1 = sc->EdgeCreationOriginPrim.VertexIndex;
+    VertexIndex v1 = sc->EdgeCreationStateOriginVertexIndex;
     VertexIndex v2 = vi;
     GraphSketch_AddEdge(gs, v1, v2);
     
     Graph_DumpAdjMatrix(gs->Graph, sc->AdjMatrixDumpBuffer);
     Graph_DumpIncidenceMatrix(gs->Graph, sc->IncidenceMatrixDumpBuffer);
     sc->IsInEdgeCreationState = false;
+    GuiUnlock();
 }
 
 void SceneController_CreateVertex(SceneController *sc, GraphSketch *gs)
@@ -147,8 +149,15 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Edge Mode"))
     {
         sc->IsInEdgeCreationMode = true;
+//        sc->IsInVertexDrag
         sc->IsInVertexCreationMode = false;
     }
+    
+//    if (GuiButton((Rectangle){ 530, 340, 140, 20 }, "Drag Mode"))
+//    {
+//        sc->IsInEdgeCreationMode = true;
+//        sc->IsInVertexCreationMode = false;
+//    }
     
     if (sc->IsInVertexCreationMode)
     {
@@ -169,6 +178,6 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     
     if (sc->IsInEdgeCreationState)
     {
-        DrawLineEx(sc->EdgeCreationOriginPrim.Centroid, mousePosition, 2, RAYWHITE);
+        DrawLineEx(gs->IndexToPrimitiveMap[sc->EdgeCreationStateOriginVertexIndex].Centroid, mousePosition, 2, RAYWHITE);
     }
 }
