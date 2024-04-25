@@ -32,12 +32,20 @@ static Vector2 _QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
 static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
 {
     Primitive v = gs->IndexToPrimitiveMap[de.V1];
-    DrawText(de.Label, v.Centroid.x, v.Centroid.y + GRAPH_VERTEX_RADIUS, 15, BLACK);
-    DrawCircleLinesV(v.Centroid, GRAPH_VERTEX_RADIUS + 10, BLACK);
+    const int xOffset = 20;
+    const int yOffset = 80;
+    
+    DrawText(de.Label, v.Centroid.x, v.Centroid.y - yOffset / 1.5, 15, BLACK);
+    
+    Vector2 p1 = (Vector2) { v.Centroid.x - xOffset, v.Centroid.y};
+    Vector2 splineControl = (Vector2) {v.Centroid.x, v.Centroid.y - yOffset};
+    Vector2 p2 = (Vector2) {v.Centroid.x + xOffset, v.Centroid.y};
+    Vector2 points[3] = { p1, splineControl, p2 };
+    DrawSplineBezierQuadratic(points, 3, 2, BLACK);
 }
 
-void CalculateCurvature(Vector2 v0, Vector2 v1, Vector2 v2, double* curvatureX, double* curvatureY) {
-    double t = 0.5; // Parameter value at midpoint
+void CalculateCurvature(Vector2 v0, Vector2 v1, Vector2 v2, double* curvatureX, double* curvatureY)
+{
     
     // First derivatives
     Vector2 dpdt1 = {2 * (v1.x - v0.x), 2 * (v1.y - v0.y)};
@@ -72,14 +80,16 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     CalculateCurvature(c1, splineControl, c2, &curvatureX, &curvatureY);
     
     // Move control point in the direction of maximum curvature
-    if (fabs(curvatureX) > fabs(curvatureY)) 
-    {
-        splineControl.x += de.Curvature * (curvatureX > 0 ? 1 : -1);
-    }
-    else 
-    {
-        splineControl.y += de.Curvature * (curvatureY > 0 ? 1 : -1);
-    }
+    splineControl.x += de.Curvature * (curvatureX > 0 ? 1 : -1);
+    splineControl.y += de.Curvature * (curvatureY > 0 ? 1 : -1);
+//    if (fabs(curvatureX) > fabs(curvatureY))
+//    {
+//        splineControl.x += de.Curvature * (curvatureX > 0 ? 1 : -1);
+//    }
+//    else
+//    {
+//        splineControl.y += de.Curvature * (curvatureY > 0 ? 1 : -1);
+//    }
     
     Vector2 points[3] = { c1, splineControl, c2 };
     Vector2 bezierMid = _QuadraticBezierMidpoint(points[0], points[1], points[2]);

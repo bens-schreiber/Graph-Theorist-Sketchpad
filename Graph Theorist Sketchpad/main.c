@@ -61,6 +61,7 @@ int main(void)
         GraphSketch_DrawVertices(gs);
         GraphSketch_DrawAdjMatrix(gs, adjBuffer, remakeMatrices);
         GraphSketch_DrawIncidenceMatrix(gs, incidenceBuffer, remakeMatrices);
+        BvhTree_Draw(gs->BvhTree);
         
         if (edgeCreationMode)
         {
