@@ -25,6 +25,17 @@ static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
     DrawCircleLinesV(v.Centroid, GRAPH_VERTEX_RADIUS + 10, BLACK);
 }
 
+// Function to calculate the midpoint of a quadratic bezier curve
+Vector2 QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
+    Vector2 midpoint;
+
+    // Calculate the midpoint using the parametric equation
+    midpoint.x = (p0.x + 2 * p1.x + p2.x) / 4.0;
+    midpoint.y = (p0.y + 2 * p1.y + p2.y) / 4.0;
+
+    return midpoint;
+}
+
 
 void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
 {
@@ -37,7 +48,20 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     Vector2 c1 = gs->IndexToPrimitiveMap[de.V1].Centroid;
     Vector2 c2 = gs->IndexToPrimitiveMap[de.V2].Centroid;
     Vector2 mid = { (c1.x + c2.x) / 2, (c1.y + c2.y) / 2};
-    DrawText(de.Label, mid.x, mid.y, 15, BLACK);
+    
+    Vector2 splineControl = mid;
+    if (c1.x > c2.y)
+    {
+        splineControl.x += 100;
+    }
+    else
+    {
+        splineControl.y += 100;
+    }
+    Vector2 points[3] = { c1, splineControl, c2 };
+    Vector2 bezierMid = QuadraticBezierMidpoint(points[0], points[1], points[2]);
+    DrawText(de.Label, bezierMid.x, bezierMid.y + 10, 15, BLACK);
+    DrawSplineBezierQuadratic(points, 3, 2, BLACK);
     
     DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, BLACK);
 }

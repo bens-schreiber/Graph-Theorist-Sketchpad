@@ -37,7 +37,7 @@ typedef struct
     Label Label;
     VertexIndex V1;
     VertexIndex V2;
-    EdgeIndex   E;
+    EdgeIndex E;
 } DrawableEdge;
 
 /// Creates a new drawable edge
