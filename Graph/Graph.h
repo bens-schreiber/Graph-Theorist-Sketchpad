@@ -101,6 +101,10 @@ bool Graph_IsNotAdjacent(Graph *g, VertexIndex v1, VertexIndex v2);
 /// - Returns: The degree of vertex v
 unsigned int Graph_VertexDegree(Graph *g, VertexIndex v);
 
-void Graph_DumpString(Graph *g, StringBuffer buffer);
+/// Dumps the adj matrix into a string
+void Graph_DumpAdjMatrix(Graph *g, StringBuffer buffer);
+
+/// Dumps the incidence matrix into a string
+void Graph_DumpIncidenceMatrix(Graph *g, StringBuffer buffer);
 
 #endif /* Graph_h */

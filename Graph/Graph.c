@@ -107,7 +107,7 @@ unsigned int Graph_VertexDegree(Graph *g, VertexIndex v)
     return deg;
 }
 
-void Graph_DumpString(Graph *g, StringBuffer buffer)
+void Graph_DumpAdjMatrix(Graph *g, StringBuffer buffer)
 {
     memset(buffer, '\0', sizeof(StringBuffer));
     char numStr[3];
@@ -118,6 +118,26 @@ void Graph_DumpString(Graph *g, StringBuffer buffer)
             sprintf(numStr, "%u", g->AdjMatrix[i][j]);
             strcat(buffer, numStr);
             if (j + 1 < g->Vertices)
+            {
+                strcat(buffer, " ");
+            }
+        }
+        strcat(buffer, "\n");
+    }
+    strcat(buffer, "\0");
+}
+
+void Graph_DumpIncidenceMatrix(Graph *g, StringBuffer buffer)
+{
+    memset(buffer, '\0', sizeof(StringBuffer));
+    char numStr[3];
+    for (int i = 0; i < g->Vertices; i++)
+    {
+        for (int j = 0; j < g->Edges; j++)
+        {
+            sprintf(numStr, "%d", g->IncidenceMatrix[i][j]);
+            strcat(buffer, numStr);
+            if (j + 1 < g->Edges)
             {
                 strcat(buffer, " ");
             }

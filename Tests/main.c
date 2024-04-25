@@ -18,10 +18,10 @@ int main(int argc, const char * argv[]) {
     Graph_VertexDegree_ReturnsCorrectDegree();
     
     // Graph Sketch Tests
-//    GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree();
-//    GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawable();
-//    GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox();
-//    GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox();
+    GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree();
+    GraphSketch_AddVertex_CreatesNewGraphVertexAndBvhTreeAndPrimitiveAndDrawable();
+    GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox();
+    GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox();
     
     return 0;
 }

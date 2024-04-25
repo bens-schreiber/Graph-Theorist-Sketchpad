@@ -44,17 +44,10 @@ void GraphSketch_DrawVertices(const GraphSketch *gs)
     }
 }
 
-void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
+static void _DrawMatrix(StringBuffer buffer, Vector2 position)
 {
-    assert(gs != NULL);
-    
-    if (update)
-    {
-        Graph_DumpString(gs->Graph, buffer);
-    }
-    
-    int xOffset = 10;
-    int yOffset = 10;
+    int xOffset = position.x;
+    int yOffset = position.y;
     char *iter = buffer;
     char text[2] = {*iter, '\0'};
     while (*iter != '\0')
@@ -71,6 +64,30 @@ void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool 
         xOffset += 8;
         iter++;
     }
+}
+
+void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
+{
+    assert(gs != NULL);
+    
+    if (update)
+    {
+        Graph_DumpAdjMatrix(gs->Graph, buffer);
+    }
+    
+    _DrawMatrix(buffer, (Vector2){10,10});
+}
+
+void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
+{
+    assert(gs != NULL);
+    
+    if (update)
+    {
+        Graph_DumpIncidenceMatrix(gs->Graph, buffer);
+    }
+    
+    _DrawMatrix(buffer, (Vector2){10,300});
 }
 
 void GraphSketch_DrawEdges(const GraphSketch *gs)

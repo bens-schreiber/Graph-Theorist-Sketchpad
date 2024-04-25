@@ -86,8 +86,15 @@ void GraphSketch_DrawVertices(const GraphSketch *gs);
 /// - Parameters:
 ///    - gs: the graph sketch
 ///    - buffer: the string buffer to be used for the drawing
-///    - update: whether or not to fetch the new adjacency table
+///    - update: whether or not to fetch the new adjacency matrix
 void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool update);
+
+/// Draws the graphs incidence matrix
+/// - Parameters:
+///    - gs: the graph sketch
+///    - buffer: the string buffer to be used for the drawing
+///    - update: whether or not to fetch the new incidence matrix
+void GraphSketch_DrawIncidenceMatrix(const GraphSketch *gs, StringBuffer buffer, bool update);
 
 /// Draws all of the edges in the edge list
 void GraphSketch_DrawEdges(const GraphSketch *gs);

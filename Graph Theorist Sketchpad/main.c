@@ -14,8 +14,9 @@ int main(void)
     const Rectangle screenBoundingBox = {.x = 0, .y = 0, .width = 800, .height = 450};
     
     GraphSketch *gs = GraphSketch_CreateGraphSketch();
-    StringBuffer buffer;
-    bool remakeAdjacencyString = true;
+    StringBuffer adjBuffer;
+    StringBuffer incidenceBuffer;
+    bool remakeMatrices = true;
     
     bool edgeCreationMode = false;
     Primitive edgeCreationModeOriginPrim;
@@ -30,7 +31,7 @@ int main(void)
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
         {
             GraphSketch_AddVertex(gs, GetMousePosition(), screenBoundingBox);
-            remakeAdjacencyString = true;
+            remakeMatrices = true;
         }
         
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && gs->BvhTree != NULL)
@@ -47,7 +48,7 @@ int main(void)
                     if (!gs->Graph->AdjMatrix[v1][v2])
                     {
                         GraphSketch_AddEdge(gs, v1, v2);
-                        remakeAdjacencyString = true;
+                        remakeMatrices = true;
                     }
                     edgeCreationMode = false;
                     
@@ -62,7 +63,8 @@ int main(void)
         BeginDrawing();
         
         GraphSketch_DrawVertices(gs);
-        GraphSketch_DrawAdjMatrix(gs, buffer, remakeAdjacencyString);
+        GraphSketch_DrawAdjMatrix(gs, adjBuffer, remakeMatrices);
+        GraphSketch_DrawIncidenceMatrix(gs, incidenceBuffer, remakeMatrices);
         
         if (edgeCreationMode)
         {
@@ -74,7 +76,7 @@ int main(void)
         ClearBackground(RAYWHITE);
         
         EndDrawing();
-        remakeAdjacencyString = false;
+        remakeMatrices = false;
     }
     
     CloseWindow();
