@@ -33,6 +33,7 @@
 		A4751E312BD9A3E600387100 /* LongestAxis.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0C42BD8711D0045977A /* LongestAxis.c */; };
 		A4751E322BD9A3E600387100 /* BvhTreeCreateFree.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0CB2BD89D4B0045977A /* BvhTreeCreateFree.c */; };
 		A4751E332BD9A3E600387100 /* BvhCheckCollision.c in Sources */ = {isa = PBXBuildFile; fileRef = A46FE0CD2BD89ED00045977A /* BvhCheckCollision.c */; };
+		A4751E402BDAE1C500387100 /* SceneController.c in Sources */ = {isa = PBXBuildFile; fileRef = A4751E3F2BDAE1C500387100 /* SceneController.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -90,6 +91,8 @@
 		A46FE0DE2BD99D890045977A /* GraphSketch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphSketch.h; sourceTree = "<group>"; };
 		A4751E282BD99FEE00387100 /* GraphSketchTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphSketchTests.h; sourceTree = "<group>"; };
 		A4751E2D2BD9A0DA00387100 /* Primitive.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Primitive.c; sourceTree = "<group>"; };
+		A4751E3E2BDAE1C500387100 /* SceneController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneController.h; sourceTree = "<group>"; };
+		A4751E3F2BDAE1C500387100 /* SceneController.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SceneController.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +145,7 @@
 		A46FE01F2BD6EFC50045977A /* Graph Theorist Sketchpad */ = {
 			isa = PBXGroup;
 			children = (
+				A4751E3D2BDAE1AF00387100 /* SceneController */,
 				A46FE0C72BD892820045977A /* GraphSketch */,
 				A46FE0BA2BD868200045977A /* Bvh */,
 				A46FE0222BD6EFC50045977A /* raylib.entitlements */,
@@ -217,6 +221,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A4751E3D2BDAE1AF00387100 /* SceneController */ = {
+			isa = PBXGroup;
+			children = (
+				A4751E3E2BDAE1C500387100 /* SceneController.h */,
+				A4751E3F2BDAE1C500387100 /* SceneController.c */,
+			);
+			path = SceneController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -328,6 +341,7 @@
 				A46FE0C52BD8711D0045977A /* LongestAxis.c in Sources */,
 				A46FE0D62BD9901E0045977A /* GraphSketchCreateFree.c in Sources */,
 				A4751E2E2BD9A0DA00387100 /* Primitive.c in Sources */,
+				A4751E402BDAE1C500387100 /* SceneController.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
