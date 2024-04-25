@@ -34,12 +34,14 @@ void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p);
 /// An edge connecting two vertices that can be drawn
 typedef struct
 {
+    Label Label;
     VertexIndex V1;
     VertexIndex V2;
+    EdgeIndex   E;
 } DrawableEdge;
 
 /// Creates a new drawable edge
-DrawableEdge DrawableEdge_CreateDrawableEdge(VertexIndex v1, VertexIndex v2);
+DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, VertexIndex v2, EdgeIndex e);
 
 /// The displaying graph on the screen
 typedef struct
@@ -53,13 +55,14 @@ typedef struct
     /// A list of all edges
     DrawableEdge DrawableEdgeList[GRAPH_MAX_PRIMITIVES];
     
-    int DrawableEdgeListSize;
-    
     /// A bounding volume hierarchy tree used for collision detection on primitives
     BvhTree *BvhTree;
     
     /// The mathematical representation of the graph
     Graph *Graph;
+    
+    bool ShowDirection;
+    bool ShowWeight;
     
 } GraphSketch;
 

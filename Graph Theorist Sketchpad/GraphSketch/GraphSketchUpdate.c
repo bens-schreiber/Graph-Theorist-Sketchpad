@@ -32,7 +32,7 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     
     // Add a vertex to the display
     char numStr[4];
-    sprintf(numStr, "%u", vi);
+    sprintf(numStr, "v%u", vi);
     numStr[3] = '\0';
     gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex(numStr, RED, vi);
     return vi;
@@ -41,7 +41,9 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
 void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
 {
     assert(gs != NULL);
-    Graph_AddEdge(gs->Graph, v1, v2);
-    gs->DrawableEdgeList[gs->DrawableEdgeListSize] = DrawableEdge_CreateDrawableEdge(v1, v2);
-    gs->DrawableEdgeListSize++;
+    EdgeIndex ei = Graph_AddEdge(gs->Graph, v1, v2);
+    char numStr[4];
+    sprintf(numStr, "e%u", ei);
+    numStr[3] = '\0';
+    gs->DrawableEdgeList[ei] = DrawableEdge_CreateDrawableEdge(numStr, v1, v2, ei);
 }

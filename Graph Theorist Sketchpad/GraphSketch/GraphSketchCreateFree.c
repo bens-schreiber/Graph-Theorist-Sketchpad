@@ -19,9 +19,14 @@ DrawableVertex DrawableVertex_CreateDrawableVertex(const char* label, Color colo
     return dv;
 }
 
-DrawableEdge DrawableEdge_CreateDrawableEdge(VertexIndex v1, VertexIndex v2)
+DrawableEdge DrawableEdge_CreateDrawableEdge(Label label, VertexIndex v1, VertexIndex v2, EdgeIndex e)
 {
-    return (DrawableEdge) { v1, v2};
+    DrawableEdge de = {};
+    strcpy(de.Label, label);
+    de.V1 = v1;
+    de.V2 = v2;
+    de.E = 1;
+    return de;
 }
 
 GraphSketch *GraphSketch_CreateGraphSketch(void)
@@ -29,7 +34,8 @@ GraphSketch *GraphSketch_CreateGraphSketch(void)
     GraphSketch *gs = malloc(sizeof(GraphSketch));
     gs->BvhTree = NULL;
     gs->Graph = Graph_CreateGraph();
-    gs->DrawableEdgeListSize = 0;
+    gs->ShowDirection = true;
+    gs->ShowWeight = true;
     return gs;
 }
 

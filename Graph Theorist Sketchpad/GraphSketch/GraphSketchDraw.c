@@ -15,12 +15,13 @@ void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
     assert(p != NULL);
     DrawCircleV(p->Centroid, GRAPH_VERTEX_RADIUS, SKYBLUE);
     int fontMeasure = MeasureText(dv->Label, 20);
-    DrawText(dv->Label, p->Centroid.x - fontMeasure / 2, p->Centroid.y - fontMeasure, 20, BLACK);
+    DrawText(dv->Label, p->Centroid.x - fontMeasure / 2, p->Centroid.y - fontMeasure / 2, 20, BLACK);
 }
 
 static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
 {
     Primitive v = gs->IndexToPrimitiveMap[de.V1];
+    DrawText(de.Label, v.Centroid.x, v.Centroid.y + GRAPH_VERTEX_RADIUS, 15, BLACK);
     DrawCircleLinesV(v.Centroid, GRAPH_VERTEX_RADIUS + 10, BLACK);
 }
 
@@ -32,6 +33,12 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
         _DrawableEdge_DrawSelfLoop(gs, de);
         return;
     }
+    
+    Vector2 c1 = gs->IndexToPrimitiveMap[de.V1].Centroid;
+    Vector2 c2 = gs->IndexToPrimitiveMap[de.V2].Centroid;
+    Vector2 mid = { (c1.x + c2.x) / 2, (c1.y + c2.y) / 2};
+    DrawText(de.Label, mid.x, mid.y, 15, BLACK);
+    
     DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, BLACK);
 }
 void GraphSketch_DrawVertices(const GraphSketch *gs)
@@ -94,7 +101,7 @@ void GraphSketch_DrawEdges(const GraphSketch *gs)
 {
     assert(gs != NULL);
     
-    for (int i = 0; i < gs->DrawableEdgeListSize; i++)
+    for (int i = 0; i < gs->Graph->Edges; i++)
     {
         DrawableEdge_Draw(gs, gs->DrawableEdgeList[i]);
     }
