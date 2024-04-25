@@ -12,7 +12,7 @@
 #include "../Bvh/Primitive/Primitive.h"
 #include "../../Graph/Graph.h"
 
-#define GRAPH_VERTEX_RADIUS 15
+#define GRAPH_VERTEX_RADIUS 20
 #define GRAPH_MAX_PRIMITIVES (GRAPH_MAX_SIZE*2)
 
 typedef char Label[25];

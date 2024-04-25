@@ -183,4 +183,5 @@ void Graph_DumpString(Graph *g, StringBuffer buffer)
         }
         strcat(buffer, "\n");
     }
+    strcat(buffer, "\0");
 }
