@@ -8,6 +8,7 @@
 #include "GraphSketch.h"
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 
 VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle sceneBoundingBox)
 {
@@ -24,13 +25,15 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     {
         BvhTree_FreeBvhTree(gs->BvhTree);
     }
-    gs->BvhTree = BvhTree_CreateBvhTree(gs->IndexToPrimitiveMap, gs->Graph->Vertices, sceneBoundingBox);
+    
+    Primitive primitives[gs->Graph->Vertices];
+    memcpy(primitives, gs->IndexToPrimitiveMap, sizeof(primitives));
+    gs->BvhTree = BvhTree_CreateBvhTree(primitives, gs->Graph->Vertices, sceneBoundingBox);
     
     // Add a vertex to the display
     char numStr[4];
     sprintf(numStr, "%u", vi);
     numStr[3] = '\0';
     gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex(numStr, RED, vi);
-    
     return vi;
 }

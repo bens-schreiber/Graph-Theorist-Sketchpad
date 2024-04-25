@@ -12,6 +12,7 @@
 #include "../Graph Theorist Sketchpad/GraphSketch/GraphSketch.h"
 
 #define SCENE_BOUNDING_BOX ((Rectangle) {.x = 0, .y = 0, .width = 800, .height = 450})
+#define NO_COLLISION -1
 
 #define TEST static inline void
 #define GRAPH_SKETCH_TEST_CASE(name) TEST name(void) { _Setup_GraphSketch_Tests(_##name); }
@@ -72,10 +73,10 @@ TEST _GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox(GraphSketch 
     VertexIndex vi = GraphSketch_AddVertex(gs, pos, SCENE_BOUNDING_BOX);
     
     // Act
-    Primitive *collision = BvhTree_CheckCollision(gs->BvhTree, gs->IndexToPrimitiveMap[vi].BoundingBox);
+    int collision = BvhTree_CheckCollision(gs->BvhTree, gs->IndexToPrimitiveMap[vi].BoundingBox);
     
     // Assert
-    assert(collision != NULL);
+    assert(collision != NO_COLLISION);
     assert(_checkCollisionRecsCallCount == 2);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesCollideWithItsOwnBoundingBox)
@@ -90,10 +91,10 @@ TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox(GraphS
     // Act
     Rectangle boundingBox = gs->IndexToPrimitiveMap[vi].BoundingBox;
     Rectangle noCollisionBox = { .x = boundingBox.x - 2, .y = boundingBox.y - 2, .width = 1, .height = 1 };
-    Primitive *collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
+    int collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
     
     // Assert
-    assert(collision == NULL);
+    assert(collision == NO_COLLISION);
     assert(_checkCollisionRecsCallCount == 2);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesNotCollideOutsideItsOwnBoundingBox)
@@ -107,10 +108,10 @@ TEST _GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene(GraphSketch *gs)
     
     // Act
     Rectangle noCollisionBox = (Rectangle) {.x = SCENE_BOUNDING_BOX.x - 2, .y = SCENE_BOUNDING_BOX.y - 2, .width = 1, .height = 1};
-    Primitive *collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
+    int collision = BvhTree_CheckCollision(gs->BvhTree, noCollisionBox);
     
     // Assert
-    assert(collision == NULL);
+    assert(collision == NO_COLLISION);
     assert(_checkCollisionRecsCallCount == 1);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_BvhTreeCollision_DoesNotCollideOutsideScene)

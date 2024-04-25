@@ -9,6 +9,12 @@
 #include "GraphSketch/GraphSketch.h"
 #include <stdio.h>
 
+typedef struct
+{
+    VertexIndex v1;
+    VertexIndex v2;
+} DrawableEdge;
+
 int main(void)
 {
     const Rectangle screenBoundingBox = {.x = 0, .y = 0, .width = 800, .height = 450};
@@ -16,6 +22,12 @@ int main(void)
     GraphSketch *gs = GraphSketch_CreateGraphSketch();
     StringBuffer buffer;
     bool redrawGraph = true;
+    
+    bool edgeCreationMode = false;
+    Primitive edgeCreationModeOriginPrim;
+    
+    DrawableEdge edges[GRAPH_MAX_PRIMITIVES];
+    int edgesSize = 0;
     
     InitWindow(screenBoundingBox.width, screenBoundingBox.height, "raylib [core] example - basic window");
     
@@ -30,13 +42,40 @@ int main(void)
             redrawGraph = true;
         }
         
+        if (IsKeyPressed(KEY_W))
+        {
+            for (int i = 0; i < gs->Graph->Vertices; i++)
+            {
+                printf("%u %u\n", gs->IndexToPrimitiveMap[i].VertexIndex, gs->IndexToDrawableVertexMap[i].VertexIndex);
+            }
+            
+            printf("\n\n");
+        }
+        
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && gs->BvhTree != NULL)
         {
             Rectangle mouseBoundingBox = Primitive_CreatePrimitiveWithSize(GetMousePosition(), 0, 3).BoundingBox;
-            Primitive *p = BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox);
-            if (p != NULL)
+            int vi = BvhTree_CheckCollision(gs->BvhTree, mouseBoundingBox);
+            if (vi >= 0)
             {
-                printf("%s\n", gs->IndexToDrawableVertexMap[p->VertexIndex].Label);
+                if (edgeCreationMode)
+                {
+                    VertexIndex v1 = edgeCreationModeOriginPrim.VertexIndex;
+                    VertexIndex v2 = vi;
+                    
+                    if (!gs->Graph->AdjMatrix[v1][v2])
+                    {
+                        edges[edgesSize++] = (DrawableEdge) { v1, v2};
+                        Graph_SetAdjacent(gs->Graph, v1, v2);
+                        redrawGraph = true;
+                    }
+                    edgeCreationMode = false;
+                    
+                } else
+                {
+                    edgeCreationMode = true;
+                    edgeCreationModeOriginPrim = gs->IndexToPrimitiveMap[vi];
+                }
             }
         }
         
@@ -44,6 +83,16 @@ int main(void)
         
         GraphSketch_DrawVertices(gs);
         GraphSketch_DrawAdjMatrix(gs, buffer, redrawGraph);
+        
+        if (edgeCreationMode)
+        {
+            DrawLineV(edgeCreationModeOriginPrim.Centroid, GetMousePosition(), BLACK);
+        }
+        
+        for (int i = 0; i < edgesSize; i++)
+        {
+            DrawLineV(gs->IndexToPrimitiveMap[edges[i].v1].Centroid, gs->IndexToPrimitiveMap[edges[i].v2].Centroid, BLACK);
+        }
         
         ClearBackground(RAYWHITE);
         

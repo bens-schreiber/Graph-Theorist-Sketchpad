@@ -8,13 +8,14 @@
 #include "BvhTree.h"
 
 #define IsLeaf(node) (node->Left == NULL && node->Right == NULL)
+#define NO_COLLISION -1
 
 // DFS, check each bounding box and primitives if they exist
-Primitive *_CheckCollisionImpl(BvhNode *bvhn, Rectangle boundingBox)
+int _CheckCollisionImpl(BvhNode *bvhn, Rectangle boundingBox)
 {
     if (bvhn == NULL)
     {
-        return NULL;
+        return NO_COLLISION;
     }
     
     // If the bounding boxes intersect, this node is a candidate for collision
@@ -29,28 +30,28 @@ Primitive *_CheckCollisionImpl(BvhNode *bvhn, Rectangle boundingBox)
                 // If the primitive intersects the bounding box, there is a collision
                 if (CheckCollisionRecs(bvhn->Primitives[i].BoundingBox, boundingBox))
                 {
-                    return &bvhn->Primitives[i];
+                    return bvhn->Primitives[i].VertexIndex;
                 }
             }
         }
-        Primitive *left = _CheckCollisionImpl(bvhn->Left, boundingBox);
-        if (left != NULL)
+        int left = _CheckCollisionImpl(bvhn->Left, boundingBox);
+        if (left != NO_COLLISION)
         {
             return left;
         }
         
-        Primitive *right = _CheckCollisionImpl(bvhn->Right, boundingBox);
-        if (right != NULL)
+        unsigned int right = _CheckCollisionImpl(bvhn->Right, boundingBox);
+        if (right != NO_COLLISION)
         {
             return right;
         }
         
     }
-    return NULL;
+    return NO_COLLISION;
 }
 
-Primitive *BvhTree_CheckCollision(BvhTree *bvht, Rectangle boundingBox)
+int BvhTree_CheckCollision(const BvhTree *bvht, Rectangle boundingBox)
 {
-    if (bvht == NULL) return NULL;
+    if (bvht == NULL) return -1;
     return _CheckCollisionImpl(bvht->root, boundingBox);
 }
