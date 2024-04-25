@@ -9,7 +9,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-void DrawableVertex_Draw(DrawableVertex *dv, Primitive *p)
+void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
     assert(dv != NULL);
     assert(p != NULL);
@@ -18,7 +18,12 @@ void DrawableVertex_Draw(DrawableVertex *dv, Primitive *p)
     DrawText(dv->Label, p->Centroid.x, p->Centroid.y + GRAPH_VERTEX_RADIUS + 10, 10, BLACK);
 }
 
-void GraphSketch_DrawVertices(GraphSketch *gs)
+void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
+{
+    DrawLineV(gs->IndexToPrimitiveMap[de.V1].Centroid, gs->IndexToPrimitiveMap[de.V2].Centroid, BLACK);
+}
+
+void GraphSketch_DrawVertices(const GraphSketch *gs)
 {
     assert(gs != NULL);
     
@@ -28,7 +33,7 @@ void GraphSketch_DrawVertices(GraphSketch *gs)
     }
 }
 
-void GraphSketch_DrawAdjMatrix(GraphSketch *gs, StringBuffer buffer, bool update)
+void GraphSketch_DrawAdjMatrix(const GraphSketch *gs, StringBuffer buffer, bool update)
 {
     assert(gs != NULL);
     
@@ -38,4 +43,14 @@ void GraphSketch_DrawAdjMatrix(GraphSketch *gs, StringBuffer buffer, bool update
     }
     
     DrawText(buffer, 10, 10, 20, BLACK);
+}
+
+void GraphSketch_DrawEdges(const GraphSketch *gs)
+{
+    assert(gs != NULL);
+    
+    for (int i = 0; i < gs->DrawableEdgeListSize; i++)
+    {
+        DrawableEdge_Draw(gs, gs->DrawableEdgeList[i]);
+    }
 }

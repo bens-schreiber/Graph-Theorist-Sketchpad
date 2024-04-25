@@ -19,11 +19,17 @@ DrawableVertex DrawableVertex_CreateDrawableVertex(const char* label, Color colo
     return dv;
 }
 
+DrawableEdge DrawableEdge_CreateDrawableEdge(VertexIndex v1, VertexIndex v2)
+{
+    return (DrawableEdge) { v1, v2};
+}
+
 GraphSketch *GraphSketch_CreateGraphSketch(void)
 {
     GraphSketch *gs = malloc(sizeof(GraphSketch));
     gs->BvhTree = NULL;
     gs->Graph = Graph_CreateGraph();
+    gs->DrawableEdgeListSize = 0;
     return gs;
 }
 

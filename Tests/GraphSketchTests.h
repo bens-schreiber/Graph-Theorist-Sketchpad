@@ -44,6 +44,7 @@ TEST _GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree(GraphSketch *g
     assert(gs->BvhTree == NULL);
     assert(gs->Graph != NULL);
     assert(gs->Graph->Vertices == 0);
+    assert(gs->DrawableEdgeListSize == 0);
 }
 GRAPH_SKETCH_TEST_CASE(GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree)
 

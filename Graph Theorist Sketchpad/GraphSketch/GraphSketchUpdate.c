@@ -37,3 +37,11 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Rectangle s
     gs->IndexToDrawableVertexMap[vi] = DrawableVertex_CreateDrawableVertex(numStr, RED, vi);
     return vi;
 }
+
+void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2)
+{
+    assert(gs != NULL);
+    Graph_SetAdjacent(gs->Graph, v1, v2);
+    gs->DrawableEdgeList[gs->DrawableEdgeListSize] = DrawableEdge_CreateDrawableEdge(v1, v2);
+    gs->DrawableEdgeListSize++;
+}
