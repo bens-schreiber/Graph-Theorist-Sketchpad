@@ -99,6 +99,156 @@ See that row 4 column 4 is 1, because this is a a self loop. No other edge is in
 This representation is incredibly useful for determining the degree of a vertex, the direction, weight, and self loop status of an edge. However, given no edge information, it is not very useful for determining if two vertices are connected.
 
 
+### Some Graph Theory Implementation (in psuedo code)
+
+
+#### Create a new graph
+```c
+/// -- PSEUDO CODE
+/// Creates a new graph.
+/// Note that the adjacency matrix and incidence matrix are actually MAX_SIZE x MAX_SIZE
+/// just pretend to be Vertex x Vertex and Vertex x Edge, respectively.
+/// This allows us to not have to reallocate memory for the graph!
+///
+/// Returns a new graph with 0'd out values
+Graph CreateNewGraph()
+{
+    Graph graph;
+
+    /// True or false values in adj matrix
+    graph.AdjacencyMatrix = Matrix(MAX_VERTEX_SIZE, MAX_VERTEX_SIZE, bool)
+
+    /// No adjacencies yet!
+    SetAllValuesInMatrix(graph.AdjacencyMatrix, false);
+
+    /// We use signed integers to denote direction and weight in the incidence matrix
+    graph.IncidenceMatrix = Matrix(MAX_VERTEX_SIZE, MAX_EDGE_SIZE, signed int)
+
+    /// No incidences yet!
+    SetAllValuesInMatrix(graph.IncidenceMatrix, 0);
+
+    graph.Edges = 0;
+    graph.Vertices = 0;
+
+    return graph;
+}
+```
+
+#### Add Vertex to Graph
+```c
+/// -- PSEUDO CODE
+/// "Adds" a vertex. Really, it just increments the vertex count.
+/// The Adjacency Matrix and Incidence Matrix are both of constant size in memory, 
+/// and act only on the vertex and edge count saved in the graph.
+///
+/// Returns the index of the vertex added.
+VertexIndex AddVertexToGraph(graph)
+{
+    return graph.Vertices++;
+}
+```
+
+#### Add an Edge to Graph
+```c
+/// -- PSEUDO CODE
+/// Adds an edge to the graph.
+/// Set the adj matrix to true for v1 to v2
+/// Set the incidence matrix to the weight for v1 to e, and -weight for v2 to e
+/// Increment the edge count
+///
+/// Returns the index of the edge added.
+EdgeIndex AddEdgeToGraph(graph, v1, v2, weight)
+{
+    /// v1 is adjacent to v2
+    /// note this is a directed edge
+    SetMatrixValue(graph.AdjacencyMatrix, v1, v2, true);
+
+    /// We have edges from range [0,graph.Edges), 
+    /// so we will use graph.Edges as the new edge index 
+    /// as it has no value yet.
+    EdgeIndex e = graph.Edges;
+
+    SetMatrixValue(graph.IncidenceMatrix, v1, e, weight);
+
+    SetMatrixValue(graph.IncidenceMatrix, v2, e, -weight);
+    return graph.Edges++;
+}
+```
+
+#### Is Incident
+```c
+/// -- PSEUDO CODE
+/// Determines if a vertex is incident to an edge.
+/// If the value in the incidence matrix is not 0, then the vertex is incident to the edge.
+///
+/// Returns true if the vertex is incident to the edge, false otherwise.
+bool IsIncident(graph, v, e)
+{
+    return GetMatrixValue(graph.IncidenceMatrix, v, e) != 0;
+}
+```
+
+#### Is Adjacent
+```c
+/// -- PSEUDO CODE
+/// Determines if two vertices are adjacent.
+/// If the value in the adjacency matrix is true, then the vertices are adjacent.
+/// Note this graph is directed, so adjacency is only one way (unless there is a parallel edge).
+///
+/// Returns true if the vertices are adjacent, false otherwise.
+bool IsAdjacent(graph, v1, v2)
+{
+    return GetMatrixValue(graph.AdjacencyMatrix, v1, v2);
+}
+```
+
+#### Vertex Degree
+```c
+/// -- PSEUDO CODE
+/// Determines the degree of a vertex.
+/// The degree of a vertex is the number of incoming and outgoing edges.
+/// Self loops are counted once.
+///
+/// Returns the degree of the vertex.
+unsigned int VertexDegree(graph, v)
+{
+    unsigned int degree = 0;
+    for (unsigned int i = 0; i < graph.Edges; i++)
+    {
+        if (GetMatrixValue(graph.IncidenceMatrix, v, i) != 0)
+        {
+            degree++;
+        }
+    }
+    return degree;
+}
+```
+
+#### Edges Shared
+```c
+/// -- PSEUDO CODE
+/// Determines the number of edges shared between two vertices.
+/// This is used to determine the curvature of a Bezier curve when creating parallel edges.
+///
+/// Returns the number of edges shared between the two vertices.
+unsigned int EdgesShared(graph, v1, v2)
+{
+    unsigned int shared = 0;
+    for (unsigned int i = 0; i < graph.Edges; i++)
+    {
+        if (
+            GetMatrixValue(graph.IncidenceMatrix, v1, i) != 0 
+            && GetMatrixValue(graph.IncidenceMatrix, v2, i) != 0
+        )
+        {
+            shared++;
+        }
+    }
+    return shared;
+}
+```
+
+
 ### Usage
 The graph is used in the program to determine all mathematical aspects of the graph. The graph is used to determine the adjacency matrix, incidence matrix, vertex degrees, and any algorithms that require the graph to be represented in a certain way. The graph is also used to determine if two vertices are connected, and if an edge is incident to a vertex.
 
