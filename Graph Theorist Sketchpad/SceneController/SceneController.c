@@ -159,6 +159,9 @@ void SceneController_MoveVertex(SceneController *sc, GraphSketch *gs)
 
 void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
 {
+    assert(sc != NULL);
+    assert(gs != NULL);
+    
     const Vector2 mousePosition = GetMousePosition();
     
     if (sc->ShowEdges) GraphSketch_DrawEdges(gs);
@@ -189,41 +192,47 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     DrawText(text, GUI_BOUNDING_BOX.x - MeasureText(text, 15) - 10, 10, 15, RAYWHITE);
     
     DrawRectangleRec(GUI_BOUNDING_BOX, Fade(LIGHTGRAY, 0.3f));
-    GuiCheckBox((Rectangle){ 630, 30, 20, 20 }, "Show BVH Tree", &sc->ShowBvhTree);
-    GuiCheckBox((Rectangle){ 630, 60, 20, 20 }, "Show Adjacency Matrix", &sc->ShowAdjMatrix);
-    GuiCheckBox((Rectangle){ 630, 90, 20, 20 }, "Show Vertices", &sc->ShowVertices);
-    GuiCheckBox((Rectangle){ 630, 120, 20, 20 }, "Show Incidence Matrix", &sc->ShowIncidenceMatrix);
-    GuiCheckBox((Rectangle){ 630, 150, 20, 20 }, "Show Edges", &sc->ShowEdges);
-    GuiCheckBox((Rectangle){ 630, 180, 20, 20 }, "Show Degrees", &sc->ShowDegrees);
+    GuiCheckBox((Rectangle){ 630, 15, 20, 20 }, "Show BVH Tree", &sc->ShowBvhTree);
+    GuiCheckBox((Rectangle){ 630, 45, 20, 20 }, "Show Adjacency Matrix", &sc->ShowAdjMatrix);
+    GuiCheckBox((Rectangle){ 630, 75, 20, 20 }, "Show Vertices", &sc->ShowVertices);
+    GuiCheckBox((Rectangle){ 630, 105, 20, 20 }, "Show Incidence Matrix", &sc->ShowIncidenceMatrix);
+    GuiCheckBox((Rectangle){ 630, 135, 20, 20 }, "Show Edges", &sc->ShowEdges);
+    GuiCheckBox((Rectangle){ 630, 165, 20, 20 }, "Show Degrees", &sc->ShowDegrees);
     
-    GuiColorPicker((Rectangle){ 630, 210, 90, 90 }, "", &sc->VertexColor);
+    GuiColorPicker((Rectangle){ 630, 195, 90, 90 }, "", &sc->VertexColor);
     
     
-    GuiGroupBox((Rectangle){ 630, 315, 140, 30 }, "Weight");
-    if (GuiTextBox((Rectangle){ 635, 320, 130, 20 }, sc->VertexWeightInputBuffer, 3, sc->IsInEditWeightMode))
+    GuiGroupBox((Rectangle){ 630, 290, 140, 30 }, "Weight");
+    if (GuiTextBox((Rectangle){ 635, 295, 130, 20 }, sc->VertexWeightInputBuffer, 3, sc->IsInEditWeightMode))
     {
         sc->IsInEditWeightMode = true;
     }
     
-    if (GuiButton((Rectangle){ 630, 350, 140, 20 }, "Vertex Mode"))
+    if (GuiButton((Rectangle){ 630, 330, 140, 20 }, "Vertex Mode"))
     {
         sc->IsInVertexCreationMode = true;
         sc->IsInEdgeCreationMode = false;
         sc->IsInVertexMoveMode = false;
     }
     
-    if (GuiButton((Rectangle){ 630, 380, 140, 20 }, "Edge Mode"))
+    if (GuiButton((Rectangle){ 630, 360, 140, 20 }, "Edge Mode"))
     {
         sc->IsInEdgeCreationMode = true;
         sc->IsInVertexMoveMode = false;
         sc->IsInVertexCreationMode = false;
     }
     
-    if (GuiButton((Rectangle){ 630, 410, 140, 20 }, "Move Mode"))
+    if (GuiButton((Rectangle){ 630, 390, 140, 20 }, "Move Mode"))
     {
         sc->IsInEdgeCreationMode = false;
         sc->IsInVertexCreationMode = false;
         sc->IsInVertexMoveMode = true;
+    }
+    
+    if (GuiButton((Rectangle){ 630, 420, 140, 20 }, "Clear All"))
+    {
+        SceneController_ClearAll(sc, gs);
+        return;
     }
     
     if (sc->IsInVertexCreationMode)
@@ -266,4 +275,13 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
             gs->IndexToPrimitiveMap[sc->VertexMoveStateIndex].Centroid = GetMousePosition();
         }
     }
+}
+
+void SceneController_ClearAll(SceneController *sc, GraphSketch *gs)
+{
+    assert(sc != NULL);
+    assert(gs != NULL);
+    GraphSketch_Reset(gs);
+    sc->AdjMatrixDumpBuffer[0] = '\0';
+    sc->IncidenceMatrixDumpBuffer[0] = '\0';
 }

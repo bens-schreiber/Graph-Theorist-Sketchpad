@@ -65,9 +65,6 @@ typedef struct
     /// The mathematical representation of the graph
     Graph *Graph;
     
-    bool ShowDirection;
-    bool ShowWeight;
-    
 } GraphSketch;
 
 /// Draws an edge between two vertices via their primitives centroid
@@ -87,6 +84,9 @@ VertexIndex GraphSketch_AddVertex(GraphSketch *gs, Vector2 position, Color color
 void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2, short weight);
 
 void GraphSketch_RefreshBvhTree(GraphSketch *gs, Rectangle sceneBoundingBox);
+
+/// Reset to initial empty state
+void GraphSketch_Reset(GraphSketch *gs);
 
 /// Draws the drawable vertices
 void GraphSketch_DrawVertices(const GraphSketch *gs);

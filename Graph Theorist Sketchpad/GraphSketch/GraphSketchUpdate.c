@@ -64,8 +64,22 @@ void GraphSketch_AddEdge(GraphSketch *gs, VertexIndex v1, VertexIndex v2, short 
     EdgeIndex ei = Graph_AddEdgeWeighted(gs->Graph, v1, v2, weight);
     
     char numStr[15];
-    sprintf(numStr, "e%u w%u", ei, weight);
+    if (weight > 1) sprintf(numStr, "e%u w%u", ei, weight);
+    else sprintf(numStr, "e%u", ei);
     gs->DrawableEdgeList[ei] = DrawableEdge_CreateDrawableEdge(numStr, v1, v2, ei, curvature);
     gs->VertexIndexToDegreeMap[v1]++;
     gs->VertexIndexToDegreeMap[v2]++;
+}
+
+void GraphSketch_Reset(GraphSketch *gs)
+{
+    assert(gs != NULL);
+    
+    memset(gs->VertexIndexToDegreeMap, 0, GRAPH_MAX_SIZE);
+    
+    BvhTree_FreeBvhTree(gs->BvhTree);
+    gs->BvhTree = NULL;
+    
+    Graph_FreeGraph(gs->Graph);
+    gs->Graph = Graph_CreateGraph();
 }

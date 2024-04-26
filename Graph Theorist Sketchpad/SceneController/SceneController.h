@@ -68,4 +68,7 @@ void SceneController_MoveVertex(SceneController *sc, GraphSketch *gs);
 /// Draws the GUI and GraphSketch
 void SceneController_DrawScene(SceneController *sc, GraphSketch *gs);
 
+/// Clears everything from the graph sketch
+void SceneController_ClearAll(SceneController *sc, GraphSketch *gs);
+
 #endif /* SceneController_h */

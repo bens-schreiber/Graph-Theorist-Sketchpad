@@ -36,8 +36,6 @@ GraphSketch *GraphSketch_CreateGraphSketch(void)
     memset(gs->VertexIndexToDegreeMap, 0, GRAPH_MAX_SIZE);
     gs->BvhTree = NULL;
     gs->Graph = Graph_CreateGraph();
-    gs->ShowDirection = true;
-    gs->ShowWeight = true;
     return gs;
 }
 
