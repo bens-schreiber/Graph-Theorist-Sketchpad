@@ -2,6 +2,12 @@
 Created for WSU MATH 453 Graph Theory. Made entirely with C in Raylib and Raygui. Has its own collision detection system using a Bounding Volume Hierarchy Tree.
 This is definitely a "runs on my machine" kind of project, however, if you have a mac, Xcode, and some spare time, you can try to run it by cloning the Raygui repo
 
+
+
+https://github.com/bens-schreiber/Graph-Theorist-Sketchpad/assets/64621941/3c78c002-6e17-4653-83ba-991e006c2913
+
+
+
 The following is the write-up required for the project submission:
 
 ## Introduction
