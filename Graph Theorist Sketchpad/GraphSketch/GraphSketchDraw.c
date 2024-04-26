@@ -12,6 +12,8 @@
 #include "raygui.h"
 #include "raymath.h"
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 void DrawableVertex_Draw(const DrawableVertex *dv, const Primitive *p)
 {
     assert(dv != NULL);
@@ -29,10 +31,13 @@ static Vector2 _QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
     return midpoint;
 }
 
-static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de)
+static void _DrawableEdge_DrawSelfLoop(const GraphSketch *gs, DrawableEdge de, int weight)
 {
     Primitive v = gs->IndexToPrimitiveMap[de.V1];
-    DrawText(de.Label, v.Centroid.x - GRAPH_VERTEX_RADIUS*1.5, v.Centroid.y - GRAPH_VERTEX_RADIUS*3 / 1.5, 15, RAYWHITE);
+    
+    Vector2 textPos = (Vector2) {v.Centroid.x - GRAPH_VERTEX_RADIUS*1.5, v.Centroid.y};
+    DrawText(de.Label, textPos.x, textPos.y, 15, RAYWHITE);
+
     DrawCircleLinesV(Vector2AddValue(v.Centroid, -20), GRAPH_VERTEX_RADIUS / 2, RAYWHITE);
 }
 
@@ -55,9 +60,10 @@ void _DrawTriangleFromMidpointPointingAtPos(Vector2 midpoint, Vector2 point, flo
 
 void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
 {
+    int weight = MAX(gs->Graph->IncidenceMatrix[de.V1][de.E], gs->Graph->IncidenceMatrix[de.V2][de.E]);
     if (de.V1 == de.V2)
     {
-        _DrawableEdge_DrawSelfLoop(gs, de);
+        _DrawableEdge_DrawSelfLoop(gs, de, weight);
         return;
     }
     
@@ -80,7 +86,9 @@ void DrawableEdge_Draw(const GraphSketch *gs, DrawableEdge de)
     Vector2 points[3] = { c1, splineControl, c2 };
     Vector2 bezierMid = _QuadraticBezierMidpoint(points[0], points[1], points[2]);
     
-    DrawText(de.Label, bezierMid.x, bezierMid.y + 10, 15, RAYWHITE);
+    Vector2 textPos = (Vector2) { bezierMid.x, bezierMid.y + 10};
+    DrawText(de.Label, textPos.x, textPos.y, 15, RAYWHITE);
+    
     DrawSplineBezierQuadratic(points, 3, 2, RAYWHITE);
     _DrawTriangleFromMidpointPointingAtPos(bezierMid, c1, 15);
 }

@@ -64,6 +64,9 @@ EdgeIndex Graph_AddEdge(Graph *g, VertexIndex v1, VertexIndex v2);
 /// - Returns: the new edge index
 EdgeIndex Graph_AddEdgeWeighted(Graph *g, VertexIndex v1, VertexIndex v2, VertexIndex weight);
 
+/// Removes the edge e from the graph
+void Graph_RemoveEdge(Graph *g, EdgeIndex e);
+
 /// Queries the incidence matrix
 /// - Parameters:
 ///   - g: The graph

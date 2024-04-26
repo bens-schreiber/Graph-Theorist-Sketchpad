@@ -184,6 +184,10 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     
     if (sc->ShowDegrees) GraphSketch_DrawDegrees(gs);
     
+    char text[25] = "";
+    sprintf(text, "|V| = %u   |E| = %u", gs->Graph->Vertices, gs->Graph->Edges);
+    DrawText(text, GUI_BOUNDING_BOX.x - MeasureText(text, 15) - 10, 10, 15, RAYWHITE);
+    
     DrawRectangleRec(GUI_BOUNDING_BOX, Fade(LIGHTGRAY, 0.3f));
     GuiCheckBox((Rectangle){ 630, 30, 20, 20 }, "Show BVH Tree", &sc->ShowBvhTree);
     GuiCheckBox((Rectangle){ 630, 60, 20, 20 }, "Show Adjacency Matrix", &sc->ShowAdjMatrix);
