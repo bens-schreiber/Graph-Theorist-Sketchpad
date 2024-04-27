@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     Graph_VertexDegree_ReturnsCorrectDegree();
     Graph_KruskalsAlgorithm_CorrectlyDeterminesMST();
     Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST();
+    Graph_KruskalsAlgorithmWithWeightsAndCycles_CorrectlyDeterminesMST();
     
     // Graph Sketch Tests
     GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree();

@@ -180,4 +180,46 @@ TEST _Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST(Graph *g)
 GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST)
 
 
+TEST _Graph_KruskalsAlgorithmWithWeightsAndCycles_CorrectlyDeterminesMST(Graph *g)
+{
+    // Arrange
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
+    VertexIndex v3 = Graph_AddVertex(g);
+    VertexIndex v4 = Graph_AddVertex(g);
+    VertexIndex v5 = Graph_AddVertex(g);
+    
+    Graph_AddEdgeWeighted(g, v1, v2, 30);
+    EdgeIndex e1 = Graph_AddEdgeWeighted(g, v1, v2, 1);
+    
+    Graph_AddEdgeWeighted(g, v2, v3, 50);
+    EdgeIndex e2 = Graph_AddEdgeWeighted(g, v2, v3, 49);
+    
+    Graph_AddEdgeWeighted(g, v3, v4, 100);
+    EdgeIndex e3 = Graph_AddEdgeWeighted(g, v3, v4, 50);
+    
+    Graph_AddEdgeWeighted(g, v4, v4, 10);   // self loop
+    EdgeIndex e4 = Graph_AddEdgeWeighted(g, v4, v5, 51);
+    
+    Graph_AddEdgeWeighted(g, v1, v3, 99);
+    Graph_AddEdgeWeighted(g, v2, v5, 99);
+    Graph_AddEdgeWeighted(g, v3, v5, 99);
+    Graph_AddEdgeWeighted(g, v5, v1, 99);
+    
+    
+    EdgeIndex edges[g->Vertices - 1];
+    
+    // Act
+    Graph_MinSpanningTree(g, edges);
+    
+    // Assert
+    assert(edges[0] == e1);
+    assert(edges[1] == e2);
+    assert(edges[2] == e3);
+    assert(edges[3] == e4);
+    
+}
+GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithWeightsAndCycles_CorrectlyDeterminesMST)
+
+
 #endif /* GraphTests_h */
