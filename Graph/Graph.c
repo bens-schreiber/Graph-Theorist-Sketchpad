@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 Graph *Graph_CreateGraph(void)
 {
@@ -113,6 +114,74 @@ unsigned int Graph_VertexDegree(Graph *g, VertexIndex v)
     }
     return deg;
 }
+
+typedef struct
+{
+    int Weight;
+    EdgeIndex E;
+    VertexIndex V1;
+    VertexIndex V2;
+} EdgeInformation;
+
+#define NO_VERTEX -1
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+int _CompareEdgeInformation(const void *a, const void *b)
+{
+    EdgeInformation *eiA = (EdgeInformation*) a;
+    EdgeInformation *eiB = (EdgeInformation*) b;
+    return eiA->Weight - eiB->Weight;
+}
+
+void Graph_MinSpanningTree(Graph *g, EdgeIndex edges[GRAPH_MAX_SIZE])
+{
+    assert(g != NULL);
+    
+    // Gather edge list with helpful information
+    EdgeInformation edgeIndexToEdgeInformation[g->Edges];
+    for (EdgeIndex ei = 0; ei< g->Edges; ei++)
+    {
+        EdgeInformation ef = {.Weight = 0, .E = ei, .V1 = NO_VERTEX, .V2 = NO_VERTEX}; // v2 being -1 indicating a self loop
+        for (VertexIndex vi = 0; vi < g->Vertices; vi++)
+        {
+            if (ef.V1 == NO_VERTEX)
+            {
+                ef.Weight = MAX(ef.Weight, abs(g->IncidenceMatrix[vi][ei]));
+                ef.V1 = vi;
+            }
+            else if (ef.V2 == NO_VERTEX)
+            {
+                ef.Weight = MAX(ef.Weight, abs(g->IncidenceMatrix[vi][ei]));
+                ef.V2 = vi;
+            }
+            if (ef.V1 != NO_VERTEX && ef.V2 != NO_VERTEX)
+            {
+                break;
+            }
+        }
+    }
+    
+    // Sort by weight
+    qsort(edgeIndexToEdgeInformation, g->Edges, sizeof(EdgeInformation), _CompareEdgeInformation);
+    
+    // Detect cycles
+    int edgeListIndex = 0;
+    
+    bool adjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
+    memset(adjMatrix, GRAPH_MAX_SIZE, false);
+    
+    for (int i = 0; i < GRAPH_MAX_SIZE; i++)
+    {
+        if (edgeListIndex >= g->Vertices) break; // we've reached the MPT
+        EdgeInformation ef = edgeIndexToEdgeInformation[i];
+        if (ef.V2 == NO_VERTEX) continue; // self loops get us nowhere
+        if (adjMatrix[ef.V1][ef.V2]) continue; // we don't want adjacent edges
+        edges[edgeListIndex++] = ef.E;
+    }
+    
+    edges[edgeListIndex] = -1;
+}
+    
+    
 
 void Graph_DumpAdjMatrix(Graph *g, StringBuffer buffer)
 {

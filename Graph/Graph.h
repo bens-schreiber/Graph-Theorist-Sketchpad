@@ -107,10 +107,15 @@ unsigned int Graph_EdgesShared(Graph *g, VertexIndex v1, VertexIndex v2);
 /// - Returns: The degree of vertex v
 unsigned int Graph_VertexDegree(Graph *g, VertexIndex v);
 
+/// Uses Kruskals algorithm to calculate the minimum spanning tree of the graph, putting the vertex list in the vertices array
+/// terminated by a -1 vertex
+void Graph_MinSpanningTree(Graph *g, EdgeIndex edges[GRAPH_MAX_SIZE]);
+
 /// Dumps the adj matrix into a string
 void Graph_DumpAdjMatrix(Graph *g, StringBuffer buffer);
 
 /// Dumps the incidence matrix into a string
 void Graph_DumpIncidenceMatrix(Graph *g, StringBuffer buffer);
+
 
 #endif /* Graph_h */
