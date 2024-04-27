@@ -1,7 +1,6 @@
 # Graph Theorist Sketchpad
 
-Created for WSU MATH 453 Graph Theory. Made entirely with C in Raylib and Raygui. Has its own collision detection system using a Bounding Volume Hierarchy Tree.
-This is definitely a "runs on my machine" kind of project, however, if you have a mac, Xcode, and some spare time, you can try to run it by cloning the Raygui repo
+Created for WSU MATH 453 Graph Theory. Made entirely with C in Raylib and Raygui.
 
 https://github.com/bens-schreiber/Graph-Theorist-Sketchpad/assets/64621941/59364901-7b7c-439c-ab47-8393c14f299d
 
@@ -102,7 +101,7 @@ There are many ways to represent a graph, but for the purposes of this project, 
 
 he adjacency matrix represents a map from vertex to vertex. Given v1 and v2, row 1 column 2 will be 1 if there is an edge from v1 to v2. Since I chose to make all of the graphs directed, the adjacency matrix will not necessarily have an edge from v2 to v1. An edge from v1 to v1 to v2 to v2 denotes a self loop.
 
-![Alt text](image-1.png)
+![Alt text](Screenshots/image-1.png)
 
 This representation is useful for very quickly determining if two vertices are connected, in O(1) time. However, the adjacency matrix is not very useful for determining the degree of a vertex, or incidence, since we can have parallel edges.
 
@@ -110,7 +109,7 @@ This representation is useful for very quickly determining if two vertices are c
 
 The incidence matrix represents a map from vertex to edge. My implementation provides a 0 if there is no incidence, a value less than 0 if the edge is incoming, and a value greater than 0 if an edge is outgoing. The weight of a vertex is the largest absolute value in the column.
 
-![Alt text](image.png)
+![Alt text](Screenshots/image.png)
 
 See that v0 is incident to e0, and v1 is incident to e0. In the incidence matrix, row 0 column 0 is 11, because this is the weight directed from v0 to v1. Further, notice row 1 column 0 is -1, because the edge is incoming to v1.
 
@@ -346,19 +345,19 @@ Three data structures are used:
 
 - Bounding Volume Hierarchy Tree: A binary search tree that sorts the primitives by their centroids, then creates areas that bound the primitives. Because of the nature of a binary search tree, searching for a collision is O(log n), where n is the number of primitives in the scene, which is significantly faster than O(n) for a brute force search.
 
-![Alt text](image-2.png)
+![Alt text](Screenshots/image-2.png)
 
 In this picture, you can see the primitives (red square) and their bounding boxes (red border square).
 
 See the BVH algorithm, which is recursive.
 It operates by sorting the primtivies by their centroids on the longest axis (think horizontally or vertically). Then it finds the median primitive, and creates a bounding box that bounds the primitives to the left and to the right of the median. This is done recursively until the bounding box is two primitives. Only a leaf node of the tree is considered collideable.
-![Alt text](image-3.png)
+![Alt text](Screenshots/image-3.png)
 
 With this setup, we now have the tools to make an interactable graph.
 
 ### Interesting/Notable Scenarios
 
-![Alt text](image-4.png)
+![Alt text](Screenshots/image-4.png)
 
 Take a look at the edge e0. It is the simplest case of drawing an edge between two vertices. The edge is not a self loop, and it is not parallel. Now, we face an issue, what if we want to add a parallel edge? We can't just draw the edge on top of the other edge, because then it won't be visible/will graphically colide.
 
@@ -366,7 +365,7 @@ This is where the Bezier curve comes in. The Quadratic Spline Bezier is a curve 
 
 We are certain that the control point should be the center of the two lines, but we need to move it away from the midpoint, to get a curve. Further, we need some mathematical equation to determine how much an edge should curve.
 
-![Alt text](image-5.png)
+![Alt text](Screenshots/image-5.png)
 (albeit, the labeling sn't always perfect, but it gets the job done)
 
 The midpoint is calculated as:
@@ -433,7 +432,7 @@ B(0.5) = 0.25 _ P0 + 0.5 _ P1 + 0.25 \* P2
 
 = (P0 + 2P1 + P2) / 4
 
-![Alt text](image-6.png)
+![Alt text](Screenshots/image-6.png)
 Ta-dah! Mind boggling effects (ignore the direction arrows on the edges, I'm no geometry major but they're close enough).
 
 ### Thoughts, criticisms
