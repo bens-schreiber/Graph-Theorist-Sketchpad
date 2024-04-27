@@ -37,6 +37,7 @@ SceneController *SceneController_CreateSceneController(void)
     sc->ShowEdges = true;
     sc->ShowDirection = true;
     sc->ShowDegrees = false;
+    sc->ShowMST = false;
     
     sc->VertexColor = RAYWHITE;
     
@@ -164,9 +165,18 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     
     const Vector2 mousePosition = GetMousePosition();
     
-    if (sc->ShowEdges) GraphSketch_DrawEdges(gs);
-    
-    if (sc->ShowVertices) GraphSketch_DrawVertices(gs);
+    if (sc->ShowMST)
+    {
+        GraphSketch_DrawMST(gs);
+    }
+    else
+    {
+        
+        if (sc->ShowEdges) GraphSketch_DrawEdges(gs);
+        
+        if (sc->ShowVertices) GraphSketch_DrawVertices(gs);
+        
+    }
     
     if (sc->ShowBvhTree)
     {
@@ -198,8 +208,9 @@ void SceneController_DrawScene(SceneController *sc, GraphSketch *gs)
     GuiCheckBox((Rectangle){ 630, 105, 20, 20 }, "Show Incidence Matrix", &sc->ShowIncidenceMatrix);
     GuiCheckBox((Rectangle){ 630, 135, 20, 20 }, "Show Edges", &sc->ShowEdges);
     GuiCheckBox((Rectangle){ 630, 165, 20, 20 }, "Show Degrees", &sc->ShowDegrees);
+    GuiCheckBox((Rectangle){ 630, 195, 20, 20 }, "Show MST", &sc->ShowMST);
     
-    GuiColorPicker((Rectangle){ 630, 195, 90, 90 }, "", &sc->VertexColor);
+    GuiColorPicker((Rectangle){ 630, 230, 100, 50 }, "", &sc->VertexColor);
     
     
     GuiGroupBox((Rectangle){ 630, 290, 140, 30 }, "Weight");

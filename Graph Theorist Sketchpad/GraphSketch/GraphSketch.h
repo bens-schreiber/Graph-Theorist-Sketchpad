@@ -109,5 +109,8 @@ void GraphSketch_DrawEdges(const GraphSketch *gs);
 /// Draws the degree of each vertex
 void GraphSketch_DrawDegrees(GraphSketch *gs);
 
+/// Draws the minimum spanning tree
+void GraphSketch_DrawMST(GraphSketch *gs);
+
 #endif /* GraphSketch_h */
 

@@ -16,6 +16,8 @@
 #define INCIDENCE_MATRIX_NO_VALUE               0
 #define INCIDENCE_MATRIX_POSITIVE_DIRECTION     1
 
+#define MST_NO_EDGE (unsigned int)(-1)
+
 typedef char StringBuffer[0xFFF];
 typedef unsigned int VertexIndex;
 typedef unsigned int EdgeIndex;

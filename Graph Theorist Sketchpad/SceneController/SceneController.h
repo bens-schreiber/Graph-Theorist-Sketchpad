@@ -39,6 +39,7 @@ typedef struct
     bool ShowEdges;
     bool ShowDirection;
     bool ShowDegrees;
+    bool ShowMST;
     
     // Color options
     Color VertexColor;

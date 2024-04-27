@@ -177,3 +177,19 @@ void GraphSketch_DrawDegrees(GraphSketch *gs)
         DrawText(text, c.x - GRAPH_VERTEX_RADIUS, c.y + GRAPH_VERTEX_RADIUS + 5, 10, RAYWHITE);
     }
 }
+
+void GraphSketch_DrawMST(GraphSketch *gs)
+{
+    if (gs->Graph->Vertices < 2 || gs->Graph->Edges < 1 ) return;
+    EdgeIndex edges[gs->Graph->Vertices];
+    Graph_MinSpanningTree(gs->Graph, edges);
+    
+    for (int i = 0; i < gs->Graph->Vertices; i++)
+    {
+        if (edges[i] == MST_NO_EDGE) break;
+        DrawableEdge de = gs->DrawableEdgeList[edges[i]];
+        DrawableEdge_Draw(gs, de);
+        DrawableVertex_Draw(&gs->IndexToDrawableVertexMap[de.V1], &gs->IndexToPrimitiveMap[de.V1]);
+        DrawableVertex_Draw(&gs->IndexToDrawableVertexMap[de.V2], &gs->IndexToPrimitiveMap[de.V2]);
+    }
+}

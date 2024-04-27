@@ -139,9 +139,33 @@ TEST _Graph_KruskalsAlgorithm_CorrectlyDeterminesMST(Graph *g)
     // Assert
     assert(edges[0] == e1);
     assert(edges[3] == e4);
+    assert(edges[4] == MST_NO_EDGE);
     
 }
 GRAPH_TEST_CASE(Graph_KruskalsAlgorithm_CorrectlyDeterminesMST)
+
+TEST _Graph_KruskalsAlgorithmWithPathGraph_CorrectlyDeterminesMST(Graph *g)
+{
+    // Arrange
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
+    VertexIndex v3 = Graph_AddVertex(g);
+    
+    EdgeIndex e1 = Graph_AddEdge(g, v1, v2);
+    EdgeIndex e2 = Graph_AddEdge(g, v1, v3);
+    
+    EdgeIndex edges[g->Vertices - 1];
+    
+    // Act
+    Graph_MinSpanningTree(g, edges);
+    
+    // Assert
+    assert(edges[0] == e1);
+    assert(edges[1] == e2);
+    assert(edges[2] == MST_NO_EDGE);
+    
+}
+GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithPathGraph_CorrectlyDeterminesMST)
 
 
 TEST _Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST(Graph *g)
@@ -175,6 +199,7 @@ TEST _Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST(Graph *g)
     assert(edges[1] == e2);
     assert(edges[2] == e3);
     assert(edges[3] == e4);
+    assert(edges[4] == MST_NO_EDGE);
     
 }
 GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST)
@@ -217,9 +242,31 @@ TEST _Graph_KruskalsAlgorithmWithWeightsAndCycles_CorrectlyDeterminesMST(Graph *
     assert(edges[1] == e2);
     assert(edges[2] == e3);
     assert(edges[3] == e4);
+    assert(edges[4] == MST_NO_EDGE);
     
 }
 GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithWeightsAndCycles_CorrectlyDeterminesMST)
+
+
+TEST _Graph_KruskalsAlgorithmWithNoEdges_NoMST(Graph *g)
+{
+    // Arrange
+    Graph_AddVertex(g);
+    Graph_AddVertex(g);
+    Graph_AddVertex(g);
+    Graph_AddVertex(g);
+    Graph_AddVertex(g);
+    
+    EdgeIndex edges[g->Vertices - 1];
+    
+    // Act
+    Graph_MinSpanningTree(g, edges);
+    
+    // Assert
+    assert(edges[0] == MST_NO_EDGE);
+    
+}
+GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithNoEdges_NoMST)
 
 
 #endif /* GraphTests_h */
