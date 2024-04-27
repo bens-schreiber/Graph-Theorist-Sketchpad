@@ -4,7 +4,8 @@ This is definitely a "runs on my machine" kind of project, however, if you have 
 
 
 
-https://github.com/bens-schreiber/Graph-Theorist-Sketchpad/assets/64621941/3c78c002-6e17-4653-83ba-991e006c2913
+
+https://github.com/bens-schreiber/Graph-Theorist-Sketchpad/assets/64621941/59364901-7b7c-439c-ab47-8393c14f299d
 
 
 
@@ -62,8 +63,11 @@ The Graph Theorist Sketchpad is a program that allows users to create, manipulat
 
 16. Bvh Collison Detection
     - Users can click "Show BVH Tree" to see the bounding volume hierarchy tree that is used for collision detection. The tree is built using the graph, and updates every time the graph is updated. On Vertex mode, the user can see the bounding box of the mouse plus the required space between vertices On edge mode, the user can see a smaller bounding box around the mouse, denoting the mouse collision zone. When hovered over a collideable, the user will see a green square onn the mouse collision zone.
+   
+17. Minimum spanning Tree
+    - Users can select the "Show MST" option to see the minimum spanning tree via Kruskals algorithm.
 
-17. Clear All
+19. Clear All
     - Users can clear the graph by pressing the "Clear All" button in the GUI. This will remove all vertices and edges from the graph.
 
 ## Implementation
