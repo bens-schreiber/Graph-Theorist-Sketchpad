@@ -1,73 +1,87 @@
 # Graph Theorist Sketchpad
+
 Created for WSU MATH 453 Graph Theory. Made entirely with C in Raylib and Raygui. Has its own collision detection system using a Bounding Volume Hierarchy Tree.
 This is definitely a "runs on my machine" kind of project, however, if you have a mac, Xcode, and some spare time, you can try to run it by cloning the Raygui repo
 
-
-
-
 https://github.com/bens-schreiber/Graph-Theorist-Sketchpad/assets/64621941/59364901-7b7c-439c-ab47-8393c14f299d
-
-
 
 The following is the write-up required for the project submission:
 
 ## Introduction
+
 The Graph Theorist Sketchpad is a program that allows users to create, manipulate, and analyze graphs. The program was created using the C Programming language, along with Raylib, a C wrapper for OpenGL, and RayGUI, an auxiliary library for Raylib that provides a set of GUI elements. The program was created as a final project for Math 453: Graph Theory at Washington State University. Because I chose to create the program in C, the entire project is full of my own implementations of common data structures and algorithms, from collision detection to unit testing.
 
 ## Features
 
 1. Create Vertices
-    - Users can create vertices by entering "Vertex Creation Mode" and clicking anywhere on the screen away from the bounds of existing vertices and the GUI.
+
+   - Users can create vertices by entering "Vertex Creation Mode" and clicking anywhere on the screen away from the bounds of existing vertices and the GUI.
 
 2. Create Edges
-    - Users can create edges by entering "Edge Creation Mode" and clicking on two vertices. The program will automatically create an edge between the two vertices.
+
+   - Users can create edges by entering "Edge Creation Mode" and clicking on two vertices. The program will automatically create an edge between the two vertices.
 
 3. Parallel Edges
-    - Users can create parallel edges by going through the same process as create edges. This edge will be created using a Bezier curve, which is moved away from all other edges to prevent overlap.
+
+   - Users can create parallel edges by going through the same process as create edges. This edge will be created using a Bezier curve, which is moved away from all other edges to prevent overlap.
 
 4. Move Vertices
-    - Users can move vertices by entering "Vertex Move Mode" and dragging the vertex to a new location. All edges connected to the vertex will move with it.
+
+   - Users can move vertices by entering "Vertex Move Mode" and dragging the vertex to a new location. All edges connected to the vertex will move with it.
 
 5. Self Loops
-    - Users can create self loops by entering "Edge Creation Mode" and clicking on the same vertex twice.
+
+   - Users can create self loops by entering "Edge Creation Mode" and clicking on the same vertex twice.
 
 6. Directed Edges
-    - Users can create directed edges by entering "Edge Creation Mode". The program will automatically create a directed edge from the first vertex to the second vertex.
+
+   - Users can create directed edges by entering "Edge Creation Mode". The program will automatically create a directed edge from the first vertex to the second vertex.
 
 7. Label Vertices
-    - All vertices are labeled with a unique number. Users can toggle the visibility of these labels.
+
+   - All vertices are labeled with a unique number. Users can toggle the visibility of these labels.
 
 8. Label Edges
-    - All edges are labeled with a unique number. Users can toggle the visibility of these labels.
+
+   - All edges are labeled with a unique number. Users can toggle the visibility of these labels.
 
 9. View Edge count
-    - Users can see the amount of edges in the graph at the top of the screen.
+
+   - Users can see the amount of edges in the graph at the top of the screen.
 
 10. View Vertex count
+
     - Users can see the amount of vertices in the graph at the top of the screen.
 
 11. Create Weighted Edges
+
     - Users can create weighted edges by entering "Edge Creation Mode" and entering a weight in the GUI. All edges are labeled with their weight.
 
 12. Color Vertices
+
     - Users can color vertices by selecting a color from the GUI and creating a new vertex. The vertex will be colored with the selected color.
 
 13. Incidence Matrix
+
     - Users can view the incidence matrix of the graph by pressing the "Show Incidence Matrix" button in the GUI. The incidence matrix also denotes the direction and weight of the edges. Self loops are denoted by a single 1 in the column of the vertex.
 
 14. Adjacency Matrix
+
     - Users can view the adjacency matrix of the graph by pressing the "Show Adjacency Matrix" button in the GUI. The adjacency matrix simply denotes if the vertices are connected by an edge, with regard to direction.
 
 15. Vertex Degrees
+
     - Users can view the degree of each vertex by pressing the "Show Vertex Degrees" button in the GUI. The degree of a vertex is the number of incoming and outgoing edges. Self loops are counted once.
 
 16. Bvh Collison Detection
+
     - Users can click "Show BVH Tree" to see the bounding volume hierarchy tree that is used for collision detection. The tree is built using the graph, and updates every time the graph is updated. On Vertex mode, the user can see the bounding box of the mouse plus the required space between vertices On edge mode, the user can see a smaller bounding box around the mouse, denoting the mouse collision zone. When hovered over a collideable, the user will see a green square onn the mouse collision zone.
-   
-17. Minimum spanning Tree
+
+17. Minimum Spanning Tree
+
     - Users can select the "Show MST" option to see the minimum spanning tree via Kruskals algorithm.
 
-19. Clear All
+18. Clear All
     - Users can clear the graph by pressing the "Clear All" button in the GUI. This will remove all vertices and edges from the graph.
 
 ## Implementation
@@ -85,13 +99,15 @@ The program is divided into several units, each responsible for a different aspe
 There are many ways to represent a graph, but for the purposes of this project, I chose the adjacency matrix, and incidence matrix. Both of these representations have massive benefits:
 
 #### Adjacency Matrix:
-he adjacency matrix represents a map from vertex to vertex. Given v1 and v2, row 1 column 2 will be 1 if there is an edge from v1 to v2. Since I chose to make all of the graphs directed, the adjacency matrix will not necessarily have an edge from v2 to v1. An edge from v1 to v1 to v2 to v2 denotes a self loop. 
+
+he adjacency matrix represents a map from vertex to vertex. Given v1 and v2, row 1 column 2 will be 1 if there is an edge from v1 to v2. Since I chose to make all of the graphs directed, the adjacency matrix will not necessarily have an edge from v2 to v1. An edge from v1 to v1 to v2 to v2 denotes a self loop.
 
 ![Alt text](image-1.png)
 
 This representation is useful for very quickly determining if two vertices are connected, in O(1) time. However, the adjacency matrix is not very useful for determining the degree of a vertex, or incidence, since we can have parallel edges.
 
 #### Incidence Matrix:
+
 The incidence matrix represents a map from vertex to edge. My implementation provides a 0 if there is no incidence, a value less than 0 if the edge is incoming, and a value greater than 0 if an edge is outgoing. The weight of a vertex is the largest absolute value in the column.
 
 ![Alt text](image.png)
@@ -102,11 +118,10 @@ See that row 4 column 4 is 1, because this is a a self loop. No other edge is in
 
 This representation is incredibly useful for determining the degree of a vertex, the direction, weight, and self loop status of an edge. However, given no edge information, it is not very useful for determining if two vertices are connected.
 
-
 ### Some Graph Theory Implementation (in psuedo code)
 
-
 #### Create a new graph
+
 ```c
 /// -- PSEUDO CODE
 /// Creates a new graph.
@@ -139,10 +154,11 @@ Graph CreateNewGraph()
 ```
 
 #### Add Vertex to Graph
+
 ```c
 /// -- PSEUDO CODE
 /// "Adds" a vertex. Really, it just increments the vertex count.
-/// The Adjacency Matrix and Incidence Matrix are both of constant size in memory, 
+/// The Adjacency Matrix and Incidence Matrix are both of constant size in memory,
 /// and act only on the vertex and edge count saved in the graph.
 ///
 /// Returns the index of the vertex added.
@@ -153,6 +169,7 @@ VertexIndex AddVertexToGraph(graph)
 ```
 
 #### Add an Edge to Graph
+
 ```c
 /// -- PSEUDO CODE
 /// Adds an edge to the graph.
@@ -167,8 +184,8 @@ EdgeIndex AddEdgeToGraph(graph, v1, v2, weight)
     /// note this is a directed edge
     SetMatrixValue(graph.AdjacencyMatrix, v1, v2, true);
 
-    /// We have edges from range [0,graph.Edges), 
-    /// so we will use graph.Edges as the new edge index 
+    /// We have edges from range [0,graph.Edges),
+    /// so we will use graph.Edges as the new edge index
     /// as it has no value yet.
     EdgeIndex e = graph.Edges;
 
@@ -180,6 +197,7 @@ EdgeIndex AddEdgeToGraph(graph, v1, v2, weight)
 ```
 
 #### Is Incident
+
 ```c
 /// -- PSEUDO CODE
 /// Determines if a vertex is incident to an edge.
@@ -193,6 +211,7 @@ bool IsIncident(graph, v, e)
 ```
 
 #### Is Adjacent
+
 ```c
 /// -- PSEUDO CODE
 /// Determines if two vertices are adjacent.
@@ -207,6 +226,7 @@ bool IsAdjacent(graph, v1, v2)
 ```
 
 #### Vertex Degree
+
 ```c
 /// -- PSEUDO CODE
 /// Determines the degree of a vertex.
@@ -229,6 +249,7 @@ unsigned int VertexDegree(graph, v)
 ```
 
 #### Edges Shared
+
 ```c
 /// -- PSEUDO CODE
 /// Determines the number of edges shared between two vertices.
@@ -241,7 +262,7 @@ unsigned int EdgesShared(graph, v1, v2)
     for (unsigned int i = 0; i < graph.Edges; i++)
     {
         if (
-            GetMatrixValue(graph.IncidenceMatrix, v1, i) != 0 
+            GetMatrixValue(graph.IncidenceMatrix, v1, i) != 0
             && GetMatrixValue(graph.IncidenceMatrix, v2, i) != 0
         )
         {
@@ -252,8 +273,51 @@ unsigned int EdgesShared(graph, v1, v2)
 }
 ```
 
+#### Minimum Spanning Tree
+
+```c
+/// -- PSEUDO CODE
+/// Determines the minimum spanning tree of the graph using Kruskal's algorithm.
+/// The minimum spanning tree is the smallest tree that connects all vertices in the graph.
+/// The minimum spanning tree is determined by finding the smallest edge that connects two vertices,
+/// and adding it to the tree. This is done until all vertices are connected.
+///
+/// The return value is put into edgeList, with the end of the list denoted by the value MST_NO_EDGE.
+void Graph_MinSpanningTree(graph, edgeList)
+{
+    /// Create a list of all edges in the graph from the incidence matrix, with their weight
+    Edge edges[graph.Edges];
+    for (unsigned int i = 0; i < graph.Edges; i++)
+    {
+        edges[i].v1 = GetEdgeVertex1(graph, i);
+        edges[i].v2 = GetEdgeVertex2(graph, i);
+        edges[i].weight = GetEdgeWeight(graph, i);
+    }
+
+    /// Sort the edges by weight
+    sort(edges, graph.Edges, sizeof(Edge), EdgeCompare);
+
+    /// Create a disjoint set to keep track of which vertices are connected
+    DisjointSet ds = DisjointSet_Create(graph.Vertices);
+
+    /// Create the minimum spanning tree
+    unsigned int edgeCount = 0;
+    for (unsigned int i = 0; i < graph.Edges; i++)
+    {
+        if (DisjointSet_Find(ds, edges[i].v1) != DisjointSet_Find(ds, edges[i].v2))
+        {
+            edgeList[edgeCount++] = i;
+            DisjointSet_Union(ds, edges[i].v1, edges[i].v2);
+        }
+    }
+
+    /// Add a sentinel value to the end of the list
+    edgeList[edgeCount] = MST_NO_EDGE;
+}
+```
 
 ### Usage
+
 The graph is used in the program to determine all mathematical aspects of the graph. The graph is used to determine the adjacency matrix, incidence matrix, vertex degrees, and any algorithms that require the graph to be represented in a certain way. The graph is also used to determine if two vertices are connected, and if an edge is incident to a vertex.
 
 It is completely seperate from the Front End of the program, which is responsible for rendering the graph and GUI elements. The graph is only used to determine the mathematical properties of the graph, and is not used to render anything.
@@ -265,6 +329,7 @@ The front end of this application was the trickiest part, using OpenGL instead o
 ### Implementation
 
 To make the front end, we need to understand how rendering works. Rendering is done in a loop where 60 times a second follow:
+
 - Logic / Update values
 - Draw shapes, GUI elements, and text
 - Clear the screen
@@ -304,7 +369,8 @@ We are certain that the control point should be the center of the two lines, but
 ![Alt text](image-5.png)
 (albeit, the labeling sn't always perfect, but it gets the job done)
 
-The midpoint is calculated as: 
+The midpoint is calculated as:
+
 ```c
 Vector2 mid = { (c1.x + c2.x) / 2, (c1.y + c2.y) / 2};
 ```
@@ -312,6 +378,7 @@ Vector2 mid = { (c1.x + c2.x) / 2, (c1.y + c2.y) / 2};
 where c1 is the centroid of the first vertex, and c2 is the centroid of the second vertex.
 
 The direction vector from c1 to c2 is then calculated as:
+
 ```c
 Vector2 direction = {-(c2.y - c1.y), c2.x - c1.x};
 
@@ -319,6 +386,7 @@ direction = Vector2Normalize(direction);
 ```
 
 Then, the spline control point can be calculated as:
+
 ```c
 Vector2 splineControl = mid;
 // Move the control point along this direction
@@ -329,6 +397,7 @@ splineControl.y += de.Curvature * direction.y;
 But how do we know what the curvature value is? This is where some graph theory comes into play.
 
 When connecting two nodes, v1 and v2, an edge is produced with Curvature. If v1 is adjacent to v2, or v2 is adjacent to v1, then the curvature will be non 0. The amount to curve by is the edges shared by the two vertices, multiplied by an arbitrary constant (Why 40? I plugged it in and it didn't look weird. Not everything has to be well thought out). If the edges shared is odd, then the curvature is positive, and if the edges shared is even, then the curvature is negative. This makes the back and forth opposite curve that is seen in the picture.
+
 ```c
     int curvature = 0;
     if (Graph_IsAdjacent(gs->Graph, v1, v2) || Graph_IsAdjacent(gs->Graph, v2, v1))
@@ -346,6 +415,7 @@ When connecting two nodes, v1 and v2, an edge is produced with Curvature. If v1 
 ```
 
 Finally, we need to find the endpoint of our bezier curve so we can put the label by it. This is found with this equation:
+
 ```c
 static Vector2 _QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
     Vector2 midpoint;
@@ -357,9 +427,9 @@ static Vector2 _QuadraticBezierMidpoint(Vector2 p0, Vector2 p1, Vector2 p2) {
 
 This equation is found by the fact that the bezier curve is parametric from 0 to 1, so we solve for t = 0.5 for the midpoint:
 
-B(t) = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
+B(t) = (1-t)^2 _ P0 + 2(1-t)t _ P1 + t^2 \* P2
 
-B(0.5) = 0.25 * P0 + 0.5 * P1 + 0.25 * P2
+B(0.5) = 0.25 _ P0 + 0.5 _ P1 + 0.25 \* P2
 
 = (P0 + 2P1 + P2) / 4
 
