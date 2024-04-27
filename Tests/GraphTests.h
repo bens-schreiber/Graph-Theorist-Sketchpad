@@ -117,4 +117,67 @@ TEST _Graph_VertexDegree_ReturnsCorrectDegree(Graph *g)
 GRAPH_TEST_CASE(Graph_VertexDegree_ReturnsCorrectDegree)
 
 
+TEST _Graph_KruskalsAlgorithm_CorrectlyDeterminesMST(Graph *g)
+{
+    // Arrange
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
+    VertexIndex v3 = Graph_AddVertex(g);
+    VertexIndex v4 = Graph_AddVertex(g);
+    VertexIndex v5 = Graph_AddVertex(g);
+    
+    EdgeIndex e1 = Graph_AddEdge(g, v1, v2);
+    Graph_AddEdge(g, v2, v3);
+    Graph_AddEdge(g, v3, v4);
+    EdgeIndex e4 = Graph_AddEdge(g, v4, v5);
+    
+    EdgeIndex edges[g->Vertices - 1];
+    
+    // Act
+    Graph_MinSpanningTree(g, edges);
+    
+    // Assert
+    assert(edges[0] == e1);
+    assert(edges[3] == e4);
+    
+}
+GRAPH_TEST_CASE(Graph_KruskalsAlgorithm_CorrectlyDeterminesMST)
+
+
+TEST _Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST(Graph *g)
+{
+    // Arrange
+    VertexIndex v1 = Graph_AddVertex(g);
+    VertexIndex v2 = Graph_AddVertex(g);
+    VertexIndex v3 = Graph_AddVertex(g);
+    VertexIndex v4 = Graph_AddVertex(g);
+    VertexIndex v5 = Graph_AddVertex(g);
+    
+    Graph_AddEdgeWeighted(g, v1, v2, 30);
+    EdgeIndex e1 = Graph_AddEdgeWeighted(g, v1, v2, 1);
+    
+    Graph_AddEdgeWeighted(g, v2, v3, 50);
+    EdgeIndex e2 = Graph_AddEdgeWeighted(g, v2, v3, 49);
+    
+    Graph_AddEdgeWeighted(g, v3, v4, 100);
+    EdgeIndex e3 = Graph_AddEdgeWeighted(g, v3, v4, 50);
+    
+    Graph_AddEdgeWeighted(g, v4, v4, 10);   // self loop
+    EdgeIndex e4 = Graph_AddEdgeWeighted(g, v4, v5, 51);
+    
+    EdgeIndex edges[g->Vertices - 1];
+    
+    // Act
+    Graph_MinSpanningTree(g, edges);
+    
+    // Assert
+    assert(edges[0] == e1);
+    assert(edges[1] == e2);
+    assert(edges[2] == e3);
+    assert(edges[3] == e4);
+    
+}
+GRAPH_TEST_CASE(Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST)
+
+
 #endif /* GraphTests_h */

@@ -119,8 +119,8 @@ typedef struct
 {
     int Weight;
     EdgeIndex E;
-    VertexIndex V1;
-    VertexIndex V2;
+    signed int V1;
+    signed int V2;
 } EdgeInformation;
 
 #define NO_VERTEX -1
@@ -143,6 +143,7 @@ void Graph_MinSpanningTree(Graph *g, EdgeIndex edges[GRAPH_MAX_SIZE])
         EdgeInformation ef = {.Weight = 0, .E = ei, .V1 = NO_VERTEX, .V2 = NO_VERTEX}; // v2 being -1 indicating a self loop
         for (VertexIndex vi = 0; vi < g->Vertices; vi++)
         {
+            if (g->IncidenceMatrix[vi][ei] == INCIDENCE_MATRIX_NO_VALUE) continue;
             if (ef.V1 == NO_VERTEX)
             {
                 ef.Weight = MAX(ef.Weight, abs(g->IncidenceMatrix[vi][ei]));
@@ -155,9 +156,11 @@ void Graph_MinSpanningTree(Graph *g, EdgeIndex edges[GRAPH_MAX_SIZE])
             }
             if (ef.V1 != NO_VERTEX && ef.V2 != NO_VERTEX)
             {
+                edgeIndexToEdgeInformation[ei] = ef;
                 break;
             }
         }
+        edgeIndexToEdgeInformation[ei] = ef;
     }
     
     // Sort by weight
@@ -166,19 +169,18 @@ void Graph_MinSpanningTree(Graph *g, EdgeIndex edges[GRAPH_MAX_SIZE])
     // Detect cycles
     int edgeListIndex = 0;
     
-    bool adjMatrix[GRAPH_MAX_SIZE][GRAPH_MAX_SIZE];
-    memset(adjMatrix, GRAPH_MAX_SIZE, false);
+    bool visited[GRAPH_MAX_SIZE];
+    memset(visited, false, sizeof(visited));
     
     for (int i = 0; i < GRAPH_MAX_SIZE; i++)
     {
-        if (edgeListIndex >= g->Vertices) break; // we've reached the MPT
+        if (edgeListIndex >= g->Vertices - 1) break; // we've reached the MPT
         EdgeInformation ef = edgeIndexToEdgeInformation[i];
         if (ef.V2 == NO_VERTEX) continue; // self loops get us nowhere
-        if (adjMatrix[ef.V1][ef.V2]) continue; // we don't want adjacent edges
+        if (visited[ef.V1] || visited[ef.V2]) continue;
+        visited[ef.V1] = true;
         edges[edgeListIndex++] = ef.E;
     }
-    
-    edges[edgeListIndex] = -1;
 }
     
     

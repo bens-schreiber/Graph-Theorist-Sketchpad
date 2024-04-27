@@ -16,6 +16,8 @@ int main(int argc, const char * argv[]) {
     Graph_AddVerticesWithSelfLoops_PopulatesIncidenceMatrixAndAdjacencyMatrix();
     Graph_AddVertexAdjacency_VerticesAreAdjacentAndIncident();
     Graph_VertexDegree_ReturnsCorrectDegree();
+    Graph_KruskalsAlgorithm_CorrectlyDeterminesMST();
+    Graph_KruskalsAlgorithmWithWeights_CorrectlyDeterminesMST();
     
     // Graph Sketch Tests
     GraphSketch_CreateNew_SetsGraphWithNoVerticesAndNullBvhTree();
